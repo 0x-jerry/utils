@@ -42,7 +42,9 @@ export class EventEmitter<Events extends Record<string, ListenerFunction>> {
    * @param event Event type
    */
   events<K extends keyof Events>(event: K): NonNullable<Listeners<Events>[K]>
-  events<K extends keyof Events>(event?: K): Listeners<Events> | NonNullable<Listeners<Events>[K]> {
+  events<K extends keyof Events>(
+    event?: K
+  ): Listeners<Events> | NonNullable<Listeners<Events>[K]> {
     if (!event) {
       return this.#listeners
     }
@@ -132,7 +134,11 @@ export class EventEmitter<Events extends Record<string, ListenerFunction>> {
     const clears: Events[K][] = []
 
     events.forEach((event) => {
-      event(...args)
+      try {
+        event(...args)
+      } catch (error) {
+        console.warn('Invoke function error:', error)
+      }
 
       if (event[Once]) {
         delete event[Once]
