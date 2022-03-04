@@ -1,28 +1,34 @@
-import { Arrayable, toArray } from '../core'
-
 export type LoggerLevel = 'info' | 'warn' | 'error'
 
 type LoggerPrefixFunction = (type: LoggerLevel) => string
 
-export function createSimpleLogger(prefixes: Arrayable<string | LoggerPrefixFunction>) {
-  const $prefixes = toArray(prefixes)
-
+export function createSimpleLogger(prefix: string | LoggerPrefixFunction) {
   const getPrefix = (type: LoggerLevel) =>
-    $prefixes.reduce((pre, cur) => {
-      const str = typeof cur === 'string' ? cur : cur(type)
+    typeof prefix === 'string' ? prefix : prefix(type)
 
-      return [pre, str].filter(Boolean).join(' ')
-    }, '')
+  let enable = true
 
   return {
+    enable() {
+      enable = true
+    },
+    disable() {
+      enable = false
+    },
     log(...params: unknown[]) {
+      if (!enable) return
+
       console.log(getPrefix('info'), ...params)
     },
     warn(...params: unknown[]) {
+      if (!enable) return
+
       console.warn(getPrefix('warn'), ...params)
     },
     error(...params: unknown[]) {
+      if (!enable) return
+
       console.error(getPrefix('error'), ...params)
-    },
+    }
   }
 }
