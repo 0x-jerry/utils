@@ -72,4 +72,44 @@ describe('createSimpleLogger', () => {
     expect(level).toBe('error')
     clear()
   })
+
+  it('enable/disable', () => {
+    let prefix, level
+
+    const clear = () => {
+      prefix = undefined
+      level = undefined
+    }
+
+    console.warn =
+      console.error =
+      console.log =
+        ($prefix) => {
+          prefix = $prefix
+        }
+
+    let idx = 0
+
+    const logger = createSimpleLogger((t) => {
+      level = t
+      return `[${idx++}]`
+    })
+
+    logger.log('hello')
+    expect(prefix).toBe('[0]')
+    expect(level).toBe('info')
+    clear()
+
+    logger.disable()
+    logger.warn('hello')
+    expect(prefix).toBe(undefined)
+    expect(level).toBe(undefined)
+    clear()
+
+    logger.enable()
+    logger.error('hello')
+    expect(prefix).toBe('[1]')
+    expect(level).toBe('error')
+    clear()
+  })
 })
