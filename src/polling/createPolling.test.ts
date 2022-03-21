@@ -3,7 +3,7 @@ import { sleep } from '../core'
 
 describe('createPolling', () => {
   it('start polling', async () => {
-    const fn = jest.fn()
+    const fn = vi.fn()
 
     const polling = createPolling(fn, { timeout: 10 })
 
@@ -15,7 +15,7 @@ describe('createPolling', () => {
   })
 
   it('stop polling', async () => {
-    const fn = jest.fn()
+    const fn = vi.fn()
 
     const polling = createPolling(fn, { timeout: 10 })
 

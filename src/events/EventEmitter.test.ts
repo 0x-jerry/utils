@@ -65,18 +65,14 @@ describe('EventEmitter', () => {
 
     ee.on('test', () => {})
 
-    expect(() => ee.on('test', () => {})).toThrow(
-      'Listeners reached limit size: 1'
-    )
-    expect(() => ee.once('test', () => {})).toThrow(
-      'Listeners reached limit size: 1'
-    )
+    expect(() => ee.on('test', () => {})).toThrow('Listeners reached limit size: 1')
+    expect(() => ee.once('test', () => {})).toThrow('Listeners reached limit size: 1')
   })
 
   it('on then off', () => {
     const ee = new EventEmitter<Events>()
 
-    const fn = jest.fn()
+    const fn = vi.fn()
 
     const off = ee.on('bar', () => fn())
     ee.emit('bar', 12, '123')
@@ -93,7 +89,7 @@ describe('EventEmitter', () => {
       throw new Error()
     }
 
-    const fn2 = jest.fn()
+    const fn2 = vi.fn()
 
     const off = ee.on('bar', () => fn())
     const off2 = ee.on('bar', fn2)

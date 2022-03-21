@@ -12,7 +12,7 @@ describe('crateKeyboardHandler', () => {
       // if (isInput) return
 
       fn(e)
-    })
+    }),
   )
 
   it('on', () => {
@@ -20,7 +20,7 @@ describe('crateKeyboardHandler', () => {
       key: 'k',
     })
 
-    const fn = jest.fn()
+    const fn = vi.fn()
 
     onKeydown('k', fn)
 
@@ -36,7 +36,7 @@ describe('crateKeyboardHandler', () => {
       key: 'k',
     })
 
-    const fn = jest.fn()
+    const fn = vi.fn()
 
     const cancel = onKeydown('k', fn)
 
@@ -54,7 +54,7 @@ describe('crateKeyboardHandler', () => {
       metaKey: true,
     })
 
-    const fn = jest.fn()
+    const fn = vi.fn()
 
     onKeydown('meta + k', fn)
 
@@ -68,7 +68,7 @@ describe('crateKeyboardHandler', () => {
       metaKey: true,
     })
 
-    const fn = jest.fn()
+    const fn = vi.fn()
 
     onKeydown('meta+k, meta+o', fn)
 
@@ -79,7 +79,7 @@ describe('crateKeyboardHandler', () => {
       new KeyboardEvent('keydown', {
         key: 'o',
         metaKey: true,
-      })
+      }),
     )
 
     expect(fn).toBeCalledTimes(2)

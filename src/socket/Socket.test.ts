@@ -54,7 +54,7 @@ describe('Socket', () => {
   it('serialize error', (done) => {
     const [socket] = setupSocketServer(done)
 
-    const fn = jest.fn()
+    const fn = vi.fn()
 
     socket.on('deserialize-error', fn)
 
@@ -111,7 +111,7 @@ function setupSocketServer(done: () => void) {
         JSON.stringify({
           from: 'wss',
           data: raw,
-        })
+        }),
       )
     })
   })
