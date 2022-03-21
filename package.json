@@ -13,7 +13,8 @@
     "dist"
   ],
   "scripts": {
-    "test": "vitest",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "build": "tsup src/exports.ts --format cjs,esm --dts",
     "release": "x-release"
