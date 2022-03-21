@@ -1,1 +1,1 @@
-export { chooseFile } from './chooseFiles'
+export { chooseFiles } from './chooseFiles'

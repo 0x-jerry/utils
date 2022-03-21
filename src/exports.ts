@@ -1,5 +1,6 @@
 export * from './assert'
 export * from './core'
+export * from './dom'
 export * from './dom-navigator'
 export * from './events'
 export * from './keyboard-events'
