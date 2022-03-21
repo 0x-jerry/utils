@@ -1,10 +1,10 @@
-import { chooseFile, getInputEl } from './chooseFiles'
+import { chooseFiles, getInputEl } from './chooseFiles'
 
 describe('choose files', () => {
   it('choose', async () => {
     const blob = new Blob(['hello'])
 
-    const p = chooseFile()
+    const p = chooseFiles()
     const el = getInputEl()!
 
     expect(el).toBeTruthy()

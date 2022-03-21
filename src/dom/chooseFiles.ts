@@ -1,10 +1,23 @@
 let input: HTMLInputElement | null = null
 
-export function chooseFile(accept = ''): Promise<File[]> {
+interface ChooseFilesOption {
+  /**
+   * @default ''
+   */
+  accept?: string
+
+  /**
+   * @default false
+   */
+  multiple?: boolean
+}
+
+export function chooseFiles(opt: ChooseFilesOption = {}): Promise<File[]> {
   return new Promise((resolve, reject) => {
     input ||= createInputElement()
 
-    input.accept = accept
+    input.accept = opt.accept ?? ''
+    input.multiple = opt.multiple ?? false
 
     input.onchange = () => {
       const files = [...(input?.files || [])]
