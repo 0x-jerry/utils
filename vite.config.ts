@@ -6,6 +6,8 @@ export default defineConfig({
     globals: true,
     environment: 'happy-dom',
     coverage: {
+      include: ['src/**/*.ts'],
+      exclude: ['src/**/*.d.ts', 'src/**/*.test.ts'],
       reporter: ['html', 'clover'],
     },
   },
