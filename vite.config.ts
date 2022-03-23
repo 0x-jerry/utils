@@ -8,7 +8,7 @@ export default defineConfig({
     coverage: {
       include: ['src/**/*.ts'],
       exclude: ['src/**/*.d.ts', 'src/**/*.test.ts'],
-      reporter: ['html', 'clover'],
+      reporter: ['clover', 'html-spa'],
     },
   },
 })
