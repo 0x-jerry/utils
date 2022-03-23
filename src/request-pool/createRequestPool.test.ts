@@ -46,4 +46,23 @@ describe('request poll', () => {
     await sleep(200)
     expect(queue).toEqual([0, 1, 2, 3, 4])
   })
+
+  it('request failed', async () => {
+    const fakeReq = async (throwError: boolean = false) => {
+      await sleep(100)
+      if (throwError) {
+        throw new Error('error')
+      }
+
+      return 0
+    }
+
+    const req = createRequestPool(fakeReq, { max: 1 })
+
+    const r1 = req(true)
+    const r2 = req()
+
+    await expect(r1).rejects.toThrow('error')
+    await expect(r2).resolves.toBe(0)
+  })
 })

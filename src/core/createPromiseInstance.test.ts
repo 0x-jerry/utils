@@ -6,7 +6,7 @@ describe('createPromiseInstance', () => {
 
     ins.resolve(1)
 
-    expect(ins.instance).resolves.toBe(1)
+    await expect(ins.instance).resolves.toBe(1)
   })
 
   it('reject', async () => {
@@ -14,6 +14,6 @@ describe('createPromiseInstance', () => {
 
     ins.reject('error')
 
-    expect(ins.instance).rejects.toBe('error')
+    await expect(ins.instance).rejects.toBe('error')
   })
 })

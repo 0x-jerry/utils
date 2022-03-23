@@ -37,6 +37,6 @@ describe('choose files', () => {
     const err = new Event('error')
     el.dispatchEvent(err)
 
-    expect(p).rejects.toBe(err)
+    await expect(p).rejects.toBe(err)
   })
 })
