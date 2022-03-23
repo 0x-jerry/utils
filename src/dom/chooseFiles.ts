@@ -1,5 +1,3 @@
-let input: HTMLInputElement | null = null
-
 interface ChooseFilesOption {
   /**
    * @default ''
@@ -14,7 +12,7 @@ interface ChooseFilesOption {
 
 export function chooseFiles(opt: ChooseFilesOption = {}): Promise<File[]> {
   return new Promise((resolve, reject) => {
-    input ||= createInputElement()
+    const input = createInputElement()
 
     input.accept = opt.accept ?? ''
     input.multiple = opt.multiple ?? false
@@ -22,24 +20,26 @@ export function chooseFiles(opt: ChooseFilesOption = {}): Promise<File[]> {
     input.onchange = () => {
       const files = [...(input?.files || [])]
 
-      input!.value = ''
       resolve(files)
+      input.remove()
     }
 
-    input.onerror = (e) => reject(e)
+    input.onerror = (e) => {
+      reject(e)
+      input.remove()
+    }
 
     input.click()
   })
 }
 
-// for test
-export const getInputEl = () => input
-
 function createInputElement() {
-  input ||= document.createElement('input')
+  const input = document.createElement('input')
 
   input.type = 'file'
   input.style.display = 'none'
+  input.setAttribute('data-choose-file', '')
+
   document.body.appendChild(input)
 
   return input
