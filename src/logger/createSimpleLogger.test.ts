@@ -2,53 +2,24 @@ import { createSimpleLogger } from './createSimpleLogger'
 
 describe('createSimpleLogger', () => {
   it('output', () => {
-    let prefix, other
-
-    const clear = () => {
-      prefix = undefined
-      other = undefined
-    }
-
-    console.warn =
-      console.error =
-      console.log =
-        ($prefix, ...$other) => {
-          prefix = $prefix
-          other = $other
-        }
+    const console = mockConsole()
 
     const logger = createSimpleLogger('[tt]')
 
     logger.log('hello')
-    expect(prefix).toBe('[tt]')
-    expect(other).toEqual(['hello'])
-    clear()
+    expect(console.log).toHaveBeenLastCalledWith('[tt]', 'hello')
 
     logger.warn('hello')
-    expect(prefix).toBe('[tt]')
-    expect(other).toEqual(['hello'])
-    clear()
+    expect(console.warn).toHaveBeenLastCalledWith('[tt]', 'hello')
 
     logger.error('hello')
-    expect(prefix).toBe('[tt]')
-    expect(other).toEqual(['hello'])
-    clear()
+    expect(console.error).toHaveBeenLastCalledWith('[tt]', 'hello')
   })
 
   it('function prefix', () => {
-    let prefix, level
+    let level
 
-    const clear = () => {
-      prefix = undefined
-      level = undefined
-    }
-
-    console.warn =
-      console.error =
-      console.log =
-        ($prefix) => {
-          prefix = $prefix
-        }
+    const console = mockConsole()
 
     let idx = 0
 
@@ -58,35 +29,20 @@ describe('createSimpleLogger', () => {
     })
 
     logger.log('hello')
-    expect(prefix).toBe('[0]')
+    expect(console.log.mock.calls[0][0]).toBe('[0]')
     expect(level).toBe('info')
-    clear()
 
     logger.warn('hello')
-    expect(prefix).toBe('[1]')
+    expect(console.warn.mock.calls[0][0]).toBe('[1]')
     expect(level).toBe('warn')
-    clear()
 
     logger.error('hello')
-    expect(prefix).toBe('[2]')
+    expect(console.error.mock.calls[0][0]).toBe('[2]')
     expect(level).toBe('error')
-    clear()
   })
 
   it('enable/disable', () => {
-    let prefix, level
-
-    const clear = () => {
-      prefix = undefined
-      level = undefined
-    }
-
-    console.warn =
-      console.error =
-      console.log =
-        ($prefix) => {
-          prefix = $prefix
-        }
+    let level
 
     let idx = 0
 
@@ -96,22 +52,29 @@ describe('createSimpleLogger', () => {
     })
 
     logger.log('hello')
-    expect(prefix).toBe('[0]')
     expect(level).toBe('info')
-    clear()
+    level = undefined
 
     logger.disable()
     logger.warn('hello')
     logger.log('hello')
     logger.warn('hello')
-    expect(prefix).toBe(undefined)
     expect(level).toBe(undefined)
-    clear()
 
     logger.enable()
     logger.error('hello')
-    expect(prefix).toBe('[1]')
     expect(level).toBe('error')
-    clear()
   })
 })
+
+function mockConsole() {
+  const warn = vi.spyOn(console, 'warn')
+  const log = vi.spyOn(console, 'log')
+  const error = vi.spyOn(console, 'error')
+
+  return {
+    log,
+    warn,
+    error,
+  }
+}
