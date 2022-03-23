@@ -31,4 +31,20 @@ describe('createPolling', () => {
 
     expect(fn).toBeCalledTimes(3)
   })
+
+  it('is polling', async () => {
+    const fn = vi.fn()
+
+    const polling = createPolling(fn, { timeout: 10 })
+
+    polling.polling()
+    polling.polling()
+    expect(polling.isPolling).toBe(true)
+    expect(fn).toBeCalledTimes(1)
+
+    polling.abort()
+    await sleep(20)
+
+    expect(fn).toBeCalledTimes(1)
+  })
 })

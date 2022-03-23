@@ -24,24 +24,22 @@ export function createPolling(fn: () => any | Promise<any>, opt?: PollingOption)
 
   let isManualAbort = false
 
-  const isPolling = {
-    value: false,
-  }
+  let _isPolling = false
 
   const abort = () => {
     isManualAbort = true
   }
 
   const polling = async () => {
-    if (isPolling.value) return
+    if (_isPolling) return
 
-    isPolling.value = true
+    _isPolling = true
 
     const isAbort = await fn()
 
     await sleep(conf.timeout)
 
-    isPolling.value = false
+    _isPolling = false
     if (isAbort || isManualAbort) return
 
     polling()
@@ -60,7 +58,9 @@ export function createPolling(fn: () => any | Promise<any>, opt?: PollingOption)
     /**
      *
      */
-    isPolling,
+    get isPolling() {
+      return _isPolling
+    },
     /**
      * Abort roll polling.
      */
