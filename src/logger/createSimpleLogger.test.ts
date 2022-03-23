@@ -102,6 +102,8 @@ describe('createSimpleLogger', () => {
 
     logger.disable()
     logger.warn('hello')
+    logger.log('hello')
+    logger.warn('hello')
     expect(prefix).toBe(undefined)
     expect(level).toBe(undefined)
     clear()
