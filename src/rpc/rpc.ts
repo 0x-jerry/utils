@@ -36,7 +36,6 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
       }
 
       try {
-        // @ts-ignore
         r.result = await client[msg.method](...msg.params)
       } catch (error) {
         console.warn('Error occurs when call method:', msg, error)
