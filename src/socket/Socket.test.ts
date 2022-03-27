@@ -1,6 +1,4 @@
-/**
- * @jest-environment jsdom
- */
+// @vitest-environment happy-dom
 import { Socket } from './Socket'
 import { Server } from 'mock-socket'
 import { sleep, isObject } from '../core'
@@ -111,7 +109,7 @@ function setupSocketServer(done: () => void) {
         JSON.stringify({
           from: 'wss',
           data: raw,
-        }),
+        })
       )
     })
   })

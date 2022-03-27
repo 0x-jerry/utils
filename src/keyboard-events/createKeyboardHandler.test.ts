@@ -1,7 +1,4 @@
-/**
- * @jest-environment jsdom
- */
-
+// @vitest-environment happy-dom
 import { createKeyboardHandler } from './createKeyboardHandler'
 
 describe('crateKeyboardHandler', () => {
@@ -12,7 +9,7 @@ describe('crateKeyboardHandler', () => {
       // if (isInput) return
 
       fn(e)
-    }),
+    })
   )
 
   it('on', () => {
@@ -79,7 +76,7 @@ describe('crateKeyboardHandler', () => {
       new KeyboardEvent('keydown', {
         key: 'o',
         metaKey: true,
-      }),
+      })
     )
 
     expect(fn).toBeCalledTimes(2)

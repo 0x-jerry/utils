@@ -1,7 +1,4 @@
-/**
- * @jest-environment jsdom
- */
-
+// @vitest-environment happy-dom
 import { createDomNavigator, KeyboardNavigatorOption, utils } from './domNavigator'
 
 const getGlobalOffset = utils.getGlobalOffset
