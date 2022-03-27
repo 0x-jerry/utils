@@ -22,13 +22,21 @@ export class EventEmitter<Events extends Record<string, ListenerFunction>> {
     return this.#limit
   }
 
-  constructor(limit = 20) {
+  constructor(
+    /**
+     *
+     * 0 means infinite.
+     *
+     * @default 20
+     */
+    limit = 20
+  ) {
     this.#limit = limit
     this.#listeners = {}
   }
 
   #checkLimit(size: number) {
-    if (size >= this.#limit) {
+    if (this.#limit && size >= this.#limit) {
       throw new Error('Listeners reached limit size: ' + this.#limit)
     }
   }
@@ -42,9 +50,7 @@ export class EventEmitter<Events extends Record<string, ListenerFunction>> {
    * @param event Event type
    */
   events<K extends keyof Events>(event: K): NonNullable<Listeners<Events>[K]>
-  events<K extends keyof Events>(
-    event?: K
-  ): Listeners<Events> | NonNullable<Listeners<Events>[K]> {
+  events<K extends keyof Events>(event?: K): Listeners<Events> | NonNullable<Listeners<Events>[K]> {
     if (!event) {
       return this.#listeners
     }

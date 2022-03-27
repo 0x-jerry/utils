@@ -24,7 +24,7 @@ export function createRequestPool<T extends (...arg: any[]) => Promise<any>>(
 
   const ctx: RequestPoolContext = {
     count: 0,
-    event: new EventEmitter(20),
+    event: new EventEmitter(0),
   }
 
   return function (this: any, ...args: any[]) {
