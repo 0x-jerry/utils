@@ -54,8 +54,10 @@ describe('createSimpleLogger', () => {
     logger.log('hello')
     expect(level).toBe('info')
     level = undefined
+    expect(logger.isEnabled).toBe(true)
 
     logger.disable()
+    expect(logger.isEnabled).toBe(false)
     logger.warn('hello')
     logger.log('hello')
     logger.warn('hello')
