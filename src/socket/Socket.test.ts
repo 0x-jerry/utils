@@ -1,4 +1,4 @@
-// @vitest-environment happy-dom
+// @jest-environment jsdom
 import { Socket } from './Socket'
 import { Server } from 'mock-socket'
 import { sleep, isObject } from '../core'

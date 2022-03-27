@@ -1,4 +1,4 @@
-// @vitest-environment happy-dom
+// @jest-environment jsdom
 import { createKeyboardHandler } from './createKeyboardHandler'
 
 describe('crateKeyboardHandler', () => {

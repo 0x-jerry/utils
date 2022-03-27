@@ -1,3 +1,6 @@
+// @jest-environment happy-dom
+// Why we use happy-dom here? Because jsdom has some strict check for `HTMLInputElement.files`. We can not mock the value of input.
+
 import { chooseFiles } from './chooseFiles'
 
 describe('choose files', () => {
