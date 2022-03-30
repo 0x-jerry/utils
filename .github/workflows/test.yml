@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        node-version: [15]
+        node-version: [16]
     steps:
       - uses: actions/checkout@v2
 
@@ -26,14 +26,10 @@ jobs:
 
       - run: pnpm i
 
-      - run: pnpm run test:coverage
-
-      - name: Upload to Codecov
-        uses: codecov/codecov-action@v2
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v3.0.0
+        env:
+          CC_TEST_REPORTER_ID: 1e06679220ee24cfd303bd437618cd5fc15a33be1322a81dc269b0f56977690a
         with:
-          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-          files: ./coverage/clover.xml # optional
-          flags: unittests # optional
-          name: codecov-umbrella # optional
-          fail_ci_if_error: true # optional (default = false)
-          verbose: false # optional (default = false)
+          coverageCommand: pnpm run test:coverage
+          coverageLocations: ${{github.workspace}}/coverage/clover.xml:clover
