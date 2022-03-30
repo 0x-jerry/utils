@@ -1,6 +1,7 @@
+import { ref } from '@vue/reactivity'
 import { sleep } from '../core'
 
-interface PollingOption {
+export interface PollingOption {
   /**
    *
    * @default 500
@@ -24,22 +25,22 @@ export function createPolling(fn: () => any | Promise<any>, opt?: PollingOption)
 
   let isManualAbort = false
 
-  let _isPolling = false
+  const _isPolling = ref(false)
 
   const abort = () => {
     isManualAbort = true
   }
 
   const polling = async () => {
-    if (_isPolling) return
+    if (_isPolling.value) return
 
-    _isPolling = true
+    _isPolling.value = true
 
     const isAbort = await fn()
 
     await sleep(conf.timeout)
 
-    _isPolling = false
+    _isPolling.value = false
     if (isAbort || isManualAbort) return
 
     polling()
@@ -59,7 +60,7 @@ export function createPolling(fn: () => any | Promise<any>, opt?: PollingOption)
      *
      */
     get isPolling() {
-      return _isPolling
+      return _isPolling.value
     },
     /**
      * Abort roll polling.

@@ -3,6 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@0x-jerry/x-release': ^0.3.2
   '@types/node': ^17.0.23
+  '@vue/reactivity': ^3.2.31
   c8: ^7.11.0
   happy-dom: ^2.50.0
   jsdom: ^19.0.0
@@ -11,6 +12,9 @@ specifiers:
   typescript: ^4.6.3
   vite: ^2.8.6
   vitest: ^0.7.12
+
+dependencies:
+  '@vue/reactivity': registry.npmmirror.com/@vue/reactivity/3.2.31
 
 devDependencies:
   '@0x-jerry/x-release': registry.npmmirror.com/@0x-jerry/x-release/0.3.2
@@ -169,6 +173,20 @@ packages:
     name: '@types/throttle-debounce'
     version: 2.1.0
     dev: true
+
+  registry.npmmirror.com/@vue/reactivity/3.2.31:
+    resolution: {integrity: sha512-HVr0l211gbhpEKYr2hYe7hRsV91uIVGFYNHj73njbARVGHQvIojkImKMaZNDdoDZOIkMsBc9a1sMqR+WZwfSCw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@vue/reactivity/-/reactivity-3.2.31.tgz}
+    name: '@vue/reactivity'
+    version: 3.2.31
+    dependencies:
+      '@vue/shared': registry.npmmirror.com/@vue/shared/3.2.31
+    dev: false
+
+  registry.npmmirror.com/@vue/shared/3.2.31:
+    resolution: {integrity: sha512-ymN2pj6zEjiKJZbrf98UM2pfDd6F2H7ksKw7NDt/ZZ1fh5Ei39X5tABugtT03ZRlWd9imccoK0hE8hpjpU7irQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@vue/shared/-/shared-3.2.31.tgz}
+    name: '@vue/shared'
+    version: 3.2.31
+    dev: false
 
   registry.npmmirror.com/abab/2.0.5:
     resolution: {integrity: sha512-9IK9EadsbHo6jLWIpxpR6pL0sazTXV6+SQv25ZB+F7Bj9mJNaOc4nCRabwd5M/JwmUa8idz6Eci6eKfJryPs6Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/abab/-/abab-2.0.5.tgz}
