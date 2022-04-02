@@ -1,4 +1,4 @@
-import { createRequestPool } from './createRequestPool'
+import { createPool } from './createPool'
 import { sleep } from '../core'
 
 const fakeReq = async (n: number, time: number) => {
@@ -10,7 +10,7 @@ const fakeReq = async (n: number, time: number) => {
 
 describe('request poll', () => {
   it('max count', async () => {
-    const req = createRequestPool(fakeReq, { max: 4 })
+    const req = createPool(fakeReq, { maximize: 4 })
 
     const queue: any[] = []
 
@@ -27,7 +27,7 @@ describe('request poll', () => {
   })
 
   it('request time', async () => {
-    const req = createRequestPool(fakeReq, { max: 2 })
+    const req = createPool(fakeReq, { maximize: 2 })
 
     const queue: any[] = []
 
@@ -57,7 +57,7 @@ describe('request poll', () => {
       return 0
     }
 
-    const req = createRequestPool(fakeReq, { max: 1 })
+    const req = createPool(fakeReq, { maximize: 1 })
 
     const r1 = req(true)
     const r2 = req()
