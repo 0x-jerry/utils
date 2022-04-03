@@ -10,7 +10,6 @@ specifiers:
   mock-socket: ^9.1.2
   tsup: ^5.12.1
   typescript: ^4.6.3
-  vite: ^2.8.6
   vitest: ^0.8.0
 
 dependencies:
@@ -25,7 +24,6 @@ devDependencies:
   mock-socket: registry.npmmirror.com/mock-socket/9.1.2
   tsup: registry.npmmirror.com/tsup/5.12.1_typescript@4.6.3
   typescript: registry.npmmirror.com/typescript/4.6.3
-  vite: registry.npmmirror.com/vite/2.8.6
   vitest: registry.npmmirror.com/vitest/0.8.0_4212d89b5a6c0b8444dd87b1e45e2f15
 
 packages:
