@@ -17,3 +17,7 @@ export type Awaitable<T> = T | PromiseLike<T>
  * Infers the element type of an array.
  */
 export type ElementOf<T> = T extends Array<infer E> ? E : never
+
+export interface Ctor<Instance = any, Params = any[]> {
+  new (...args: Params): Instance
+}
