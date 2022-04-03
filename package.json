@@ -5,6 +5,17 @@
   "main": "./dist/exports.js",
   "module": "./dist/exports.mjs",
   "types": "./dist/exports.d.ts",
+  "description": "Collection of useful JavaScript/TypeScript utils",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0x-jerry/utils.git"
+  },
+  "keywords": [],
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/0x-jerry/utils/issues"
+  },
+  "homepage": "https://github.com/0x-jerry/utils#readme",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
