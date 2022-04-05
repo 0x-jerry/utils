@@ -1,13 +1,28 @@
 import { Ctor } from './types'
 
-/**
- * Please attention, this is only working with ES6.
- *
- * It will not working if you compile code to ES5.
- *
- * @param o
- * @returns
- */
-export function isClass<Ins, Params>(o: unknown): o is Ctor<Ins, Params> {
-  return /^\s*class/.test(String(o))
+export namespace is {
+  // class is a keyword, so use calsss
+  export function classs(o: unknown): o is Ctor {
+    return /^\s*class/.test(String(o))
+  }
+
+  export function number(o: unknown): o is number {
+    return typeof o === 'number'
+  }
+
+  export function string(o: unknown): o is string {
+    return typeof o === 'string'
+  }
+
+  export function boolean(o: unknown): o is boolean {
+    return typeof o === 'boolean'
+  }
+
+  export function fn(o: unknown): o is Function {
+    return typeof o === 'function' && !classs(o)
+  }
+
+  export function array<T = any>(o: unknown): o is Array<T> {
+    return Array.isArray(o)
+  }
 }

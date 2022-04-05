@@ -37,4 +37,18 @@ describe('assert', () => {
     expect(() => assert.fn(1)).toThrow('1 should be a function.')
     expect(() => assert.fn(1, 'msg')).toThrow('msg')
   })
+
+  it('class', () => {
+    assert.classs(class A {})
+
+    expect(() => assert.classs(() => {})).toThrow('() => {\n    } should be a class.')
+    expect(() => assert.classs(1, 'msg')).toThrow('msg')
+  })
+
+  it('array', () => {
+    assert.array([])
+
+    expect(() => assert.array('')).toThrow(' should be an array.')
+    expect(() => assert.array(1, 'msg')).toThrow('msg')
+  })
 })

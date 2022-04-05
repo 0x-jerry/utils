@@ -1,3 +1,5 @@
+import { Ctor, is } from '../core'
+
 /**
  * Assert function, like the one in node.
  *
@@ -10,18 +12,26 @@ export function assert(condition: unknown, message: string): asserts condition {
 
 export namespace assert {
   export function number(t: unknown, message?: string): asserts t is number {
-    return assert(typeof t === 'number', message || `${t} should be a number.`)
+    return assert(is.number(t), message || `${t} should be a number.`)
   }
 
   export function string(t: unknown, message?: string): asserts t is string {
-    return assert(typeof t === 'string', message || `${t} should be a string.`)
+    return assert(is.string(t), message || `${t} should be a string.`)
   }
 
   export function boolean(t: unknown, message?: string): asserts t is boolean {
-    return assert(typeof t === 'boolean', message || `${t} should be a boolean.`)
+    return assert(is.boolean(t), message || `${t} should be a boolean.`)
   }
 
   export function fn(t: unknown, message?: string): asserts t is Function {
-    return assert(typeof t === 'function', message || `${t} should be a function.`)
+    return assert(is.fn(t), message || `${t} should be a function.`)
+  }
+
+  export function classs(t: unknown, message?: string): asserts t is Ctor {
+    return assert(is.classs(t), message || `${t} should be a class.`)
+  }
+
+  export function array<T = any>(t: unknown, message?: string): asserts t is Array<T> {
+    return assert(is.array(t), message || `${t} should be an array.`)
   }
 }
