@@ -1,4 +1,4 @@
-import { Ctor } from './types'
+import { Ctor } from '../core'
 
 export namespace is {
   // class is a keyword, so use calsss
@@ -24,5 +24,9 @@ export namespace is {
 
   export function array<T = any>(o: unknown): o is Array<T> {
     return Array.isArray(o)
+  }
+
+  export function object(o: unknown): o is Object {
+    return o !== null && typeof o === 'object'
   }
 }

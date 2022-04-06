@@ -49,4 +49,12 @@ describe('is utils', () => {
     expect(is.array(1)).toBe(false)
     expect(is.array(new Set())).toBe(false)
   })
+
+  it('is object', () => {
+    expect(is.object(null)).toBe(false)
+
+    expect(is.object(1)).toBe(false)
+
+    expect(is.object({})).toBe(true)
+  })
 })

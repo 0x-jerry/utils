@@ -1,4 +1,5 @@
-import { Ctor, is } from '../core'
+import { Ctor } from '../core'
+import { is } from '../is'
 
 /**
  * Assert function, like the one in node.
