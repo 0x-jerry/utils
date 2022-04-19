@@ -8,10 +8,23 @@ export interface RPCMethods {
 export interface RPCOption {
   send: (data: RPCMessage) => any
   receive: (resolver: (data: RPCMessage) => void) => any
+  /**
+   * set 0 to turn off timeout check.
+   * @default 10s
+   */
+  timeout?: number
 }
 
 type RPCServer<T extends RPCMethods> = {
   [key in keyof T]: (...arg: Parameters<T[key]>) => Promise<ReturnType<T[key]>>
+}
+
+const RPCTimeoutErrorSymbol = Symbol()
+
+export class RPCTimeoutError extends Error {
+  [RPCTimeoutErrorSymbol] = true
+
+  static S = RPCTimeoutErrorSymbol
 }
 
 export function createRPC<Server extends RPCMethods, Client extends RPCMethods = {}>(
@@ -22,11 +35,12 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
     {
       serialize: JSON.stringify,
       deserialize: JSON.parse,
+      timeout: 10 * 1000,
     },
     opt
   )
 
-  const record = new Map<string, PromiseInstance<any>>()
+  const record = new Map<string, PromiseInstance>()
 
   ctx.receive(async (msg) => {
     if (msg.type === 'q') {
@@ -77,6 +91,14 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
 
           const p = createPromiseInstance()
           record.set(req.id, p)
+
+          if (ctx.timeout) {
+            setTimeout(() => {
+              if (p.isPending) {
+                p.reject(new RPCTimeoutError())
+              }
+            }, ctx.timeout)
+          }
 
           ctx.send(req)
 
