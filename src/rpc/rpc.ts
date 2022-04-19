@@ -1,3 +1,4 @@
+import { createPromiseInstance, PromiseInstance } from '../core'
 import { RPCRequest, RPCResponse, RPCMessage } from './types'
 
 export interface RPCMethods {
@@ -25,7 +26,7 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
     opt
   )
 
-  const record = new Map<string, PPromise<any>>()
+  const record = new Map<string, PromiseInstance<any>>()
 
   ctx.receive(async (msg) => {
     if (msg.type === 'q') {
@@ -74,33 +75,16 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
             params: args,
           }
 
-          const p = P()
+          const p = createPromiseInstance()
           record.set(req.id, p)
 
           ctx.send(req)
 
-          return p.p
+          return p.instance
         }
       },
     }
   ) as any
-}
-
-function P<T = unknown>() {
-  const p: PPromise<T> = {} as any
-
-  p.p = new Promise((resolve, reject) => {
-    p.resolve = resolve
-    p.reject = reject
-  })
-
-  return p
-}
-
-type PPromise<T> = {
-  p: Promise<T>
-  resolve: (value: T) => void
-  reject: (reason: unknown) => void
 }
 
 function uuid() {

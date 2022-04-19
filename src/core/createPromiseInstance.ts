@@ -1,4 +1,10 @@
-export function createPromiseInstance<T>() {
+export interface PromiseInstance<T> {
+  instance: Promise<T>
+  resolve: (data: T | PromiseLike<T>) => void
+  reject: (reason: any) => void
+}
+
+export function createPromiseInstance<T>(): PromiseInstance<T> {
   type Resolve = (value: T | PromiseLike<T>) => void
   type Reject = (reason?: any) => void
 
@@ -12,6 +18,6 @@ export function createPromiseInstance<T>() {
   return {
     instance: p,
     resolve: _resolve!,
-    reject: _reject!
+    reject: _reject!,
   }
 }
