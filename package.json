@@ -1,6 +1,6 @@
 {
   "name": "@0x-jerry/utils",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "license": "MIT",
   "main": "./dist/exports.js",
   "module": "./dist/exports.mjs",
