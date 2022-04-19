@@ -97,7 +97,7 @@ describe('rpc test', () => {
     const invalidMsg = { type: 's', id: '0cfd68c19', result: 'pong: 1' }
     channel.port2.postMessage(invalidMsg)
     // ensure channel message has been resolved
-    await sleep(0)
+    await sleep(10)
 
     expect(warn.mock.calls[0]).eql(['Not found request:', invalidMsg])
 
