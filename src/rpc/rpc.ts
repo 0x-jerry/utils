@@ -15,16 +15,20 @@ export interface RPCOption {
   timeout?: number
 }
 
-type RPCServer<T extends RPCMethods> = {
-  [key in keyof T]: (...arg: Parameters<T[key]>) => Promise<ReturnType<T[key]>>
-}
-
 const RPCTimeoutErrorSymbol = Symbol()
 
 export class RPCTimeoutError extends Error {
   [RPCTimeoutErrorSymbol] = true
 
   static S = RPCTimeoutErrorSymbol
+}
+
+export const RPCStatus = Symbol()
+
+type RPCServer<T extends RPCMethods> = {
+  [key in keyof T]: (...arg: Parameters<T[key]>) => Promise<ReturnType<T[key]>>
+} & {
+  [RPCStatus]: Map<string, PromiseInstance>
 }
 
 export function createRPC<Server extends RPCMethods, Client extends RPCMethods = {}>(
@@ -80,7 +84,15 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
   return new Proxy(
     {},
     {
-      get(_, method: string) {
+      get(_, method: string | symbol) {
+        if (typeof method === 'symbol') {
+          if (method === RPCStatus) {
+            return record
+          }
+
+          return
+        }
+
         return (...args: any[]) => {
           const req: RPCRequest = {
             type: 'q',
@@ -93,11 +105,7 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
           record.set(req.id, p)
 
           if (ctx.timeout) {
-            setTimeout(() => {
-              if (p.isPending) {
-                p.reject(new RPCTimeoutError())
-              }
-            }, ctx.timeout)
+            setTimeout(() => checkTimeout(req.id), ctx.timeout)
           }
 
           ctx.send(req)
@@ -107,6 +115,17 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
       },
     }
   ) as any
+
+  function checkTimeout(id: string) {
+    const r = record.get(id)
+
+    if (!r?.isPending) {
+      return
+    }
+
+    r.reject(new RPCTimeoutError())
+    record.delete(id)
+  }
 }
 
 function uuid() {

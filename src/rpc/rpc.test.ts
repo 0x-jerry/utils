@@ -1,10 +1,14 @@
 import { MessageChannel } from 'worker_threads'
 import { sleep } from '../core'
-import { createRPC } from './rpc'
+import { createRPC, RPCStatus, RPCTimeoutError } from './rpc'
 
 const A = {
   ping(s: string) {
     return 'ping: ' + s
+  },
+  async timeout(ts: number) {
+    await sleep(ts)
+    return 0
   },
 }
 
@@ -96,6 +100,23 @@ describe('rpc test', () => {
     await sleep(0)
 
     expect(warn.mock.calls[0]).eql(['Not found request:', invalidMsg])
+
+    channel.port1.close()
+  })
+
+  it('should throw a timeout error', async () => {
+    const channel = new MessageChannel()
+
+    const a = createRPC<FnA>(B, {
+      send: (data) => channel.port1.postMessage(data),
+      receive: (resolver) => channel.port1.on('message', resolver),
+      timeout: 10,
+    })
+
+    await expect(a.timeout(100)).rejects.toBeInstanceOf(RPCTimeoutError)
+
+    const status = a[RPCStatus]
+    expect(status.size).toBe(0)
 
     channel.port1.close()
   })
