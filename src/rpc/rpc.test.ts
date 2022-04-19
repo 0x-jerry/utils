@@ -1,6 +1,6 @@
 import { MessageChannel } from 'worker_threads'
 import { sleep } from '../core'
-import { createRPC, RPCStatus, RPCTimeoutError } from './rpc'
+import { createRPC, RPCStatusSymbol, RPCTimeoutError } from './rpc'
 
 const A = {
   ping(s: string) {
@@ -115,7 +115,7 @@ describe('rpc test', () => {
 
     await expect(a.timeout(100)).rejects.toBeInstanceOf(RPCTimeoutError)
 
-    const status = a[RPCStatus]
+    const status = a[RPCStatusSymbol]
     expect(status.size).toBe(0)
 
     channel.port1.close()

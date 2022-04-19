@@ -15,7 +15,8 @@ export interface RPCOption {
   timeout?: number
 }
 
-const RPCTimeoutErrorSymbol = Symbol()
+const RPCTimeoutErrorSymbol = '__$rpc_timeout_error$__'
+export const RPCStatusSymbol = '__$rpc_status$__'
 
 export class RPCTimeoutError extends Error {
   [RPCTimeoutErrorSymbol] = true
@@ -23,12 +24,10 @@ export class RPCTimeoutError extends Error {
   static S = RPCTimeoutErrorSymbol
 }
 
-export const RPCStatus = Symbol()
-
 type RPCServer<T extends RPCMethods> = {
   [key in keyof T]: (...arg: Parameters<T[key]>) => Promise<ReturnType<T[key]>>
 } & {
-  [RPCStatus]: Map<string, PromiseInstance>
+  [RPCStatusSymbol]: Map<string, PromiseInstance>
 }
 
 export function createRPC<Server extends RPCMethods, Client extends RPCMethods = {}>(
@@ -84,13 +83,9 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
   return new Proxy(
     {},
     {
-      get(_, method: string | symbol) {
-        if (typeof method === 'symbol') {
-          if (method === RPCStatus) {
-            return record
-          }
-
-          return
+      get(_, method: string) {
+        if (method === RPCStatusSymbol) {
+          return record
         }
 
         return (...args: any[]) => {

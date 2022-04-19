@@ -1,4 +1,4 @@
-const Once = Symbol()
+const Once = '__$once$__'
 
 interface ListenerFunction {
   (...args: any[]): any
