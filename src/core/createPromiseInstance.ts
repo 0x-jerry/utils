@@ -25,11 +25,15 @@ export function createPromiseInstance<T>(): PromiseInstance<T> {
 
   const p = new Promise<T>((resolve, reject) => {
     _resolve = (v) => {
+      if (_status !== PromiseStatus.Pending) return
+
       _status = PromiseStatus.Fulfilled
       resolve(v)
     }
 
     _reject = (r) => {
+      if (_status !== PromiseStatus.Pending) return
+
       _status = PromiseStatus.Rejected
 
       reject(r)
