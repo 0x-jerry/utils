@@ -13,6 +13,11 @@ export interface RPCOption {
    * @default 10s
    */
   timeout?: number
+  /**
+   *
+   * @default true
+   */
+  ignoreSelfMessage?: boolean
 }
 
 const RPCTimeoutErrorSymbol = '__$rpc_timeout_error$__'
@@ -39,6 +44,7 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
       serialize: JSON.stringify,
       deserialize: JSON.parse,
       timeout: 10 * 1000,
+      ignoreSelfMessage: true,
     },
     opt
   )
@@ -47,6 +53,12 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
 
   ctx.receive(async (msg) => {
     if (msg.type === 'q') {
+      // this maybe send by this rpc server self.
+      if (ctx.ignoreSelfMessage && record.has(msg.id)) {
+        // ignore this message
+        return
+      }
+
       // request
       const r: RPCResponse = {
         type: 's',
@@ -54,7 +66,10 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
       }
 
       try {
-        r.result = await client[msg.method](...msg.params)
+        const fn = client[msg.method]
+        if (!fn) throw new Error(`Not found method: [${msg.method}]`)
+
+        r.result = await fn.call(client, ...msg.params)
       } catch (error) {
         console.warn('Error occurs when call method:', msg, error)
         r.error = error

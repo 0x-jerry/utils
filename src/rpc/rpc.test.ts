@@ -120,4 +120,28 @@ describe('rpc test', () => {
 
     channel.port1.close()
   })
+
+  it('should ignore the message send by itself', async () => {
+    const channel = new MessageChannel()
+
+    const a = createRPC<FnA>(B, {
+      send: (data) => channel.port1.postMessage(data),
+      receive: (resolver) => channel.port2.on('message', resolver),
+      timeout: 100,
+    })
+
+    await expect(a.ping('hello')).rejects.toBeInstanceOf(RPCTimeoutError)
+
+    channel.port1.close()
+
+    const aa = createRPC<FnA>(B, {
+      send: (data) => channel.port1.postMessage(data),
+      receive: (resolver) => channel.port2.on('message', resolver),
+      timeout: 100,
+    })
+
+    await expect(aa.ping('hello')).rejects.toThrow('Not found method: [ping]')
+
+    channel.port1.close()
+  })
 })
