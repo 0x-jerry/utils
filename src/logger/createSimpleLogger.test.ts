@@ -29,6 +29,7 @@ describe('createSimpleLogger', () => {
     })
 
     logger.log('hello')
+    expect(console.log).toBeCalledTimes(1)
     expect(console.log.mock.calls[0][0]).toBe('[0]')
     expect(level).toBe('info')
 
@@ -71,7 +72,7 @@ describe('createSimpleLogger', () => {
 
 function mockConsole() {
   const warn = vi.spyOn(console, 'warn')
-  const log = vi.spyOn(console, 'log')
+  const log = vi.spyOn(console, 'info')
   const error = vi.spyOn(console, 'error')
 
   return {
