@@ -1,4 +1,5 @@
 import { EventEmitter } from '../events'
+import { createSimpleLogger, SimpleLogger } from '../logger'
 
 type WebSocketEvents = {
   error(e: any): void
@@ -18,8 +19,14 @@ const defaultFormatter: SocketFormatter = {
   serialize: (data) => JSON.stringify(data),
 }
 
+export interface SocketOption {
+  verbose?: boolean
+}
+
 export class Socket extends EventEmitter<WebSocketEvents> {
   #s?: WebSocket
+
+  #logger?: SimpleLogger
 
   get socket() {
     return this.#s
@@ -35,11 +42,15 @@ export class Socket extends EventEmitter<WebSocketEvents> {
 
   formatter = defaultFormatter
 
-  constructor(public url: string) {
+  constructor(public url: string, opt: SocketOption = {}) {
     super()
 
+    if (opt.verbose) {
+      this.#logger = createSimpleLogger()
+    }
+
     // avoid uncaught exception
-    this.on('error', console.error)
+    this.on('error', (e) => this.#logger?.error(e))
   }
 
   async #connect() {

@@ -1,4 +1,5 @@
 import { createPromiseInstance, PromiseInstance } from '../core'
+import { createSimpleLogger, SimpleLogger } from '../logger'
 import { RPCRequest, RPCResponse, RPCMessage } from './types'
 
 export interface RPCMethods {
@@ -18,6 +19,7 @@ export interface RPCOption {
    * @default true
    */
   ignoreSelfMessage?: boolean
+  verbose?: boolean
 }
 
 const RPCTimeoutErrorSymbol = '__$rpc_timeout_error$__'
@@ -29,7 +31,7 @@ export class RPCTimeoutError extends Error {
   static S = RPCTimeoutErrorSymbol
 }
 
-type RPCServer<T extends RPCMethods> = {
+export type RPCServer<T extends RPCMethods> = {
   [key in keyof T]: (...arg: Parameters<T[key]>) => Promise<ReturnType<T[key]>>
 } & {
   [RPCStatusSymbol]: Map<string, PromiseInstance>
@@ -45,9 +47,12 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
       deserialize: JSON.parse,
       timeout: 10 * 1000,
       ignoreSelfMessage: true,
+      verbose: false,
     },
     opt
   )
+
+  const logger: SimpleLogger | null = ctx.verbose ? createSimpleLogger() : null
 
   const record = new Map<string, PromiseInstance>()
 
@@ -71,7 +76,7 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
 
         r.result = await fn.call(client, ...msg.params)
       } catch (error) {
-        console.warn('Error occurs when call method:', msg, error)
+        logger?.warn('Error occurs when call method:', msg, error)
         r.error = error
       }
 
@@ -81,7 +86,7 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
 
     // response
     if (!record.has(msg.id)) {
-      console.warn('Not found request:', msg)
+      logger?.warn('Not found request:', msg)
       return
     }
 

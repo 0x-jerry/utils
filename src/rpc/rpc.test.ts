@@ -64,11 +64,13 @@ describe('rpc test', () => {
     const a = createRPC<typeof BB>(AA, {
       send: (data) => channel.port1.postMessage(data),
       receive: (resolver) => channel.port1.on('message', resolver),
+      verbose: true,
     })
 
     const b = createRPC<typeof AA>(BB, {
       send: (data) => channel.port2.postMessage(data),
       receive: (resolver) => channel.port2.on('message', resolver),
+      verbose: true,
     })
 
     const r1 = a.pong()
@@ -92,6 +94,7 @@ describe('rpc test', () => {
     const a = createRPC<FnB>(A, {
       send: (data) => channel.port1.postMessage(data),
       receive: (resolver) => channel.port1.on('message', resolver),
+      verbose: true,
     })
 
     const invalidMsg = { type: 's', id: '0cfd68c19', result: 'pong: 1' }

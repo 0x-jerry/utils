@@ -1,3 +1,5 @@
+import { createSimpleLogger, SimpleLogger } from '../logger'
+
 const Once = '__$once$__'
 
 interface ListenerFunction {
@@ -9,11 +11,16 @@ type Listeners<R extends Record<string, unknown>> = {
   [K in keyof R]?: Set<R[K]>
 }
 
+export interface EventEmitterOption {
+  verbose?: boolean
+}
+
 export class EventEmitter<Events extends Record<string, ListenerFunction>> {
   static SymbolOnce = Once
 
   #listeners: Listeners<Events>
   #limit: number
+  #logger?: SimpleLogger
 
   /**
    * Limit count of listeners for every event.
@@ -29,10 +36,15 @@ export class EventEmitter<Events extends Record<string, ListenerFunction>> {
      *
      * @default 20
      */
-    limit = 20
+    limit = 20,
+    opt: EventEmitterOption = {}
   ) {
     this.#limit = limit
     this.#listeners = {}
+
+    if (opt.verbose) {
+      this.#logger = createSimpleLogger()
+    }
   }
 
   #checkLimit(size: number) {
@@ -143,7 +155,7 @@ export class EventEmitter<Events extends Record<string, ListenerFunction>> {
       try {
         event(...args)
       } catch (error) {
-        console.warn('Invoke function error:', error)
+        this.#logger?.warn('Invoke function error:', error)
       }
 
       if (event[Once]) {
