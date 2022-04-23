@@ -21,7 +21,7 @@ jobs:
         run: npm install -g conventional-changelog-cli
 
       - name: Generate Release Note
-        run: conventional-changelog -p angular -i RELEASE-NOTE.md -s
+        run: conventional-changelog -p angular -i RELEASE-NOTE.md -s -r 2
 
       - name: Release
         uses: softprops/action-gh-release@v1
