@@ -29,4 +29,40 @@ export namespace is {
   export function object(o: unknown): o is Object {
     return o !== null && typeof o === 'object'
   }
+
+  export function empty(o: number | object | BigInt | boolean | Function): false
+  export function empty<V, K>(
+    o: null | undefined | string | Set<V> | Map<K, V> | Array<V> | Iterable<V>
+  ): boolean
+  export function empty(o: unknown): boolean {
+    if (o === null || o === undefined) {
+      return true
+    }
+
+    if (typeof o === 'string') {
+      return !o
+    }
+
+    if (o instanceof Set || o instanceof Map) {
+      return o.size === 0
+    }
+
+    if (o instanceof Array) {
+      return o.length === 0
+    }
+
+    if (iterable(o)) {
+      for (const _ of o) {
+        return false
+      }
+
+      return true
+    }
+
+    return false
+  }
+
+  export function iterable<V>(o: unknown): o is Iterable<V> {
+    return Symbol.iterator in Object(o)
+  }
 }

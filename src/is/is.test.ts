@@ -57,4 +57,41 @@ describe('is utils', () => {
 
     expect(is.object({})).toBe(true)
   })
+
+  it('is iterable', () => {
+    expect(is.iterable({})).toBe(false)
+    expect(is.iterable(0)).toBe(false)
+
+    expect(is.iterable([])).toBe(true)
+  })
+
+  it('is empty', () => {
+    const iter = function* (opt: any[]) {
+      for (const item of opt) {
+        yield item
+      }
+      return
+    }
+
+    //
+    expect(is.empty(0)).toBe(false)
+    expect(is.empty({})).toBe(false)
+    expect(is.empty(false)).toBe(false)
+    expect(is.empty(true)).toBe(false)
+    expect(is.empty(() => {})).toBe(false)
+
+    //
+    expect(is.empty('0')).toBe(false)
+    expect(is.empty([0])).toBe(false)
+    expect(is.empty(new Set([0]))).toBe(false)
+    expect(is.empty(new Map([[0, 0]]))).toBe(false)
+    expect(is.empty(iter([1]))).toBe(false)
+
+    //
+    expect(is.empty('')).toBe(true)
+    expect(is.empty([])).toBe(true)
+    expect(is.empty(new Set())).toBe(true)
+    expect(is.empty(new Map())).toBe(true)
+    expect(is.empty(iter([]))).toBe(true)
+  })
 })
