@@ -17,10 +17,11 @@ jobs:
           node-version: 16
           registry-url: https://registry.npm.taobao.org
 
+      - name: Install Changelog Tool
+        run: npm install -g conventional-changelog-cli
+
       - name: Generate Release Note
-        run: -|
-          npm install -g conventional-changelog-cli
-          conventional-changelog -p angular -i RELEASE-NOTE.md -s -r 0
+        run: conventional-changelog -p angular -i RELEASE-NOTE.md -s -r 0
 
       - name: Release
         uses: softprops/action-gh-release@v1
