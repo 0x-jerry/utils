@@ -2,9 +2,6 @@
   "name": "@0x-jerry/utils",
   "version": "1.6.0",
   "license": "MIT",
-  "main": "./dist/exports.js",
-  "module": "./dist/exports.mjs",
-  "types": "./dist/exports.d.ts",
   "description": "Collection of useful JavaScript/TypeScript utils",
   "repository": {
     "type": "git",
@@ -23,11 +20,21 @@
   "files": [
     "dist"
   ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "build": "tsup src/exports.ts --format cjs,esm --dts",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
     "release": "x-release"
   },
   "devDependencies": {
