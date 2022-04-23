@@ -16,6 +16,13 @@ jobs:
         with:
           node-version: 16
           registry-url: https://registry.npm.taobao.org
-      - run: npx conventional-github-releaser -p angular
-        env:
-          CONVENTIONAL_GITHUB_RELEASER_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Generate Release Note
+        run: -|
+          npm install -g conventional-changelog-cli
+          conventional-changelog -p angular -i RELEASE-NOTE.md -s -r 0
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: RELEASE-NOTE.md
