@@ -1,7 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
-  '@0x-jerry/x-release': ^0.3.2
+  '@0x-jerry/x-release': ^0.3.3
   '@types/node': ^17.0.25
   '@vue/reactivity': ^3.2.33
   c8: ^7.11.0
@@ -16,7 +16,7 @@ dependencies:
   '@vue/reactivity': registry.npmmirror.com/@vue/reactivity/3.2.33
 
 devDependencies:
-  '@0x-jerry/x-release': registry.npmmirror.com/@0x-jerry/x-release/0.3.2
+  '@0x-jerry/x-release': registry.npmmirror.com/@0x-jerry/x-release/0.3.3
   '@types/node': registry.npmmirror.com/@types/node/17.0.25
   c8: registry.npmmirror.com/c8/7.11.0
   happy-dom: registry.npmmirror.com/happy-dom/2.55.0
@@ -42,10 +42,10 @@ packages:
       run-parallel: registry.npmmirror.com/run-parallel/1.2.0
     dev: true
 
-  registry.npmmirror.com/@0x-jerry/x-release/0.3.2:
-    resolution: {integrity: sha512-I0VOLvTFMqKoy59M9X3ZCLck343wNNPvyKlUAV4wj+wvy9UV0xWBHAgpa1sWnWq15lmWliTNJvvqZLavoZGUaQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@0x-jerry/x-release/-/x-release-0.3.2.tgz}
+  registry.npmmirror.com/@0x-jerry/x-release/0.3.3:
+    resolution: {integrity: sha512-X7VFX8bINY7eNNSO6JRsxSS+Akg58QhwsN2D4R8HCo8FDwFyC9gLCTL9NEL/bvIf8ZNqyEoNd8iDUIsybSlv7A==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@0x-jerry/x-release/-/x-release-0.3.3.tgz}
     name: '@0x-jerry/x-release'
-    version: 0.3.2
+    version: 0.3.3
     hasBin: true
     dependencies:
       cac: registry.npmmirror.com/cac/6.7.12
