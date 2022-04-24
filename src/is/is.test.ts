@@ -75,12 +75,12 @@ describe('is utils', () => {
 
     //
     expect(is.empty(0)).toBe(false)
-    expect(is.empty({})).toBe(false)
     expect(is.empty(false)).toBe(false)
     expect(is.empty(true)).toBe(false)
     expect(is.empty(() => {})).toBe(false)
 
     //
+    expect(is.empty({ a: 1 })).toBe(false)
     expect(is.empty('0')).toBe(false)
     expect(is.empty([0])).toBe(false)
     expect(is.empty(new Set([0]))).toBe(false)
@@ -88,6 +88,7 @@ describe('is utils', () => {
     expect(is.empty(iter([1]))).toBe(false)
 
     //
+    expect(is.empty({})).toBe(true)
     expect(is.empty('')).toBe(true)
     expect(is.empty([])).toBe(true)
     expect(is.empty(new Set())).toBe(true)

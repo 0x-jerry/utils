@@ -30,32 +30,26 @@ export namespace is {
     return o !== null && typeof o === 'object'
   }
 
-  export function empty(o: number | object | BigInt | boolean | Function): false
+  export function empty(o: number | BigInt | boolean | Function): false
   export function empty<V, K>(
-    o: null | undefined | string | Set<V> | Map<K, V> | Array<V> | Iterable<V>
+    o: null | undefined | string | Set<V> | Map<K, V> | Array<V> | Iterable<V> | object
   ): boolean
   export function empty(o: unknown): boolean {
     if (o === null || o === undefined) {
       return true
-    }
-
-    if (typeof o === 'string') {
+    } else if (typeof o === 'string') {
       return !o
-    }
-
-    if (o instanceof Set || o instanceof Map) {
+    } else if (o instanceof Set || o instanceof Map) {
       return o.size === 0
-    }
-
-    if (o instanceof Array) {
+    } else if (o instanceof Array) {
       return o.length === 0
-    }
-
-    if (iterable(o)) {
+    } else if (iterable(o)) {
       for (const _ of o) {
         return false
       }
 
+      return true
+    } else if (object(o) && Object.keys(o).length === 0) {
       return true
     }
 
