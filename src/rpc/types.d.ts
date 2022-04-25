@@ -23,7 +23,7 @@ export interface RPCRequest extends RPCMessageProtocol {
   /**
    * params
    */
-  p: any[]
+  p?: any[]
 }
 
 export interface RPCResponse extends RPCMessageProtocol {

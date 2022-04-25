@@ -76,26 +76,35 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
         return
       }
 
-      const response: RPCResponse = {
-        _: ctx.id,
-        t: 's',
-        id: msg.id,
-      }
+      resolveRequest(msg)
+    } else {
+      resolveResponse(msg)
+    }
+  })
 
-      try {
-        const fn = client[msg.m]
-        if (!fn) throw new Error(`Not found method: [${msg.m}]`)
+  return getProxyObject(ctx, record) as any
 
-        response.r = await fn.call(client, ...msg.p)
-      } catch (error) {
-        logger?.warn('Error occurs when call method:', msg, error)
-        response.e = error
-      }
-
-      ctx.send(response)
-      return
+  async function resolveRequest(msg: RPCRequest) {
+    const response: RPCResponse = {
+      _: ctx.id,
+      t: 's',
+      id: msg.id,
     }
 
+    try {
+      const fn = client[msg.m]
+      if (!fn) throw new Error(`Not found method: [${msg.m}]`)
+
+      response.r = await fn.call(client, ...msg.p)
+    } catch (error) {
+      logger?.warn('Error occurs when call method:', msg, error)
+      response.e = error
+    }
+
+    ctx.send(response)
+  }
+
+  function resolveResponse(msg: RPCResponse) {
     // response
     if (!record.has(msg.id)) {
       logger?.warn('Not found request:', msg)
@@ -110,39 +119,43 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
     } else {
       p.resolve(msg.r)
     }
-  })
+  }
+}
+
+function getProxyObject(ctx: Required<RPCOption>, record: Map<string, PromiseInstance<any>>) {
+  const getter = (_: object, method: string) => {
+    if (method === RPCStatusSymbol) {
+      return record
+    }
+
+    return (...args: any[]) => {
+      const request: RPCRequest = {
+        t: 'q',
+        _: ctx.id,
+        id: uuid(),
+        m: method,
+        p: args,
+      }
+
+      const p = createPromiseInstance()
+      record.set(request.id, p)
+
+      if (ctx.timeout) {
+        setTimeout(() => checkTimeout(request.id), ctx.timeout)
+      }
+
+      ctx.send(request)
+
+      return p.instance
+    }
+  }
 
   return new Proxy(
     {},
     {
-      get(_, method: string) {
-        if (method === RPCStatusSymbol) {
-          return record
-        }
-
-        return (...args: any[]) => {
-          const request: RPCRequest = {
-            t: 'q',
-            _: ctx.id,
-            id: uuid(),
-            m: method,
-            p: args,
-          }
-
-          const p = createPromiseInstance()
-          record.set(request.id, p)
-
-          if (ctx.timeout) {
-            setTimeout(() => checkTimeout(request.id), ctx.timeout)
-          }
-
-          ctx.send(request)
-
-          return p.instance
-        }
-      },
+      get: getter,
     }
-  ) as any
+  )
 
   function checkTimeout(id: string) {
     const r = record.get(id)
