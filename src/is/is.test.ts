@@ -95,4 +95,13 @@ describe('is utils', () => {
     expect(is.empty(new Map())).toBe(true)
     expect(is.empty(iter([]))).toBe(true)
   })
+
+  it('is nullish', () => {
+    expect(is.nullish('')).toBe(false)
+    expect(is.nullish(0)).toBe(false)
+    expect(is.nullish(false)).toBe(false)
+
+    expect(is.nullish(undefined)).toBe(true)
+    expect(is.nullish(null)).toBe(true)
+  })
 })

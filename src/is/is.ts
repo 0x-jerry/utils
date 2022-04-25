@@ -59,4 +59,8 @@ export namespace is {
   export function iterable<V>(o: unknown): o is Iterable<V> {
     return Symbol.iterator in Object(o)
   }
+
+  export function nullish<T>(o: T): o is NonNullable<T> {
+    return !(o != null)
+  }
 }
