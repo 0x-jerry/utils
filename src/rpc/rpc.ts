@@ -20,6 +20,13 @@ export interface RPCOption {
    */
   ignoreSelfMessage?: boolean
   verbose?: boolean
+
+  /**
+   * protocol ID
+   *
+   * ex. you may use random string
+   */
+  id: string
 }
 
 const RPCTimeoutErrorSymbol = '__$rpc_timeout_error$__'
@@ -43,8 +50,6 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
 ): RPCServer<Server> {
   const ctx: Required<RPCOption> = Object.assign(
     {
-      serialize: JSON.stringify,
-      deserialize: JSON.parse,
       timeout: 10 * 1000,
       ignoreSelfMessage: true,
       verbose: false,
@@ -56,31 +61,38 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
 
   const record = new Map<string, PromiseInstance>()
 
+  const isServiceMsg = (msg: RPCMessage) => msg._ === ctx.id
+
   ctx.receive(async (msg) => {
-    if (msg.type === 'q') {
-      // this maybe send by this rpc server self.
+    if (!isServiceMsg(msg)) {
+      return
+    }
+
+    // request
+    if (msg.t === 'q') {
+      // this maybe send by this rpc server.
       if (ctx.ignoreSelfMessage && record.has(msg.id)) {
         // ignore this message
         return
       }
 
-      // request
-      const r: RPCResponse = {
-        type: 's',
+      const response: RPCResponse = {
+        _: ctx.id,
+        t: 's',
         id: msg.id,
       }
 
       try {
-        const fn = client[msg.method]
-        if (!fn) throw new Error(`Not found method: [${msg.method}]`)
+        const fn = client[msg.m]
+        if (!fn) throw new Error(`Not found method: [${msg.m}]`)
 
-        r.result = await fn.call(client, ...msg.params)
+        response.r = await fn.call(client, ...msg.p)
       } catch (error) {
         logger?.warn('Error occurs when call method:', msg, error)
-        r.error = error
+        response.e = error
       }
 
-      ctx.send(r)
+      ctx.send(response)
       return
     }
 
@@ -93,10 +105,10 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
     const p = record.get(msg.id)!
     record.delete(msg.id)
 
-    if (msg.error) {
-      p.reject(msg.error)
+    if (msg.e) {
+      p.reject(msg.e)
     } else {
-      p.resolve(msg.result)
+      p.resolve(msg.r)
     }
   })
 
@@ -109,21 +121,22 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
         }
 
         return (...args: any[]) => {
-          const req: RPCRequest = {
-            type: 'q',
+          const request: RPCRequest = {
+            t: 'q',
+            _: ctx.id,
             id: uuid(),
-            method,
-            params: args,
+            m: method,
+            p: args,
           }
 
           const p = createPromiseInstance()
-          record.set(req.id, p)
+          record.set(request.id, p)
 
           if (ctx.timeout) {
-            setTimeout(() => checkTimeout(req.id), ctx.timeout)
+            setTimeout(() => checkTimeout(request.id), ctx.timeout)
           }
 
-          ctx.send(req)
+          ctx.send(request)
 
           return p.instance
         }

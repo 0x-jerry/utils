@@ -1,15 +1,42 @@
-export interface RPCRequest {
-  type: 'q'
+export interface RPCMessageProtocol {
+  /**
+   * protocol ID
+   */
+  _: string
+  /**
+   * type
+   */
+  t: string
+  /**
+   * id
+   */
   id: string
-  method: string
-  params: any[]
 }
 
-export interface RPCResponse {
-  type: 's'
+export interface RPCRequest extends RPCMessageProtocol {
+  t: 'q'
   id: string
-  result?: any
-  error?: any
+  /**
+   * method
+   */
+  m: string
+  /**
+   * params
+   */
+  p: any[]
+}
+
+export interface RPCResponse extends RPCMessageProtocol {
+  t: 's'
+  id: string
+  /**
+   * result
+   */
+  r?: any
+  /**
+   * error
+   */
+  e?: any
 }
 
 export type RPCMessage = RPCRequest | RPCResponse
