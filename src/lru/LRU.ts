@@ -1,4 +1,4 @@
-import { assert } from '../assert'
+import { is } from '../is'
 
 interface LRUOptions {
   /**
@@ -58,7 +58,10 @@ export class LRU<Key = string, Value = unknown> {
   constructor(option: Partial<LRUOptions> = {}) {
     this.limit = option.limit ?? 500
     this.maxAge = option.maxAge ?? 24 * 60 * 60 * 1000
-    assert(this.limit, 'option.limit should be greater than 0')
+
+    if (this.limit <= 0) {
+      throw new Error('option.limit should be greater than 0')
+    }
   }
 
   set(key: Key, value: Value): void {
