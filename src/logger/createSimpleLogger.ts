@@ -3,29 +3,12 @@ export type LoggerLevel = 'info' | 'warn' | 'error'
 type LoggerPrefixFunction = (type: LoggerLevel) => string
 
 export function createSimpleLogger(prefix?: string | LoggerPrefixFunction) {
-  const getPrefix = (type: LoggerLevel) => {
-    if (prefix === undefined) {
-      return undefined
-    }
-
-    return typeof prefix === 'string' ? prefix : prefix(type)
-  }
-
   let _enable = true
 
   const printFactory =
     (type: LoggerLevel) =>
-    (...params: unknown[]) => {
-      if (!_enable) return
-
-      const prefix = getPrefix(type)
-
-      if (prefix === undefined) {
-        console[type](...params)
-      } else {
-        console[type](prefix, ...params)
-      }
-    }
+    (...params: unknown[]) =>
+      print(type, params)
 
   return {
     get isEnabled() {
@@ -40,6 +23,26 @@ export function createSimpleLogger(prefix?: string | LoggerPrefixFunction) {
     log: printFactory('info'),
     warn: printFactory('warn'),
     error: printFactory('error'),
+  }
+
+  function getPrefix(type: LoggerLevel) {
+    if (prefix === undefined) {
+      return undefined
+    }
+
+    return typeof prefix === 'string' ? prefix : prefix(type)
+  }
+
+  function print(type: LoggerLevel, params: unknown[]) {
+    if (!_enable) return
+
+    const prefix = getPrefix(type)
+
+    if (prefix === undefined) {
+      console[type](...params)
+    } else {
+      console[type](prefix, ...params)
+    }
   }
 }
 

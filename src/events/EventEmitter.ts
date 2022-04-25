@@ -7,7 +7,7 @@ interface ListenerFunction {
   [Once]?: boolean
 }
 
-type Listeners<R extends Record<string, unknown>> = {
+type EventListeners<R extends Record<string, unknown>> = {
   [K in keyof R]?: Set<R[K]>
 }
 
@@ -18,7 +18,7 @@ export interface EventEmitterOption {
 export class EventEmitter<Events extends Record<string, ListenerFunction>> {
   static SymbolOnce = Once
 
-  #listeners: Listeners<Events>
+  #listeners: EventListeners<Events>
   #limit: number
   #logger?: SimpleLogger
 
@@ -56,13 +56,15 @@ export class EventEmitter<Events extends Record<string, ListenerFunction>> {
   /**
    * Get all events and it's listeners.
    */
-  events<K extends keyof Events>(): Listeners<Events>
+  events<K extends keyof Events>(): EventListeners<Events>
   /**
    * Get all listeners of the event.
    * @param event Event type
    */
-  events<K extends keyof Events>(event: K): NonNullable<Listeners<Events>[K]>
-  events<K extends keyof Events>(event?: K): Listeners<Events> | NonNullable<Listeners<Events>[K]> {
+  events<K extends keyof Events>(event: K): NonNullable<EventListeners<Events>[K]>
+  events<K extends keyof Events>(
+    event?: K
+  ): EventListeners<Events> | NonNullable<EventListeners<Events>[K]> {
     if (!event) {
       return this.#listeners
     }
