@@ -1,6 +1,6 @@
 import { MessageChannel } from 'worker_threads'
 import { sleep } from '../core'
-import { createRPC, RPCStatusSymbol, RPCTimeoutError } from './rpc'
+import { createRPC, RPCMethods, RPCOption, RPCTimeoutError } from './rpc'
 import { RPCRequest, RPCResponse } from './types'
 
 const A = {
@@ -19,39 +19,20 @@ const B = {
   },
 }
 
-type FnA = typeof A
-type FnB = typeof B
-
 describe('rpc test', () => {
   it('remote call', async () => {
-    const channel = new MessageChannel()
+    const { a, b, channel } = createRPCPair(A, B)
 
-    const id = 'mf2'
-
-    const a = createRPC<FnB>(A, {
-      send: (data) => channel.port1.postMessage(data),
-      receive: (resolver) => channel.port1.on('message', resolver),
-      id,
-    })
-
-    const b = createRPC<FnA>(B, {
-      send: (data) => channel.port2.postMessage(data),
-      receive: (resolver) => channel.port2.on('message', resolver),
-      id,
-    })
-
-    const res = await a.pong('123')
+    const res = await a.proxy.pong('123')
     expect(res).toBe('pong: 123')
 
-    const r = await b.ping('aaa')
+    const r = await b!.proxy.ping('aaa')
     expect(r).toBe('ping: aaa')
 
     channel.port1.close()
   })
 
   it('remote error', async () => {
-    const channel = new MessageChannel()
-
     const warn = vi.spyOn(console, 'warn')
 
     const AA = {
@@ -66,28 +47,14 @@ describe('rpc test', () => {
       },
     }
 
-    const id = 'mf5'
+    const { a, b, channel } = createRPCPair(AA, BB)
 
-    const a = createRPC<typeof BB>(AA, {
-      send: (data) => channel.port1.postMessage(data),
-      receive: (resolver) => channel.port1.on('message', resolver),
-      verbose: true,
-      id,
-    })
-
-    const b = createRPC<typeof AA>(BB, {
-      send: (data) => channel.port2.postMessage(data),
-      receive: (resolver) => channel.port2.on('message', resolver),
-      verbose: true,
-      id,
-    })
-
-    const r1 = a.pong()
+    const r1 = a.proxy.pong()
     await expect(r1).rejects.toThrow('error')
     expect(warn.mock.calls[0][0]).toBe('Error occurs when call method:')
     expect(warn.mock.calls[0][1].m).toBe('pong')
 
-    const r2 = b.ping()
+    const r2 = b!.proxy.ping()
     await expect(r2).rejects.toThrow('error aa')
     expect(warn.mock.calls[1][0]).toBe('Error occurs when call method:')
     expect(warn.mock.calls[1][1].m).toBe('ping')
@@ -96,16 +63,11 @@ describe('rpc test', () => {
   })
 
   it('invalid message', async () => {
-    const channel = new MessageChannel()
-
     const warn = vi.spyOn(console, 'warn')
 
     const id = 'mf66'
 
-    const a = createRPC<FnB>(A, {
-      send: (data) => channel.port1.postMessage(data),
-      receive: (resolver) => channel.port1.on('message', resolver),
-      verbose: true,
+    const { channel } = createRPCPair(A, B, {
       id,
     })
 
@@ -121,67 +83,33 @@ describe('rpc test', () => {
   })
 
   it('should throw a timeout error', async () => {
-    const channel = new MessageChannel()
+    const { b, channel } = createRPCPair(A, B)
 
-    const id = 'mf2'
+    await expect(b!.proxy.timeout(100)).rejects.toBeInstanceOf(RPCTimeoutError)
 
-    const a = createRPC<FnA>(B, {
-      send: (data) => channel.port1.postMessage(data),
-      receive: (resolver) => channel.port1.on('message', resolver),
-      timeout: 10,
-      id,
-    })
-
-    await expect(a.timeout(100)).rejects.toBeInstanceOf(RPCTimeoutError)
-
-    const status = a[RPCStatusSymbol]
+    const status = b!.record
     expect(status.size).toBe(0)
 
     channel.port1.close()
   })
 
   it('should ignore the message send by itself', async () => {
-    const channel = new MessageChannel()
-    const id = 'mf2'
+    const { a, channel } = createRPCPair<typeof B, typeof A>(A)
 
-    const a = createRPC<FnA>(B, {
-      send: (data) => channel.port1.postMessage(data),
-      receive: (resolver) => channel.port2.on('message', resolver),
-      timeout: 100,
-      id,
-    })
-
-    await expect(a.ping('hello')).rejects.toBeInstanceOf(RPCTimeoutError)
-
-    channel.port1.close()
-
-    const aa = createRPC<FnA>(B, {
-      send: (data) => channel.port1.postMessage(data),
-      receive: (resolver) => channel.port2.on('message', resolver),
-      timeout: 100,
-      id,
-    })
-
-    await expect(aa.ping('hello')).rejects.toThrow('Not found method: [ping]')
+    await expect(a.proxy.pong('hello')).rejects.toBeInstanceOf(RPCTimeoutError)
 
     channel.port1.close()
   })
 
   it('should ignore the message send by other rpc service', async () => {
-    const channel = new MessageChannel()
-
     const AA = {
       ping: vi.fn(),
     }
 
-    const a = createRPC<FnB>(AA, {
-      send: (data) => channel.port1.postMessage(data),
-      receive: (resolver) => channel.port1.on('message', resolver),
-      verbose: true,
-      id: 'mf65',
-    })
+    const id = 'mf65'
+    const { channel } = createRPCPair<typeof B, typeof AA>(AA, undefined, { id })
 
-    const selfRPCMsg: RPCRequest = { _: 'mf65', t: 'q', id: '0cfd68c11', m: 'ping', p: [] }
+    const selfRPCMsg: RPCRequest = { _: id, t: 'q', id: '0cfd68c11', m: 'ping', p: [] }
     channel.port2.postMessage(selfRPCMsg)
     await sleep(10)
     expect(AA.ping).toBeCalledTimes(1)
@@ -196,3 +124,33 @@ describe('rpc test', () => {
     channel.port1.close()
   })
 })
+
+function createRPCPair<MethodsB extends RPCMethods, MethodsA extends RPCMethods>(
+  A: MethodsA,
+  B?: MethodsB,
+  opt?: RPCOption
+) {
+  const channel = new MessageChannel()
+
+  const options: RPCOption = {
+    timeout: 100,
+    id: Math.random().toString().slice(2),
+    verbose: true,
+    ...opt,
+  }
+
+  const a = createRPC<MethodsB>(A, options)
+
+  channel.port1.on('message', a.receive)
+  a.setSend((d) => channel.port1.postMessage(d))
+
+  let b
+  if (B) {
+    b = createRPC<MethodsA>(B, options)
+
+    channel.port2.on('message', b.receive)
+    b.setSend((d) => channel.port2.postMessage(d))
+  }
+
+  return { a, b, channel }
+}

@@ -7,8 +7,6 @@ export interface RPCMethods {
 }
 
 export interface RPCOption {
-  send: (data: RPCMessage) => any
-  receive: (resolver: (data: RPCMessage) => void) => any
   /**
    * set 0 to turn off timeout check.
    * @default 10s
@@ -29,8 +27,11 @@ export interface RPCOption {
   id: string
 }
 
+export interface RPCContext extends RPCOption {
+  send?: (data: RPCMessage) => any
+}
+
 const RPCTimeoutErrorSymbol = '__$rpc_timeout_error$__'
-export const RPCStatusSymbol = '__$rpc_status$__'
 
 export class RPCTimeoutError extends Error {
   [RPCTimeoutErrorSymbol] = true
@@ -40,15 +41,20 @@ export class RPCTimeoutError extends Error {
 
 export type RPCServer<T extends RPCMethods> = {
   [key in keyof T]: (...arg: Parameters<T[key]>) => Promise<ReturnType<T[key]>>
-} & {
-  [RPCStatusSymbol]: Map<string, PromiseInstance>
+}
+
+export interface RPCServerProxy<T extends RPCMethods> {
+  receive: (data: RPCMessage) => void
+  setSend: (send: (data: RPCMessage) => any) => void
+  proxy: RPCServer<T>
+  record: Map<string, PromiseInstance>
 }
 
 export function createRPC<Server extends RPCMethods, Client extends RPCMethods = {}>(
   client: Client,
   opt: RPCOption
-): RPCServer<Server> {
-  const ctx: Required<RPCOption> = Object.assign(
+): RPCServerProxy<Server> {
+  const options: Required<RPCOption> = Object.assign(
     {
       timeout: 10 * 1000,
       ignoreSelfMessage: true,
@@ -57,13 +63,17 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
     opt
   )
 
+  const ctx: RPCContext = {
+    ...options,
+  }
+
   const logger: SimpleLogger | null = ctx.verbose ? createSimpleLogger() : null
 
   const record = new Map<string, PromiseInstance>()
 
   const isServiceMsg = (msg: RPCMessage) => msg._ === ctx.id
 
-  ctx.receive(async (msg) => {
+  const receive = async (msg: RPCMessage) => {
     if (!isServiceMsg(msg)) {
       return
     }
@@ -80,9 +90,18 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
     } else {
       resolveResponse(msg)
     }
-  })
+  }
 
-  return getProxyObject(ctx, record) as any
+  const r: RPCServerProxy<Server> = {
+    proxy: getProxyObject(ctx, record) as any,
+    record,
+    receive,
+    setSend(send) {
+      ctx.send = send
+    },
+  }
+
+  return r
 
   async function resolveRequest(msg: RPCRequest) {
     const response: RPCResponse = {
@@ -101,7 +120,7 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
       response.e = error
     }
 
-    ctx.send(response)
+    ctx.send?.(response)
   }
 
   function resolveResponse(msg: RPCResponse) {
@@ -122,12 +141,8 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
   }
 }
 
-function getProxyObject(ctx: Required<RPCOption>, record: Map<string, PromiseInstance<any>>) {
+function getProxyObject(ctx: RPCContext, record: Map<string, PromiseInstance<any>>) {
   const getter = (_: object, method: string) => {
-    if (method === RPCStatusSymbol) {
-      return record
-    }
-
     return (...args: any[]) => {
       const request: RPCRequest = {
         t: 'q',
@@ -144,7 +159,7 @@ function getProxyObject(ctx: Required<RPCOption>, record: Map<string, PromiseIns
         setTimeout(() => checkTimeout(request.id), ctx.timeout)
       }
 
-      ctx.send(request)
+      ctx.send?.(request)
 
       return p.instance
     }
