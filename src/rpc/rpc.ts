@@ -1,4 +1,4 @@
-import { createPromiseInstance, PromiseInstance } from '../core'
+import { createPromiseInstance, noop, PromiseInstance } from '../core'
 import { createSimpleLogger, SimpleLogger } from '../logger'
 import { RPCRequest, RPCResponse, RPCMessage } from './types'
 
@@ -8,7 +8,11 @@ export interface RPCMethods {
 
 export interface RPCOption {
   /**
-   * set 0 to turn off timeout check.
+   * Send message actively
+   */
+  send?: (data: RPCMessage) => any
+  /**
+   * Set 0 to turn off timeout check.
    * @default 10s
    */
   timeout?: number
@@ -27,7 +31,9 @@ export interface RPCOption {
   id: string
 }
 
-export interface RPCContext extends RPCOption {
+export interface RPCContext extends RPCOption {}
+
+export interface RPCRequestCtx extends RPCRequest {
   send?: (data: RPCMessage) => any
 }
 
@@ -44,8 +50,7 @@ export type RPCServer<T extends RPCMethods> = {
 }
 
 export interface RPCServerProxy<T extends RPCMethods> {
-  receive: (data: RPCMessage) => void
-  setSend: (send: (data: RPCMessage) => any) => void
+  receive: (data: RPCMessage | RPCRequestCtx) => void
   proxy: RPCServer<T>
   record: Map<string, PromiseInstance>
 }
@@ -59,6 +64,7 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
       timeout: 10 * 1000,
       ignoreSelfMessage: true,
       verbose: false,
+      send: noop,
     },
     opt
   )
@@ -96,14 +102,11 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
     proxy: getProxyObject(ctx, record) as any,
     record,
     receive,
-    setSend(send) {
-      ctx.send = send
-    },
   }
 
   return r
 
-  async function resolveRequest(msg: RPCRequest) {
+  async function resolveRequest(msg: RPCRequestCtx) {
     const response: RPCResponse = {
       _: ctx.id,
       t: 's',
@@ -120,7 +123,8 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
       response.e = error
     }
 
-    ctx.send?.(response)
+    const send = msg.send || ctx.send
+    send?.(response)
   }
 
   function resolveResponse(msg: RPCResponse) {

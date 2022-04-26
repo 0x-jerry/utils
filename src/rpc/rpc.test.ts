@@ -139,17 +139,21 @@ function createRPCPair<MethodsB extends RPCMethods, MethodsA extends RPCMethods>
     ...opt,
   }
 
-  const a = createRPC<MethodsB>(A, options)
+  const a = createRPC<MethodsB>(A, {
+    send: (d) => channel.port1.postMessage(d),
+    ...options,
+  })
 
-  channel.port1.on('message', a.receive)
-  a.setSend((d) => channel.port1.postMessage(d))
+  channel.port1.on('message', (e) => a.receive(e))
 
   let b
   if (B) {
-    b = createRPC<MethodsA>(B, options)
+    b = createRPC<MethodsA>(B, {
+      send: (d) => channel.port2.postMessage(d),
+      ...options,
+    })
 
     channel.port2.on('message', b.receive)
-    b.setSend((d) => channel.port2.postMessage(d))
   }
 
   return { a, b, channel }
