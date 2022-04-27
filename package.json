@@ -26,7 +26,7 @@
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs",
+      "require": "./dist/index.js",
       "types": "./dist/index.d.ts"
     }
   },
@@ -49,6 +49,7 @@
     "vitest": "^0.9.3"
   },
   "dependencies": {
-    "@vue/reactivity": "^3.2.33"
+    "@vue/reactivity": "^3.2.33",
+    "nanoid": "^3.3.3"
   }
 }
