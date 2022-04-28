@@ -33,12 +33,10 @@ importers:
     specifiers:
       '@0x-jerry/utils': ../
       benchmark: ^2.1.4
-      nanoid: ^3.3.3
     dependencies:
       '@0x-jerry/utils': link:..
     devDependencies:
       benchmark: 2.1.4
-      nanoid: 3.3.3
 
 packages:
 
