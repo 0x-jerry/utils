@@ -1,4 +1,4 @@
-lockfileVersion: 5.3
+lockfileVersion: 5.4
 
 importers:
 
@@ -27,7 +27,7 @@ importers:
       mock-socket: 9.1.2
       tsup: 5.12.5_typescript@4.6.3
       typescript: 4.6.3
-      vitest: 0.9.3_d37dea8845789f5178b9e3a13480d806
+      vitest: 0.9.3_2n66vccfpcpvc6fz4oqtjagyay
 
   benchmark:
     specifiers:
@@ -1857,7 +1857,7 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vitest/0.9.3_d37dea8845789f5178b9e3a13480d806:
+  /vitest/0.9.3_2n66vccfpcpvc6fz4oqtjagyay:
     resolution: {integrity: sha512-hKjqdBI732cV5giNLERyAsaJBebstrX5mvTbZr+jUDYUHnX1O4DpAJcHtqBOutuBi7lVIGQ5IF8eWvHHqbCHBA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/vitest/-/vitest-0.9.3.tgz}
     engines: {node: '>=v14.16.0'}
     hasBin: true
