@@ -14,32 +14,31 @@ export type Method = `${Uppercase<MethodLowerCase>}` | MethodLowerCase
 
 export type ResponseType = 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' | 'stream'
 
-export type AlpsHeaders = Record<string, string>
+type OmitRequestInitProperties = 'body' | 'method'
 
-export interface AlpsRequestConfig<D = any, P = D> {
+export interface AlpsRequestConfig<D = any, P = D>
+  extends Omit<RequestInit, OmitRequestInitProperties> {
   url?: string
-  method?: Method | string
   baseURL?: string
-  headers?: AlpsHeaders
+
+  method?: Method | string
+
   params?: P
   data?: D
+
   timeout?: number
   timeoutErrorMessage?: string
-  withCredentials?: boolean
+
   responseType?: ResponseType
-  xsrfCookieName?: string
-  xsrfHeaderName?: string
+
+  /**
+   * @todo
+   */
   onUploadProgress?: (progressEvent: any) => void
+  /**
+   * @todo
+   */
   onDownloadProgress?: (progressEvent: any) => void
-  maxContentLength?: number
-  validateStatus?: ((status: number) => boolean) | null
-  maxBodyLength?: number
-  maxRedirects?: number
-  beforeRedirect?: (
-    options: Record<string, any>,
-    responseDetails: { headers: Record<string, string> }
-  ) => void
-  signal?: AbortSignal
 }
 
 export interface AlpsMiddleware {
