@@ -1,5 +1,4 @@
 const Benchmark = require('benchmark')
-const {} = require('@0x-jerry/utils')
 
 const suite = new Benchmark.Suite()
 

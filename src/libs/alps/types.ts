@@ -14,22 +14,6 @@ export type Method = `${Uppercase<MethodLowerCase>}` | MethodLowerCase
 
 export type ResponseType = 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' | 'stream'
 
-export type ResponseEncodingLowerCase =
-  | 'ascii'
-  | 'ansi'
-  | 'binary'
-  | 'base64'
-  | 'base64url'
-  | 'hex'
-  | 'latin1'
-  | 'ucs-2'
-  | 'ucs2'
-  | 'utf-8'
-  | 'utf8'
-  | 'utf16le'
-
-export type ResponseEncoding = `${Uppercase<ResponseEncodingLowerCase>}` | ResponseEncodingLowerCase
-
 export type AlpsHeaders = Record<string, string>
 
 export interface AlpsRequestConfig<D = any, P = D> {
@@ -43,7 +27,6 @@ export interface AlpsRequestConfig<D = any, P = D> {
   timeoutErrorMessage?: string
   withCredentials?: boolean
   responseType?: ResponseType
-  responseEncoding?: ResponseEncoding | string
   xsrfCookieName?: string
   xsrfHeaderName?: string
   onUploadProgress?: (progressEvent: any) => void
@@ -57,4 +40,21 @@ export interface AlpsRequestConfig<D = any, P = D> {
     responseDetails: { headers: Record<string, string> }
   ) => void
   signal?: AbortSignal
+}
+
+export interface AlpsMiddleware {
+  (ctx: AlpsContext, next: () => {}): Promise<void>
+}
+
+export interface AlpsContext<T = any> {
+  requestConfig: AlpsRequestConfig
+
+  response?: Response
+
+  /**
+   * Response data
+   */
+  data?: T
+
+  error?: any
 }
