@@ -1,17 +1,20 @@
+import { createPromiseInstance } from '../../core'
 import { is } from '../../is'
 import { compose } from './compose'
 import { AlpsContext, AlpsMiddleware, AlpsRequestConfig, Method } from './types'
+import { isAbsolutePath, parseURL } from './utils'
+
+type AlpsInstanceRequestConfig = Omit<AlpsRequestConfig, 'url' | 'method'>
 
 export function createAlpsInstance<CustomConfig extends {}, CustomContext extends {} = {}>(
-  conf: Partial<AlpsRequestConfig & CustomConfig> = {}
+  conf: Partial<AlpsInstanceRequestConfig & CustomConfig> = {}
 ) {
-  type InstanceRequestConfig = Partial<AlpsRequestConfig & CustomConfig>
-  type RequestConfig = Partial<Omit<InstanceRequestConfig, 'url' | 'method'>>
+  type RequestConfig = Partial<AlpsInstanceRequestConfig & CustomConfig>
 
   type InstanceContext<D> = AlpsContext<D> & Partial<CustomContext>
 
   const _middleware: AlpsMiddleware[] = []
-  const _config: InstanceRequestConfig = conf
+  const _config: RequestConfig = conf
 
   return {
     config: _config,
@@ -70,20 +73,22 @@ export function createAlpsInstance<CustomConfig extends {}, CustomContext extend
     conf: RequestConfig = {}
   ): Promise<InstanceContext<ReturnData>> {
     // Merge config
-    const config: InstanceRequestConfig = {
+    const config: AlpsRequestConfig = {
       ..._config,
       ...conf,
+      url,
+      method,
     }
 
     const ctx: InstanceContext<ReturnData> = {
       requestConfig: config,
     } as any
 
-    const next = () => makeRequest(url, method, ctx)
-
-    const doRequest = compose(_middleware)
-
     try {
+      const doRequest = compose(_middleware)
+
+      const next = () => makeRequest(ctx)
+
       await doRequest(ctx, next)
     } catch (error) {
       ctx.error = error
@@ -94,23 +99,41 @@ export function createAlpsInstance<CustomConfig extends {}, CustomContext extend
   }
 }
 
-async function makeRequest(url: string, method: string, ctx: AlpsContext) {
+async function makeRequest(ctx: AlpsContext) {
   const { requestConfig: conf } = ctx
 
-  // todo, merge params and data
-  const res = await fetch(url, {
-    method,
-    body: '',
-  })
+  const p = createPromiseInstance<void>()
 
-  ctx.response = res
+  let timeoutHandle = null as any
 
-  try {
-    ctx.data = await getResponseData(res, conf)
-  } catch (error) {
-    ctx.data = res.body as any
-    throw new Error('Parse response data failed')
+  if (conf.timeout) {
+    timeoutHandle = setTimeout(
+      () => p.reject(conf.timeoutErrorMessage || 'Request timeout'),
+      conf.timeout
+    )
   }
+
+  const url = composeUrl(conf.url!, conf)
+
+  fetch(url, {
+    method: conf.method!,
+    body: conf.data,
+  })
+    .finally(() => clearTimeout(timeoutHandle))
+    .then(async (res) => {
+      ctx.response = res
+
+      try {
+        ctx.data = await getResponseData(res, conf)
+      } catch (error) {
+        ctx.data = res.body as any
+        throw new Error('Parse response data failed')
+      }
+    })
+    .then(p.resolve)
+    .catch(p.reject)
+
+  return p.instance
 }
 
 function transformToFormData(data: any) {
@@ -150,4 +173,40 @@ async function getResponseData(response: Response, conf: AlpsRequestConfig) {
     default:
       return response.body
   }
+}
+
+export function composeUrl(url: string, conf: AlpsRequestConfig): string {
+  const u = parseURL(url)
+
+  if (u.origin || isAbsolutePath(url)) {
+    return mergeParams(url, conf.params)
+  }
+
+  const baseU = parseURL(conf.baseURL || '')
+
+  const mergedUrl =
+    baseU.origin +
+    (baseU.path.replace(/\/$/, '') + (u.path ? '/' : '') + u.path) +
+    u.search +
+    u.hash
+
+  return mergeParams(mergedUrl, conf.params)
+}
+
+function mergeParams(url: string, params: Record<string, string | boolean | number> = {}) {
+  const fallbackOrigin = 'http://alps'
+
+  const u = new URL(url, fallbackOrigin)
+
+  for (const key in params) {
+    const value = params[key]
+
+    if (!is.nullish(value)) {
+      u.searchParams.set(key, String(value))
+    }
+  }
+
+  const result = u.toString()
+
+  return result.startsWith(fallbackOrigin) ? result.slice(fallbackOrigin.length) : result
 }
