@@ -21,3 +21,17 @@ export type ElementOf<T> = T extends Array<infer E> ? E : never
 export interface Ctor<Instance = any, Params = any[]> {
   new (...args: Params): Instance
 }
+
+export type Optional<T> = T | undefined
+
+export type DeepPartial<T> = T extends {}
+  ? {
+      [Key in keyof T]?: DeepPartial<T[Key]>
+    }
+  : Optional<T>
+
+export type DeepRequired<T> = T extends {}
+  ? {
+      [Key in keyof T]: DeepRequired<T[Key]>
+    }
+  : NonNullable<T>
