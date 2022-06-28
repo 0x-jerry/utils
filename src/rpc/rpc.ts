@@ -10,7 +10,7 @@ export interface RPCOption {
   /**
    * Send message actively
    */
-  send?: (data: RPCMessage) => any
+  send?: (data: RPCMessage) => void
   /**
    * Set 0 to turn off timeout check.
    * @default 10s
@@ -34,7 +34,7 @@ export interface RPCOption {
 export interface RPCContext extends RPCOption {}
 
 export interface RPCRequestCtx extends RPCRequest {
-  send?: (data: RPCMessage) => any
+  send?: (data: RPCMessage) => void
 }
 
 const RPCTimeoutErrorSymbol = '__$rpc_timeout_error$__'
@@ -99,7 +99,7 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
   }
 
   const r: RPCServerProxy<Server> = {
-    proxy: getProxyObject(ctx, record) as any,
+    proxy: getProxyObject(ctx, record) as RPCServer<Server>,
     record,
     receive,
   }
@@ -145,9 +145,9 @@ export function createRPC<Server extends RPCMethods, Client extends RPCMethods =
   }
 }
 
-function getProxyObject(ctx: RPCContext, record: Map<string, PromiseInstance<any>>) {
+function getProxyObject(ctx: RPCContext, record: Map<string, PromiseInstance<unknown>>) {
   const getter = (_: object, method: string) => {
-    return (...args: any[]) => {
+    return (...args: unknown[]) => {
       const request: RPCRequest = {
         t: 'q',
         _: ctx.id,

@@ -19,7 +19,7 @@ describe('get global offset', () => {
       },
     }
 
-    const [x, y] = getGlobalOffset(fakeEl as any)
+    const [x, y] = getGlobalOffset(fakeEl as unknown as HTMLElement)
 
     expect(x).toBe(2)
     expect(y).toBe(4)
