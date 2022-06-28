@@ -6,6 +6,10 @@ import { isAbsolutePath, parseURL } from './utils'
 
 type AlpsInstanceRequestConfig = Omit<AlpsRequestConfig, 'url' | 'method'>
 
+type Data = {
+  [key: string]: any
+}
+
 export function createAlpsInstance<CustomConfig extends {}, CustomContext extends {} = {}>(
   conf: Partial<AlpsInstanceRequestConfig & CustomConfig> = {}
 ) {
@@ -22,21 +26,21 @@ export function createAlpsInstance<CustomConfig extends {}, CustomContext extend
       _middleware.push(middleware)
     },
     request,
-    get<D>(url: string, params: any = {}, conf: RequestConfig = {}) {
+    get<D>(url: string, params: Data = {}, conf: RequestConfig = {}) {
       conf.params = Object.assign({}, params, conf.params)
       return request<D>(url, 'get', conf)
     },
-    post<D>(url: string, data: any = {}, conf: RequestConfig = {}) {
+    post<D>(url: string, data: Data = {}, conf: RequestConfig = {}) {
       conf.data = Object.assign({}, data, conf.data)
 
       return request<D>(url, 'post', conf)
     },
-    put<D>(url: string, data: any = {}, conf: RequestConfig = {}) {
+    put<D>(url: string, data: Data = {}, conf: RequestConfig = {}) {
       conf.data = Object.assign({}, data, conf.data)
 
       return request<D>(url, 'put', conf)
     },
-    patch<D>(url: string, data: any = {}, conf: RequestConfig = {}) {
+    patch<D>(url: string, data: Data = {}, conf: RequestConfig = {}) {
       conf.data = Object.assign({}, data, conf.data)
 
       return request<D>(url, 'patch', conf)
@@ -50,17 +54,17 @@ export function createAlpsInstance<CustomConfig extends {}, CustomContext extend
     options<D>(url: string, conf: RequestConfig = {}) {
       return request<D>(url, 'options', conf)
     },
-    postForm<D>(url: string, data: any = {}, conf: RequestConfig = {}) {
+    postForm<D>(url: string, data: Data = {}, conf: RequestConfig = {}) {
       conf.data = transformToFormData(data)
 
       return request<D>(url, 'post', conf)
     },
-    putForm<D>(url: string, data: any = {}, conf: RequestConfig = {}) {
+    putForm<D>(url: string, data: Data = {}, conf: RequestConfig = {}) {
       conf.data = transformToFormData(data)
 
       return request<D>(url, 'put', conf)
     },
-    patchForm<D>(url: string, data: any = {}, conf: RequestConfig = {}) {
+    patchForm<D>(url: string, data: Data = {}, conf: RequestConfig = {}) {
       conf.data = transformToFormData(data)
 
       return request<D>(url, 'patch', conf)

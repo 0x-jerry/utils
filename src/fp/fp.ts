@@ -17,12 +17,12 @@ import { ICompose, IComposeResult } from './types'
  * @param fns
  * @returns
  */
-export const compose: ICompose = (...fns: any[]) => {
-  const composed: IComposeResult<Fn> = (x: any) => fns.reduce((p, fn) => fn(p), x)
+export const compose: ICompose = (...fns: Fn[]) => {
+  const composed: IComposeResult<Fn> = (x: unknown) => fns.reduce((p, fn) => fn(p), x)
 
   composed.exec = composed
 
-  return composed as any
+  return composed
 }
 
 /**
