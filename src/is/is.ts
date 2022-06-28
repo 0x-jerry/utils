@@ -30,7 +30,7 @@ export namespace is {
     return o !== null && typeof o === 'object'
   }
 
-  export function empty(o: number | BigInt | boolean | Function): false
+  export function empty(o: number | bigint | boolean | Function): false
   export function empty<V, K>(
     o: null | undefined | string | Set<V> | Map<K, V> | Array<V> | Iterable<V> | object
   ): boolean
