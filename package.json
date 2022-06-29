@@ -3,6 +3,7 @@
   "version": "1.8.2",
   "license": "MIT",
   "description": "Collection of useful JavaScript/TypeScript utils",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/0x-jerry/utils.git"
@@ -21,20 +22,12 @@
     "dist"
   ],
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build": "tsup src/index.ts --format esm --dts --clean",
     "release": "x-release"
   },
   "devDependencies": {
