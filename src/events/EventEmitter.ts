@@ -15,7 +15,9 @@ export interface EventEmitterOption {
   verbose?: boolean
 }
 
-export class EventEmitter<Events extends Record<string, ListenerFunction>> {
+export class EventEmitter<
+  Events extends Record<string, ListenerFunction> = Record<string, ListenerFunction>
+> {
   static SymbolOnce = Once
 
   #listeners: EventListeners<Events>
