@@ -5,3 +5,8 @@ export { nanoid as uuid } from 'nanoid'
 export const noop = () => {}
 
 export const hasOwn = (o: Object, name: string) => Object.prototype.hasOwnProperty.call(o, name)
+
+export const createUUIDGenerator = (prefix = '') => {
+  let i = 0
+  return () => prefix + i++
+}
