@@ -5,6 +5,11 @@ describe('misc', () => {
     expect(hasOwn({}, 'a')).toBe(false)
 
     expect(hasOwn({ a: 1 }, 'a')).toBe(true)
+
+    const s = Symbol()
+
+    expect(hasOwn({ [s]: 0 }, s)).toBe(true)
+    expect(hasOwn({}, s)).toBe(false)
   })
 
   it('generate uuid', () => {
