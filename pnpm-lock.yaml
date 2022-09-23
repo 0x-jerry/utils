@@ -17,7 +17,7 @@ importers:
       tsup: ^6.1.2
       typescript: ^4.7.4
       vite: ^3.1.3
-      vitest: ^0.22.0
+      vitest: ^0.23.0
     dependencies:
       '@vue/reactivity': 3.2.37
       nanoid: 4.0.0
@@ -34,7 +34,7 @@ importers:
       tsup: 6.1.2_typescript@4.7.4
       typescript: 4.7.4
       vite: 3.1.3
-      vitest: 0.22.0_d3a6yda5o44nqhcle2jmdlibf4
+      vitest: 0.23.4_d3a6yda5o44nqhcle2jmdlibf4
 
   benchmark:
     specifiers:
@@ -242,6 +242,12 @@ packages:
 
   /acorn/8.7.1:
     resolution: {integrity: sha512-Xx54uLJQZ19lKygFXOWsscKUbsBZW0CPykPhVQdhIeIwrbPmJzqeASDInc8nKBnp/JT6igTs82qPXz069H8I/A==}
+    engines: {node: '>=0.4.0'}
+    hasBin: true
+    dev: true
+
+  /acorn/8.8.0:
+    resolution: {integrity: sha512-QOxyigPVrpZ2GXT+PFyZTl6TtOFc5egxHIP9IlQ+RbupQuX4RkT/Bee4/kQuC02Xkzg84JcT7oLYtDIQxp+v7w==}
     engines: {node: '>=0.4.0'}
     hasBin: true
     dev: true
@@ -1995,6 +2001,12 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
+  /strip-literal/0.4.2:
+    resolution: {integrity: sha512-pv48ybn4iE1O9RLgCAN0iU4Xv7RlBTiit6DKmMiErbs9x1wH6vXBs45tWc0H5wUIF6TLTrKweqkmYF/iraQKNw==}
+    dependencies:
+      acorn: 8.8.0
+    dev: true
+
   /sucrase/3.22.0:
     resolution: {integrity: sha512-RZeE0UPxCjf99p4c9Sb27qRbsuZBd7TViR/q1P6TsUPYa/H2LIkaCPpio6F1nQksrynYA78KEBUnpxswZiPYcg==}
     engines: {node: '>=8'}
@@ -2078,13 +2090,17 @@ packages:
       any-promise: 1.3.0
     dev: true
 
+  /tinybench/2.1.5:
+    resolution: {integrity: sha512-ak+PZZEuH3mw6CCFOgf5S90YH0MARnZNhxjhjguAmoJimEMAJuNip/rJRd6/wyylHItomVpKTzZk9zrhTrQCoQ==}
+    dev: true
+
   /tinypool/0.2.4:
     resolution: {integrity: sha512-Vs3rhkUH6Qq1t5bqtb816oT+HeJTXfwt2cbPH17sWHIYKTotQIFPk3tf2fgqRrVyMDVOc1EnPgzIxfIulXVzwQ==}
     engines: {node: '>=14.0.0'}
     dev: true
 
-  /tinyspy/1.0.0:
-    resolution: {integrity: sha512-FI5B2QdODQYDRjfuLF+OrJ8bjWRMCXokQPcwKm0W3IzcbUmBNv536cQc7eXGoAuXphZwgx1DFbqImwzz08Fnhw==}
+  /tinypool/0.3.0:
+    resolution: {integrity: sha512-NX5KeqHOBZU6Bc0xj9Vr5Szbb1j8tUHIeD18s41aDJaPeC5QTdEhK0SpdpUrZlj2nv5cctNcSjaKNanXlfcVEQ==}
     engines: {node: '>=14.0.0'}
     dev: true
 
@@ -2246,47 +2262,6 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vitest/0.22.0_d3a6yda5o44nqhcle2jmdlibf4:
-    resolution: {integrity: sha512-BSIro/QOHLaQY08FHwT6THWhqLQ+VPU+N4Rdo4pcP+16XB6oLmNNAXGcSh/MOLUhfUy+mqCwx7AyKmU7Ms5R+g==}
-    engines: {node: '>=v14.16.0'}
-    hasBin: true
-    peerDependencies:
-      '@edge-runtime/vm': '*'
-      '@vitest/browser': '*'
-      '@vitest/ui': '*'
-      happy-dom: '*'
-      jsdom: '*'
-    peerDependenciesMeta:
-      '@edge-runtime/vm':
-        optional: true
-      '@vitest/browser':
-        optional: true
-      '@vitest/ui':
-        optional: true
-      happy-dom:
-        optional: true
-      jsdom:
-        optional: true
-    dependencies:
-      '@types/chai': 4.3.3
-      '@types/chai-subset': 1.3.3
-      '@types/node': 18.0.0
-      chai: 4.3.6
-      debug: 4.3.4
-      happy-dom: 6.0.0
-      jsdom: 20.0.0
-      local-pkg: 0.4.2
-      tinypool: 0.2.4
-      tinyspy: 1.0.0
-      vite: 3.1.3
-    transitivePeerDependencies:
-      - less
-      - sass
-      - stylus
-      - supports-color
-      - terser
-    dev: true
-
   /vitest/0.22.1_d3a6yda5o44nqhcle2jmdlibf4:
     resolution: {integrity: sha512-+x28YTnSLth4KbXg7MCzoDAzPJlJex7YgiZbUh6YLp0/4PqVZ7q7/zyfdL0OaPtKTpNiQFPpMC8Y2MSzk8F7dw==}
     engines: {node: '>=v14.16.0'}
@@ -2318,6 +2293,49 @@ packages:
       jsdom: 20.0.0
       local-pkg: 0.4.2
       tinypool: 0.2.4
+      tinyspy: 1.0.2
+      vite: 3.1.3
+    transitivePeerDependencies:
+      - less
+      - sass
+      - stylus
+      - supports-color
+      - terser
+    dev: true
+
+  /vitest/0.23.4_d3a6yda5o44nqhcle2jmdlibf4:
+    resolution: {integrity: sha512-iukBNWqQAv8EKDBUNntspLp9SfpaVFbmzmM0sNcnTxASQZMzRw3PsM6DMlsHiI+I6GeO5/sYDg3ecpC+SNFLrQ==}
+    engines: {node: '>=v14.16.0'}
+    hasBin: true
+    peerDependencies:
+      '@edge-runtime/vm': '*'
+      '@vitest/browser': '*'
+      '@vitest/ui': '*'
+      happy-dom: '*'
+      jsdom: '*'
+    peerDependenciesMeta:
+      '@edge-runtime/vm':
+        optional: true
+      '@vitest/browser':
+        optional: true
+      '@vitest/ui':
+        optional: true
+      happy-dom:
+        optional: true
+      jsdom:
+        optional: true
+    dependencies:
+      '@types/chai': 4.3.3
+      '@types/chai-subset': 1.3.3
+      '@types/node': 18.0.0
+      chai: 4.3.6
+      debug: 4.3.4
+      happy-dom: 6.0.0
+      jsdom: 20.0.0
+      local-pkg: 0.4.2
+      strip-literal: 0.4.2
+      tinybench: 2.1.5
+      tinypool: 0.3.0
       tinyspy: 1.0.2
       vite: 3.1.3
     transitivePeerDependencies:
