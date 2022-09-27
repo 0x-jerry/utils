@@ -1,4 +1,4 @@
-import { createUUIDGenerator, hasOwn } from './misc'
+import { createAutoIncrementGenerator, hasOwn } from './misc'
 
 describe('misc', () => {
   it('hasOwn', () => {
@@ -13,12 +13,12 @@ describe('misc', () => {
   })
 
   it('generate uuid', () => {
-    const nextId = createUUIDGenerator()
+    const nextId = createAutoIncrementGenerator()
 
     expect(nextId()).toBe('0')
     expect(nextId()).toBe('1')
 
-    const nextId2 = createUUIDGenerator('p_')
+    const nextId2 = createAutoIncrementGenerator('p_')
 
     expect(nextId2()).toBe('p_0')
     expect(nextId2()).toBe('p_1')
