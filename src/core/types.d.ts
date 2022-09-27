@@ -36,7 +36,7 @@ export type DeepRequired<T> = T extends {}
     }
   : NonNullable<T>
 
-export type JsonPrimitive = string | number | boolean | null
-export type JsonObject = { [key: string]: JsonValue }
+export type JsonPrimitive = string | number | boolean | null | undefined
+export type JsonObject = { [key: string | number]: JsonValue }
 export type JsonArray = JsonValue[]
 export type JsonValue = JsonPrimitive | JsonObject | JsonArray
