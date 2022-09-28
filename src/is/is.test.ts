@@ -104,4 +104,24 @@ describe('is utils', () => {
     expect(is.nullish(undefined)).toBe(true)
     expect(is.nullish(null)).toBe(true)
   })
+
+  it('is primitive', () => {
+    expect(is.primitive('')).toBe(true)
+    expect(is.primitive(0)).toBe(true)
+    expect(is.primitive(1n)).toBe(true)
+    expect(is.primitive(Symbol())).toBe(true)
+    expect(is.primitive(null)).toBe(true)
+    expect(is.primitive(undefined)).toBe(true)
+    expect(is.primitive(false)).toBe(true)
+
+    expect(is.primitive({})).toBe(false)
+    expect(is.primitive([])).toBe(false)
+
+    expect(is.primitive(new Map())).toBe(false)
+    expect(is.primitive(new Set())).toBe(false)
+
+    expect(is.primitive(() => {})).toBe(false)
+    expect(is.primitive(class A {})).toBe(false)
+    expect(is.primitive(function () {})).toBe(false)
+  })
 })

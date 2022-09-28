@@ -40,3 +40,5 @@ export type JsonPrimitive = string | number | boolean | null | undefined
 export type JsonObject = { [key: string | number]: JsonValue }
 export type JsonArray = JsonValue[]
 export type JsonValue = JsonPrimitive | JsonObject | JsonArray
+
+export type PrimitiveType = JsonPrimitive | bigint | symbol
