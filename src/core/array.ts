@@ -1,20 +1,68 @@
 import { is } from '../is'
-import { Arrayable } from './types'
+import { Arrayable, PrimitiveType } from './types'
 
 /**
- * Ensure return an array of element T.
+ * Ensure to return a list of element T.
  *
- * @param o
+ * @param arr
  * @returns
  */
-export const toArray = <T>(o: Arrayable<T>): T[] => {
-  return Array.isArray(o) ? o : [o]
+export const toArray = <T>(arr: Arrayable<T>): T[] => {
+  return Array.isArray(arr) ? arr : [arr]
 }
 
-export const remove = <T>(o: T[], predict: T | ((item: T) => boolean)): number => {
-  const idx = is.fn(predict) ? o.findIndex(predict) : o.indexOf(predict)
+export const remove = <T>(arr: T[], predict: T | ((item: T) => boolean)): number => {
+  const idx = is.fn(predict) ? arr.findIndex(predict) : arr.indexOf(predict)
 
-  if (idx >= 0) o.splice(idx, 1)
+  if (idx >= 0) arr.splice(idx, 1)
 
   return idx
+}
+
+type GroupResult<T, U> = U extends PrimitiveType
+  ? Record<string | number | symbol, T[]>
+  : Map<U, T[]>
+
+/**
+ *
+ * @experiment
+ * @param arr
+ * @param callbackFn
+ * @returns
+ */
+export function group<T, U>(arr: T[], callbackFn: (item: T) => U): GroupResult<T, U> {
+  let record: any = null
+
+  let recordIsMap = false
+
+  function initRecord(value: any) {
+    if (is.primitive(value)) {
+      record = {}
+    } else {
+      recordIsMap = true
+      record = new Map()
+    }
+  }
+
+  for (const item of arr) {
+    const value = callbackFn(item)
+
+    if (!record) initRecord(value)
+
+    const exist = recordIsMap ? record.get(value) : record[value]
+
+    if (exist) {
+      exist.push(item)
+    } else {
+      const g = [item]
+
+      if (recordIsMap) {
+        record.set(value, g)
+      } else {
+        record[value] = g
+      }
+    }
+  }
+
+  return record || new Map()
 }

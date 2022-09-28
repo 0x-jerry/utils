@@ -1,0 +1,53 @@
+// Vitest Snapshot v1
+
+exports[`group > should group by object 1`] = `
+Map {
+  {
+    "key": 1,
+  } => [
+    {
+      "name": "1",
+      "type": {
+        "key": 1,
+      },
+    },
+    {
+      "name": "2",
+      "type": {
+        "key": 1,
+      },
+    },
+  ],
+  {
+    "key": 2,
+  } => [
+    {
+      "name": "3",
+      "type": {
+        "key": 2,
+      },
+    },
+  ],
+}
+`;
+
+exports[`group > should group by string 1`] = `
+{
+  "1": [
+    {
+      "name": "1",
+      "type": 1,
+    },
+    {
+      "name": "2",
+      "type": 1,
+    },
+  ],
+  "2": [
+    {
+      "name": "3",
+      "type": 2,
+    },
+  ],
+}
+`;
