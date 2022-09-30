@@ -1,6 +1,6 @@
 import { createSimpleLogger, SimpleLogger } from '../logger'
 
-const Once = '__$once$__'
+const Once = Symbol()
 
 interface ListenerFunction {
   (...args: any[]): any
@@ -12,6 +12,9 @@ type EventListeners<R extends Record<string, unknown>> = {
 }
 
 export interface EventEmitterOption {
+  /**
+   * show debug info
+   */
   verbose?: boolean
 }
 
@@ -21,27 +24,23 @@ export class EventEmitter<
   static SymbolOnce = Once
 
   #listeners: EventListeners<Events>
-  #limit: number
+  #capacity: number
   #logger?: SimpleLogger
 
   /**
    * Limit count of listeners for every event.
    */
-  get limit() {
-    return this.#limit
+  get capacity() {
+    return this.#capacity
   }
 
-  constructor(
-    /**
-     *
-     * 0 means infinite.
-     *
-     * @default 20
-     */
-    limit = 20,
-    opt: EventEmitterOption = {}
-  ) {
-    this.#limit = limit
+  /**
+   *
+   * @param capacity default is 0, means unlimited.
+   * @param opt
+   */
+  constructor(capacity = 0, opt: EventEmitterOption = {}) {
+    this.#capacity = capacity
     this.#listeners = {}
 
     if (opt.verbose) {
@@ -50,8 +49,8 @@ export class EventEmitter<
   }
 
   #checkLimit(size: number) {
-    if (this.#limit && size >= this.#limit) {
-      throw new Error('Listeners reached limit size: ' + this.#limit)
+    if (this.#capacity && size >= this.#capacity) {
+      throw new Error('Listeners reached limit size: ' + this.#capacity)
     }
   }
 
@@ -132,16 +131,28 @@ export class EventEmitter<
   off<K extends keyof Events>(event: K, listener: Events[K]): boolean
   off<K extends keyof Events>(event?: K, listener?: Events[K]): boolean {
     if (!event) {
+      const collections: Set<ListenerFunction>[] = Object.values(this.#listeners)
+      collections.forEach((events) => clearOnce(...events.values()))
+
       this.#listeners = {}
-      return true
+      return collections.length > 0
     }
 
     if (!listener) {
-      delete this.#listeners[event]
-      return true
+      const events = this.#listeners[event]
+      if (events) {
+        clearOnce(...events.values())
+
+        delete this.#listeners[event]
+      }
+
+      return (events?.size || 0) > 0
     }
 
     const events = this.events(event)
+
+    clearOnce(listener)
+
     return events.delete(listener)
   }
 
@@ -171,5 +182,13 @@ export class EventEmitter<
     clears.forEach((event) => {
       events.delete(event)
     })
+  }
+}
+
+function clearOnce(...listeners: ListenerFunction[]) {
+  for (const evt of listeners) {
+    if (evt[Once]) {
+      delete evt[Once]
+    }
   }
 }

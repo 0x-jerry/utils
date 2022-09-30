@@ -7,7 +7,7 @@ type Events = {
 }
 
 describe('EventEmitter', () => {
-  it('on', () => {
+  it('should add a listener', () => {
     const ee = new EventEmitter<Events>()
 
     ee.on('bar', (a) => {
@@ -21,7 +21,7 @@ describe('EventEmitter', () => {
     ee.emit('bar', 12, '123')
   })
 
-  it('once', () => {
+  it('should only run once', () => {
     const ee = new EventEmitter<Events>()
 
     const fn = (x: number) => expect(x).toBe(12)
@@ -33,6 +33,18 @@ describe('EventEmitter', () => {
     expect(Reflect.get(fn, EventEmitter.SymbolOnce)).toBe(undefined)
 
     expect(ee.events('foo').size).toBe(0)
+  })
+
+  it('should delete once symbol on listener', () => {
+    const ee = new EventEmitter<Events>()
+
+    const fn = (x: number) => expect(x).toBe(12)
+
+    ee.once('foo', fn)
+    expect(Reflect.get(fn, EventEmitter.SymbolOnce)).toBe(true)
+
+    ee.off()
+    expect(Reflect.get(fn, EventEmitter.SymbolOnce)).toBe(undefined)
   })
 
   it('off', () => {
@@ -69,10 +81,10 @@ describe('EventEmitter', () => {
     expect(() => ee.once('test', () => {})).toThrow('Listeners reached limit size: 1')
   })
 
-  it('0 limit size', () => {
+  it('0 capacity size', () => {
     const ee = new EventEmitter<Events>(0)
 
-    expect(ee.limit).toBe(0)
+    expect(ee.capacity).toBe(0)
 
     expect(() => {
       for (let index = 0; index < 30; index++) {
