@@ -5,16 +5,16 @@ export type SleepResult = Promise<void> & { cancel: () => void }
 export const sleep = (timeout: number = 0): SleepResult => {
   let handler: NodeJS.Timeout | number | undefined
 
-  const ins = createPromiseInstance<void>()
+  const promise = createPromiseInstance<void>()
 
-  const p = ins.instance as SleepResult
+  const ins = promise.instance as SleepResult
 
-  p.cancel = () => {
+  ins.cancel = () => {
     clearTimeout(handler)
-    ins.reject('canceled')
+    promise.reject('canceled')
   }
 
-  handler = setTimeout(ins.resolve, timeout)
+  handler = setTimeout(promise.resolve, timeout)
 
-  return p
+  return ins
 }

@@ -1,7 +1,7 @@
-import { sum } from './sum'
+import { sumOf } from './sum'
 
 describe('sum', () => {
   it('should work with array', () => {
-    expect(sum(1, 2, 3)).toBe(6)
+    expect(sumOf(1, 2, 3)).toBe(6)
   })
 })
