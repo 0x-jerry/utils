@@ -2,6 +2,12 @@ import { createPromiseInstance } from './createPromiseInstance'
 
 export type SleepResult = Promise<void> & { cancel: () => void }
 
+/**
+ * promise timeout, support cancel
+ *
+ * @param timeout
+ * @returns
+ */
 export const sleep = (timeout: number = 0): SleepResult => {
   let handler: NodeJS.Timeout | number | undefined
 

@@ -2,6 +2,12 @@ export type LoggerLevel = 'info' | 'warn' | 'error'
 
 type LoggerPrefixFunction = (type: LoggerLevel) => string
 
+/**
+ * create a simple logger, support print prefix, and enable/disable.
+ *
+ * @param prefix
+ * @returns
+ */
 export function createSimpleLogger(prefix?: string | LoggerPrefixFunction) {
   let _enable = true
 

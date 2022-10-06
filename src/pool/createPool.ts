@@ -5,6 +5,13 @@ export interface PoolOption {
   maximize: number
 }
 
+/**
+ * create a simple request pool, it will limit the max request count.
+ *
+ * @param request
+ * @param opt
+ * @returns
+ */
 export function createPool<T extends (...arg: any[]) => Promise<any>>(
   request: T,
   opt: Partial<PoolOption> = {}

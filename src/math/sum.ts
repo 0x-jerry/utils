@@ -1,3 +1,9 @@
-export function sumOf(...iter: number[]): number {
-  return iter.reduce((v, s) => v + s, 0)
+/**
+ * calculate the sum of arr
+ *
+ * @param arr
+ * @returns
+ */
+export function sumOf(...arr: number[]): number {
+  return arr.reduce((v, s) => v + s, 0)
 }

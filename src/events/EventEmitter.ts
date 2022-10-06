@@ -18,6 +18,25 @@ export interface EventEmitterOption {
   verbose?: boolean
 }
 
+/**
+ * @example
+ * ```ts
+ * type Events = {
+ *  test(): void
+ *  foo(a: number): void
+ *  bar(a: number, b: string): void
+ * }
+ *
+ * const event = new EventEmitter<Events>()
+ *
+ * event.on('test', () => console.log('test'))
+ *
+ * event.emit('test')
+ *
+ * event.off('test')
+ *
+ * ```
+ */
 export class EventEmitter<
   Events extends Record<string, ListenerFunction> = Record<string, ListenerFunction>
 > {
