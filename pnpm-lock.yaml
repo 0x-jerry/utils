@@ -1,36 +1,26 @@
 lockfileVersion: 5.4
 
-importers:
+specifiers:
+  '@0x-jerry/x-release': 0.3.6
+  '@types/node': ^18.0.0
+  '@vitest/coverage-c8': ^0.23.0
+  nanoid: ^4.0.0
+  tsup: ^6.1.2
+  typescript: ^4.7.4
+  vite: ^3.1.3
+  vitest: ^0.24.0
 
-  .:
-    specifiers:
-      '@0x-jerry/x-release': 0.3.6
-      '@types/node': ^18.0.0
-      '@vitest/coverage-c8': ^0.23.0
-      nanoid: ^4.0.0
-      tsup: ^6.1.2
-      typescript: ^4.7.4
-      vite: ^3.1.3
-      vitest: ^0.23.0
-    dependencies:
-      nanoid: 4.0.0
-    devDependencies:
-      '@0x-jerry/x-release': 0.3.6
-      '@types/node': 18.0.0
-      '@vitest/coverage-c8': 0.23.4
-      tsup: 6.1.2_typescript@4.7.4
-      typescript: 4.7.4
-      vite: 3.1.3
-      vitest: 0.23.4
+dependencies:
+  nanoid: 4.0.0
 
-  benchmark:
-    specifiers:
-      '@0x-jerry/utils': ../
-      benchmark: ^2.1.4
-    dependencies:
-      '@0x-jerry/utils': link:..
-    devDependencies:
-      benchmark: 2.1.4
+devDependencies:
+  '@0x-jerry/x-release': 0.3.6
+  '@types/node': 18.0.0
+  '@vitest/coverage-c8': 0.23.4
+  tsup: 6.1.2_typescript@4.7.4
+  typescript: 4.7.4
+  vite: 3.1.3
+  vitest: 0.24.0
 
 packages:
 
@@ -207,13 +197,6 @@ packages:
 
   /balanced-match/1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
-    dev: true
-
-  /benchmark/2.1.4:
-    resolution: {integrity: sha512-l9MlfN4M1K/H2fbhfMy3B7vJd6AGKJVQn2h6Sg/Yx+KckoUA7ewS5Vv6TjSq18ooE1kS9hhAlQRH3AkXIh/aOQ==}
-    dependencies:
-      lodash: 4.17.21
-      platform: 1.3.6
     dev: true
 
   /binary-extensions/2.2.0:
@@ -1083,10 +1066,6 @@ packages:
     resolution: {integrity: sha512-HDWXG8isMntAyRF5vZ7xKuEvOhT4AhlRt/3czTSjvGUxjYCBVRQY48ViDHyfYz9VIoBkW4TMGQNapx+l3RUwdA==}
     dev: true
 
-  /lodash/4.17.21:
-    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: true
-
   /loupe/2.3.4:
     resolution: {integrity: sha512-OvKfgCC2Ndby6aSTREl5aCCPTNIzlDfQZvZxNUrBrihDhL3xcrYegTblhmEiCrg2kKQz4XsFIaemE5BF4ybSaQ==}
     dependencies:
@@ -1243,10 +1222,6 @@ packages:
   /pirates/4.0.5:
     resolution: {integrity: sha512-8V9+HQPupnaXMA23c5hvl69zXvTwTzyAYasnkb0Tts4XvO4CliqONMOnvlq26rkhLC3nWDFBJf73LU1e1VZLaQ==}
     engines: {node: '>= 6'}
-    dev: true
-
-  /platform/1.3.6:
-    resolution: {integrity: sha512-fnWVljUchTro6RiCFvCXBbNhJc2NijN7oIQxbwsyL0buWJPG85v81ehlHI9fXrJsMNgTofEoWIQeClKpgxFLrg==}
     dev: true
 
   /postcss-load-config/3.1.4:
@@ -1479,8 +1454,8 @@ packages:
       any-promise: 1.3.0
     dev: true
 
-  /tinybench/2.1.5:
-    resolution: {integrity: sha512-ak+PZZEuH3mw6CCFOgf5S90YH0MARnZNhxjhjguAmoJimEMAJuNip/rJRd6/wyylHItomVpKTzZk9zrhTrQCoQ==}
+  /tinybench/2.3.0:
+    resolution: {integrity: sha512-zs1gMVBwyyG2QbVchYIbnabRhMOCGvrwZz/q+SV+LIMa9q5YDQZi2kkI6ZRqV2Bz7ba1uvrc7ieUoE4KWnGeKg==}
     dev: true
 
   /tinypool/0.3.0:
@@ -1635,7 +1610,48 @@ packages:
       debug: 4.3.4
       local-pkg: 0.4.2
       strip-literal: 0.4.2
-      tinybench: 2.1.5
+      tinybench: 2.3.0
+      tinypool: 0.3.0
+      tinyspy: 1.0.2
+      vite: 3.1.3
+    transitivePeerDependencies:
+      - less
+      - sass
+      - stylus
+      - supports-color
+      - terser
+    dev: true
+
+  /vitest/0.24.0:
+    resolution: {integrity: sha512-k5j3FPTor+MJx2x0pDW2gtVk+s9VC6nSHT3SoqOIk9Je5fFpPgict+Xy2eAVXUogvSixs45Ya1oZk+oK93BO0w==}
+    engines: {node: '>=v14.16.0'}
+    hasBin: true
+    peerDependencies:
+      '@edge-runtime/vm': '*'
+      '@vitest/browser': '*'
+      '@vitest/ui': '*'
+      happy-dom: '*'
+      jsdom: '*'
+    peerDependenciesMeta:
+      '@edge-runtime/vm':
+        optional: true
+      '@vitest/browser':
+        optional: true
+      '@vitest/ui':
+        optional: true
+      happy-dom:
+        optional: true
+      jsdom:
+        optional: true
+    dependencies:
+      '@types/chai': 4.3.3
+      '@types/chai-subset': 1.3.3
+      '@types/node': 18.0.0
+      chai: 4.3.6
+      debug: 4.3.4
+      local-pkg: 0.4.2
+      strip-literal: 0.4.2
+      tinybench: 2.3.0
       tinypool: 0.3.0
       tinyspy: 1.0.2
       vite: 3.1.3
