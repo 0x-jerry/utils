@@ -103,7 +103,7 @@ export namespace is {
    * @returns
    */
   export function iterable<V>(target: unknown): target is Iterable<V> {
-    return Symbol.iterator in Object(target)
+    return is.object(target) && Symbol.iterator in target
   }
 
   /**

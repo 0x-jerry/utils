@@ -59,6 +59,10 @@ describe('is utils', () => {
   })
 
   it('is iterable', () => {
+    expect(is.iterable(null)).toBe(false)
+    expect(is.iterable(undefined)).toBe(false)
+    expect(is.iterable(false)).toBe(false)
+
     expect(is.iterable({})).toBe(false)
     expect(is.iterable(0)).toBe(false)
 
