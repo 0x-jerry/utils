@@ -2,12 +2,16 @@ import { walkTree } from './tree'
 
 interface TNode {
   num: number
-  s?: string
   children?: TNode[]
+
+  // --- type test
+  d: string
+  s?: string
   c?: string[]
+  e: string[]
 }
 
-const rootNode: TNode = {
+const rootNode = {
   num: 0,
   children: [
     {
@@ -22,7 +26,7 @@ const rootNode: TNode = {
       num: 2,
     },
   ],
-}
+} as TNode
 
 describe('tree', () => {
   it('should traverse all tree node in DFS order', () => {

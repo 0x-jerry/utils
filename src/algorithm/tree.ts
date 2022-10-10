@@ -9,11 +9,10 @@ import { ExtractObjectKeys, Optional } from '../types'
  * @param cb
  * @param key default is `'children'`
  */
-export function walkTree<T extends {}, Key extends ExtractObjectKeys<T, Optional<Array<T>>>>(
-  node: T,
-  cb: (item: T) => void,
-  key?: Key
-) {
+export function walkTree<
+  T extends {},
+  Key extends ExtractObjectKeys<T, Optional<Iterable<any>>, Optional<string>>
+>(node: T, cb: (item: T) => void, key?: Key) {
   cb(node)
 
   key ??= 'children' as Key
