@@ -67,6 +67,7 @@ describe('is utils', () => {
     expect(is.iterable(0)).toBe(false)
 
     expect(is.iterable([])).toBe(true)
+    expect(is.iterable(new Set())).toBe(true)
   })
 
   it('is empty', () => {

@@ -85,11 +85,7 @@ export namespace is {
     } else if (target instanceof Array) {
       return target.length === 0
     } else if (iterable(target)) {
-      for (const _ of target) {
-        return false
-      }
-
-      return true
+      return !!target[Symbol.iterator]().next().done
     } else if (object(target) && Object.keys(target).length === 0) {
       return true
     }
@@ -98,7 +94,14 @@ export namespace is {
   }
 
   /**
-   * if target is iterable
+   * if target is an object and iterable
+   *
+   * @example
+   * ```ts
+   * iterable([]) // => true
+   * iterable('23') // => false
+   * ```
+   *
    * @param target
    * @returns
    */
