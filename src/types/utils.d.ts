@@ -11,7 +11,7 @@ export type Arrayable<T> = T | T[]
 /**
  * Promise, or not.
  */
-export type Awaitable<T> = T | PromiseLike<T>
+export type Promisable<T> = T | PromiseLike<T>
 
 /**
  * Infers the element type of an array.
