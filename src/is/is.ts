@@ -115,7 +115,7 @@ export namespace is {
    * @returns
    */
   export function nullish(target: unknown): target is null | undefined {
-    return !(target != null)
+    return target == null
   }
 
   /**
