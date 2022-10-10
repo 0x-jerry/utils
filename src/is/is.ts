@@ -76,7 +76,7 @@ export namespace is {
     target: null | undefined | string | Set<V> | Map<K, V> | Array<V> | Iterable<V> | object
   ): boolean
   export function empty(target: unknown): boolean {
-    if (target === null || target === undefined) {
+    if (nullish(target)) {
       return true
     } else if (typeof target === 'string') {
       return !target
@@ -111,7 +111,7 @@ export namespace is {
    * @param target
    * @returns
    */
-  export function nullish<T>(target: T): target is NonNullable<T> {
+  export function nullish(target: unknown): target is null | undefined {
     return !(target != null)
   }
 
