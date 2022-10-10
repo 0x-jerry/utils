@@ -1,5 +1,5 @@
 import { is } from '../is'
-import { DeepPartial, DeepRequired, Optional } from './types'
+import { DeepPartial, DeepRequired, Optional } from '../types'
 
 /**
  *

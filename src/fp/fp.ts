@@ -1,4 +1,4 @@
-import { Fn } from '../core'
+import { Fn } from '../types'
 import { ICompose, IComposeResult } from './types'
 
 /**

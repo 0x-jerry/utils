@@ -1,5 +1,5 @@
 import { is } from '../is'
-import { Arrayable, PrimitiveType } from './types'
+import { Arrayable, PrimitiveType } from '../types'
 
 /**
  * Ensure to return a list of element T.

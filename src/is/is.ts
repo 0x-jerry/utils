@@ -1,4 +1,4 @@
-import { Ctor, PrimitiveType } from '../core'
+import { Ctor, PrimitiveType } from '../types'
 
 export namespace is {
   /**

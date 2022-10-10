@@ -1,6 +1,5 @@
 export * from './array'
 export * from './sleep'
-export * from './types.d'
 export * from './createPromiseInstance'
 export * from './createSingleton'
 export * from './merge'
