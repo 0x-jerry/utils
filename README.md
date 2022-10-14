@@ -5,3 +5,5 @@
 [![Codecov](https://img.shields.io/codecov/c/gh/0x-jerry/utils?style=for-the-badge)](https://codecov.io/gh/0x-jerry/utils)
 
 Collection of useful JavaScript/TypeScript utils.
+
+[Generated API Doc](https://paka.dev/npm/@0x-jerry/utils)
