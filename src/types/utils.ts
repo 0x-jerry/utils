@@ -18,7 +18,7 @@ export type Promisable<T> = T | PromiseLike<T>
  */
 export type ElementOf<T> = T extends Array<infer E> ? E : never
 
-export interface Ctor<Instance = any, Params = any[]> {
+export interface Ctor<Instance = any, Params extends [] = any> {
   new (...args: Params): Instance
 }
 
