@@ -27,24 +27,10 @@ describe('EventEmitter', () => {
     const fn = (x: number) => expect(x).toBe(12)
 
     ee.once('foo', fn)
-    expect(Reflect.get(fn, EventEmitter.SymbolOnce)).toBe(true)
 
     ee.emit('foo', 12)
-    expect(Reflect.get(fn, EventEmitter.SymbolOnce)).toBe(undefined)
 
     expect(ee.events('foo').size).toBe(0)
-  })
-
-  it('should delete once symbol on listener', () => {
-    const ee = new EventEmitter<Events>()
-
-    const fn = (x: number) => expect(x).toBe(12)
-
-    ee.once('foo', fn)
-    expect(Reflect.get(fn, EventEmitter.SymbolOnce)).toBe(true)
-
-    ee.off()
-    expect(Reflect.get(fn, EventEmitter.SymbolOnce)).toBe(undefined)
   })
 
   it('off', () => {

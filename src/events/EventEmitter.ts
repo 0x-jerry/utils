@@ -1,10 +1,7 @@
 import { createSimpleLogger, SimpleLogger } from '../logger'
 
-const Once = Symbol()
-
 interface ListenerFunction {
   (...args: any[]): any
-  [Once]?: boolean
 }
 
 type EventListeners<R extends Record<string, unknown>> = {
@@ -40,11 +37,10 @@ export interface EventEmitterOption {
 export class EventEmitter<
   Events extends Record<string, ListenerFunction> = Record<string, ListenerFunction>
 > {
-  static SymbolOnce = Once
-
   #listeners: EventListeners<Events>
   #capacity: number
   #logger?: SimpleLogger
+  #once = new Set<ListenerFunction>()
 
   /**
    * Limit count of listeners for every event.
@@ -124,8 +120,8 @@ export class EventEmitter<
 
     this.#checkLimit(events.size)
 
-    listener[Once] = true
     events.add(listener)
+    this.#once.add(listener)
 
     return () => this.off(event, listener)
   }
@@ -151,7 +147,6 @@ export class EventEmitter<
   off<K extends keyof Events>(event?: K, listener?: Events[K]): boolean {
     if (!event) {
       const collections: Set<ListenerFunction>[] = Object.values(this.#listeners)
-      collections.forEach((events) => clearOnce(...events.values()))
 
       this.#listeners = {}
       return collections.length > 0
@@ -160,8 +155,6 @@ export class EventEmitter<
     if (!listener) {
       const events = this.#listeners[event]
       if (events) {
-        clearOnce(...events.values())
-
         delete this.#listeners[event]
       }
 
@@ -169,8 +162,6 @@ export class EventEmitter<
     }
 
     const events = this.events(event)
-
-    clearOnce(listener)
 
     return events.delete(listener)
   }
@@ -192,8 +183,8 @@ export class EventEmitter<
         this.#logger?.warn('Invoke function error:', error)
       }
 
-      if (event[Once]) {
-        delete event[Once]
+      if (this.#once.has(event)) {
+        this.#once.delete(event)
         clears.push(event)
       }
     })
@@ -201,13 +192,5 @@ export class EventEmitter<
     clears.forEach((event) => {
       events.delete(event)
     })
-  }
-}
-
-function clearOnce(...listeners: ListenerFunction[]) {
-  for (const evt of listeners) {
-    if (evt[Once]) {
-      delete evt[Once]
-    }
   }
 }
