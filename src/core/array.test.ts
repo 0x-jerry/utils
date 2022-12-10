@@ -18,11 +18,11 @@ describe('toArray', () => {
 
 describe('remove', () => {
   it('should remove exists item', () => {
-    const item = [1, 2, { a: 1 }] as any[]
+    const item = [1, 2, { a: 1 }]
 
     expect(remove(item, 2)).toBe(1)
     expect(item).toEqual([1, { a: 1 }])
-    expect(remove(item, (o) => o.a === 1)).toBe(1)
+    expect(remove(item, (o: any) => o.a === 1)).toBe(1)
     expect(item).toEqual([1])
   })
 
