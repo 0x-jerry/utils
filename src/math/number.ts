@@ -46,8 +46,8 @@ export function round(value: number, fractionDigits: number): number {
  * @returns
  */
 export function toRange(value: number, start: number, end: number): number {
-  if (start >= end) {
-    throw new Error('start can not great or equal than end')
+  if (start > end) {
+    throw new Error('start should less than the end')
   }
 
   const range = end - start
