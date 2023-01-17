@@ -1,7 +1,11 @@
+import { isNode } from '../utils'
+
 export function jsonToBase64(data: unknown) {
-  return Buffer.from(JSON.stringify(data)).toString('base64')
+  const s = JSON.stringify(data)
+  return isNode ? Buffer.from(s).toString('base64') : globalThis.window.btoa(s)
 }
 
 export function base64ToJson(data: string) {
-  return JSON.parse(Buffer.from(data, 'base64').toString('utf-8'))
+  const s = isNode ? Buffer.from(data, 'base64').toString('utf-8') : globalThis.window.atob(data)
+  return JSON.parse(s)
 }
