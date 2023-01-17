@@ -32,8 +32,16 @@ class Test extends PluginManager<PContext, PPlugin<PContext>> {
     return this.runMiddleware('setup', this.ctx, noop)
   }
 
+  errors: Error[] = []
+
   seq() {
-    return this.run('seq', this.ctx)
+    this.errors = []
+
+    return this.run('seq', this.ctx, {
+      handleError: (err) => {
+        this.errors.push(err)
+      },
+    })
   }
 }
 
@@ -116,5 +124,30 @@ describe('Plugin Manager', () => {
 
     await t.setup()
     expect(t.ctx.d).eql([0, 2, 2, 0])
+  })
+
+  it('should handle error', async () => {
+    const t = new Test()
+
+    t.use({
+      priority: 3,
+      seq() {
+        throw 123
+      },
+    })
+
+    t.use({
+      priority: 2,
+      seq(ctx) {
+        // @ts-expect-error
+        if (a == 2) {
+          //
+        }
+      },
+    })
+
+    await t.seq()
+
+    expect(t.errors.length).toBe(2)
   })
 })

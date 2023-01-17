@@ -68,6 +68,21 @@ describe('createSimpleLogger', () => {
     logger.error('hello')
     expect(level).toBe('error')
   })
+
+  it('should print without prefix', () => {
+    const console = mockConsole()
+
+    const logger = createSimpleLogger()
+
+    logger.log('hello')
+    expect(console.log).toHaveBeenLastCalledWith('hello')
+
+    logger.warn('hello')
+    expect(console.warn).toHaveBeenLastCalledWith('hello')
+
+    logger.error('hello')
+    expect(console.error).toHaveBeenLastCalledWith('hello')
+  })
 })
 
 function mockConsole() {
