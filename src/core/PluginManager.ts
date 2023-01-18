@@ -33,14 +33,18 @@ export class PluginManager<Ctx = {}, P extends IPlugin = IPlugin> {
       .map((n) => n[hook] as PluginFn)
       .filter(Boolean)
 
-    for (const fn of fns) {
-      try {
-        await fn(ctx)
-      } catch (err: any) {
-        const _err = err instanceof Error ? err : new Error(err)
-        opt?.handleError?.(_err)
-      }
-    }
+    const r = Promise.all(
+      fns.map(async (fn) => {
+        try {
+          await fn(ctx)
+        } catch (err: any) {
+          const _err = err instanceof Error ? err : new Error(err)
+          opt?.handleError?.(_err)
+        }
+      })
+    )
+
+    await r
   }
 
   async runMiddleware(
