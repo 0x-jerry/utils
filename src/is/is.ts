@@ -7,7 +7,7 @@ export namespace is {
    * @param target
    * @returns
    */
-  export function classs(target: unknown): target is Ctor {
+  export function cls(target: unknown): target is Ctor {
     return /^\s*class/.test(String(target))
   }
 
@@ -42,7 +42,7 @@ export namespace is {
    * return true when {@link target} is a function, but not a class.
    */
   export function fn(target: unknown): target is Function {
-    return typeof target === 'function' && !classs(target)
+    return typeof target === 'function' && !cls(target)
   }
 
   /**
@@ -72,20 +72,18 @@ export namespace is {
    * @param target
    */
   export function empty(target: number | bigint | boolean | Function): false
-  export function empty<V, K>(
-    target: null | undefined | string | Set<V> | Map<K, V> | Array<V> | Iterable<V> | object
-  ): boolean
+  export function empty(target: unknown): boolean
   export function empty(target: unknown): boolean {
     if (nullish(target)) {
       return true
     } else if (typeof target === 'string') {
-      return !target
+      return target.length === 0
     } else if (target instanceof Set || target instanceof Map) {
       return target.size === 0
-    } else if (target instanceof Array) {
+    } else if (array(target)) {
       return target.length === 0
-    } else if (iterable(target)) {
-      return !!target[Symbol.iterator]().next().done
+    } else if (promise(target)) {
+      return false
     } else if (object(target) && Object.keys(target).length === 0) {
       return true
     }
@@ -110,6 +108,26 @@ export namespace is {
   }
 
   /**
+   * if target is an object and async iterable
+   *
+   * @example
+   * ```ts
+   * const asyncIter = async function* () {
+   *  yield 1
+   * }
+   * iterable(asyncIter) // => true
+   * iterable([]) // => false
+   * iterable('23') // => false
+   * ```
+   *
+   * @param target
+   * @returns
+   */
+  export function asyncIterable<V>(target: unknown): target is AsyncIterable<V> {
+    return is.object(target) && Symbol.asyncIterator in target
+  }
+
+  /**
    * if target is null or undefined
    * @param target
    * @returns
@@ -124,6 +142,26 @@ export namespace is {
    * @returns
    */
   export function primitive(target: unknown): target is PrimitiveType {
-    return !is.object(target) && !is.fn(target) && !is.classs(target)
+    return !is.object(target) && !is.fn(target) && !is.cls(target)
+  }
+
+  /**
+   * if target is a promise
+   *
+   * @param target
+   * @returns
+   */
+  export function promise<T = unknown>(target: unknown): target is Promise<T> {
+    return target instanceof Promise
+  }
+
+  /**
+   * if target is a promise like object
+   *
+   * @param target
+   * @returns
+   */
+  export function promiseLike<T = unknown>(target: unknown): target is PromiseLike<T> {
+    return object(target) && 'then' in target
   }
 }
