@@ -22,7 +22,7 @@ export interface Ctor<Instance = any, Params extends [] = any> {
   new (...args: Params): Instance
 }
 
-export type Optional<T> = T | undefined | null
+export type Optional<T> = T | undefined | null | void
 
 export type DeepPartial<T> = T extends {}
   ? {
