@@ -1,4 +1,4 @@
-import { IComposeMiddleware } from '../utils'
+import { IComposeMiddleware } from '../utils/compose'
 import { noop } from './misc'
 import { IPlugin, PluginFn, PluginManager } from './PluginManager'
 

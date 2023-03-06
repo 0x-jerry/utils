@@ -1,6 +1,5 @@
 import { ExtractObjectKeys, Optional, Promisable } from '../types'
-import { compose, IComposeMiddleware } from '../utils'
-export { IComposeMiddleware } from '../utils'
+import { compose, IComposeMiddleware } from '../utils/compose'
 
 export interface IPlugin {
   name?: string
