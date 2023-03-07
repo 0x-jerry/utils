@@ -15,13 +15,13 @@ describe('request poll', () => {
     const queue: any[] = []
 
     for (let idx = 0; idx < 4; idx++) {
-      queue.push(req(idx, 200))
+      queue.push(req(idx, 20))
     }
 
     const t = Date.now()
     const numbers = await Promise.all(queue)
-    expect(Date.now() - t).toBeLessThan(300)
-    expect(Date.now() - t).toBeGreaterThan(199)
+    expect(Date.now() - t).toBeLessThan(30)
+    expect(Date.now() - t).toBeGreaterThan(19)
 
     expect(numbers).toEqual([0, 1, 2, 3])
   })
@@ -32,24 +32,24 @@ describe('request poll', () => {
     const queue: any[] = []
 
     for (let idx = 0; idx < 5; idx++) {
-      req(idx, 200).then((res) => {
+      req(idx, 20).then((res) => {
         queue.push(res)
       })
     }
 
-    await sleep(200)
+    await sleep(20)
     expect(queue).toEqual([0, 1])
 
-    await sleep(200)
+    await sleep(20)
     expect(queue).toEqual([0, 1, 2, 3])
 
-    await sleep(200)
+    await sleep(20)
     expect(queue).toEqual([0, 1, 2, 3, 4])
   })
 
   it('request failed', async () => {
     const fakeReq = async (throwError: boolean = false) => {
-      await sleep(100)
+      await sleep(10)
       if (throwError) {
         throw new Error('error')
       }
