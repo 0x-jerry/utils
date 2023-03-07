@@ -1,7 +1,9 @@
 import pako from 'pako'
 
 /**
- * use {@link pako} to compress text
+ * Use {@link pako} to compress text
+ *
+ * Please note, you should install {@link pako} first
  *
  * @param text
  * @returns
@@ -13,7 +15,9 @@ export function compressText(text: string): string {
 }
 
 /**
- * use {@link pako} to decompress text
+ * Use {@link pako} to decompress text
+ *
+ * Please note, you should install {@link pako} first
  *
  * @param compressedText
  * @returns
