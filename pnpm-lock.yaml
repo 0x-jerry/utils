@@ -9,7 +9,7 @@ specifiers:
   nanoid: ^4.0.0
   pako: '>= 2.0.0'
   tsup: ^6.5.0
-  typescript: ^4.9.4
+  typescript: ^5.0.0
   vitest: ^0.27.0
 
 dependencies:
@@ -24,8 +24,8 @@ devDependencies:
   '@types/pako': 2.0.0
   '@vitest/coverage-c8': 0.27.0_happy-dom@8.1.4
   happy-dom: 8.1.4
-  tsup: 6.5.0_typescript@4.9.4
-  typescript: 4.9.4
+  tsup: 6.5.0_typescript@5.0.2
+  typescript: 5.0.2
   vitest: 0.27.0_happy-dom@8.1.4
 
 packages:
@@ -1269,6 +1269,7 @@ packages:
 
   /pako/2.1.0:
     resolution: {integrity: sha512-w+eufiZ1WuJYgPXbV/PO3NCMEc3xqylkKHzp8bxp1uW4qaSNQUkwmLLEc3kKsfz8lpV1F8Ht3U1Cm+9Srog2ug==}
+    requiresBuild: true
     dev: false
     optional: true
 
@@ -1612,7 +1613,7 @@ packages:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: true
 
-  /tsup/6.5.0_typescript@4.9.4:
+  /tsup/6.5.0_typescript@5.0.2:
     resolution: {integrity: sha512-36u82r7rYqRHFkD15R20Cd4ercPkbYmuvRkz3Q1LCm5BsiFNUgpo36zbjVhCOgvjyxNBWNKHsaD5Rl8SykfzNA==}
     engines: {node: '>=14'}
     hasBin: true
@@ -1642,7 +1643,7 @@ packages:
       source-map: 0.8.0-beta.0
       sucrase: 3.29.0
       tree-kill: 1.2.2
-      typescript: 4.9.4
+      typescript: 5.0.2
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -1653,9 +1654,9 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /typescript/4.9.4:
-    resolution: {integrity: sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==}
-    engines: {node: '>=4.2.0'}
+  /typescript/5.0.2:
+    resolution: {integrity: sha512-wVORMBGO/FAs/++blGNeAVdbNKtIh1rbBL2EyQ1+J9lClJ93KiiKe8PmFIVdXhHcyv44SL9oglmfeSsndo0jRw==}
+    engines: {node: '>=12.20'}
     hasBin: true
     dev: true
 
