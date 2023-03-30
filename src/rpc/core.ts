@@ -3,12 +3,12 @@ import { is } from '../is'
 import { Fn } from '../types'
 import { Procedure, CommunicationAdapter, CommunicationProtocol } from './types'
 
-interface ServerOption<M> {
+interface RPCServerOption<M> {
   methods: M
   adaptor: CommunicationAdapter
 }
 
-export function createServer<M extends Procedure>(opt: ServerOption<M>) {
+export function createRPCServer<M extends Procedure>(opt: RPCServerOption<M>) {
   const { adaptor, methods } = opt
 
   adaptor.receive(async (raw) => {
@@ -58,7 +58,7 @@ interface ClientOptions {
   adaptor: CommunicationAdapter
 }
 
-export function createClient<T extends Procedure>(t: ClientOptions): Promisify<T> {
+export function createRPCClient<T extends Procedure>(t: ClientOptions): Promisify<T> {
   const { adaptor } = t
 
   const callRecord = new Map<string, PromiseInstance>()
