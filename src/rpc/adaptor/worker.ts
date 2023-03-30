@@ -26,7 +26,3 @@ export function createWorkerAdaptor(m?: Worker) {
 
   return adaptor
 }
-
-// export function createWorkerAdaptor(m: Worker) {
-
-// }
