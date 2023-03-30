@@ -21,6 +21,13 @@ export namespace is {
   }
 
   /**
+   * check {@link target} if is a symbol or not
+   */
+  export function symbol(target: unknown): target is symbol {
+    return typeof target === 'symbol'
+  }
+
+  /**
    * check target if is a string or not
    * @param target
    * @returns
