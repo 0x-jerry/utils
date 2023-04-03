@@ -1,4 +1,4 @@
-import { is } from '../is'
+import { isFn, isPrimitive } from '../is'
 import { Arrayable, PrimitiveType } from '../types'
 
 /**
@@ -12,7 +12,7 @@ export const toArray = <T>(arr: Arrayable<T>): T[] => {
 }
 
 export const remove = <T>(arr: T[], predict: T | ((item: T) => boolean)): number => {
-  const idx = is.fn(predict) ? arr.findIndex(predict) : arr.indexOf(predict)
+  const idx = isFn(predict) ? arr.findIndex(predict) : arr.indexOf(predict)
 
   if (idx >= 0) arr.splice(idx, 1)
 
@@ -36,7 +36,7 @@ export function group<T, U>(arr: T[], callbackFn: (item: T) => U): GroupResult<T
   let recordIsMap = false
 
   function initRecord(value: any) {
-    if (is.primitive(value)) {
+    if (isPrimitive(value)) {
       record = {}
     } else {
       recordIsMap = true

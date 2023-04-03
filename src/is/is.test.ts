@@ -1,5 +1,21 @@
 import { noop } from '../core'
-import { is } from './is'
+import {
+  isArray,
+  isAsyncIterable,
+  isBoolean,
+  isCls,
+  isEmpty,
+  isFn,
+  isIterable,
+  isNullish,
+  isNumber,
+  isObject,
+  isPrimitive,
+  isPromise,
+  isPromiseLike,
+  isString,
+  isSymbol,
+} from './is'
 
 describe('is utils', () => {
   it('is class', () => {
@@ -22,37 +38,37 @@ describe('is utils', () => {
       [Promise.resolve(), false],
     ]
 
-    run(units, is.cls)
+    run(units, isCls)
   })
 
   it('is number', () => {
-    expect(is.number(1)).toBe(true)
+    expect(isNumber(1)).toBe(true)
 
-    expect(is.number(0o1)).toBe(true)
-    expect(is.number(0x1)).toBe(true)
+    expect(isNumber(0o1)).toBe(true)
+    expect(isNumber(0x1)).toBe(true)
 
-    expect(is.number('123')).toBe(false)
+    expect(isNumber('123')).toBe(false)
   })
 
   it('is string', () => {
-    expect(is.string('')).toBe(true)
+    expect(isString('')).toBe(true)
 
-    expect(is.string(1)).toBe(false)
+    expect(isString(1)).toBe(false)
 
-    expect(is.string({})).toBe(false)
+    expect(isString({})).toBe(false)
   })
 
   it('is boolean', () => {
-    expect(is.boolean(false)).toBe(true)
+    expect(isBoolean(false)).toBe(true)
 
-    expect(is.boolean(1)).toBe(false)
-    expect(is.boolean('1')).toBe(false)
+    expect(isBoolean(1)).toBe(false)
+    expect(isBoolean('1')).toBe(false)
   })
 
   it('is symbol', () => {
-    expect(is.symbol(Symbol())).toBe(true)
-    expect(is.symbol(Symbol.for('xx'))).toBe(true)
-    expect(is.symbol(1)).toBe(false)
+    expect(isSymbol(Symbol())).toBe(true)
+    expect(isSymbol(Symbol.for('xx'))).toBe(true)
+    expect(isSymbol(1)).toBe(false)
   })
 
   it('is fn', () => {
@@ -75,7 +91,7 @@ describe('is utils', () => {
       [Promise.resolve(), false],
     ]
 
-    run(units, is.fn)
+    run(units, isFn)
   })
 
   it('is array', () => {
@@ -97,7 +113,7 @@ describe('is utils', () => {
       [Promise.resolve(), false],
     ]
 
-    run(units, is.array)
+    run(units, isArray)
   })
 
   it('is object', () => {
@@ -120,7 +136,7 @@ describe('is utils', () => {
       [Promise.resolve(), true],
     ]
 
-    run(units, is.object)
+    run(units, isObject)
   })
 
   it('is iterable', () => {
@@ -148,7 +164,7 @@ describe('is utils', () => {
       [asyncIter(), false],
     ]
 
-    run(units, is.iterable)
+    run(units, isIterable)
   })
 
   it('is async iterable', () => {
@@ -176,7 +192,7 @@ describe('is utils', () => {
       [asyncIter(), true],
     ]
 
-    run(units, is.asyncIterable)
+    run(units, isAsyncIterable)
   })
 
   it('is empty', () => {
@@ -203,7 +219,7 @@ describe('is utils', () => {
       [Promise.resolve(), false],
     ]
 
-    run(units, is.empty)
+    run(units, isEmpty)
   })
 
   it('is nullish', () => {
@@ -225,7 +241,7 @@ describe('is utils', () => {
       [Promise.resolve(), false],
     ]
 
-    run(units, is.nullish)
+    run(units, isNullish)
   })
 
   it('is primitive', () => {
@@ -247,7 +263,7 @@ describe('is utils', () => {
       [Promise.resolve(), false],
     ]
 
-    run(units, is.primitive)
+    run(units, isPrimitive)
   })
 
   it('is promise', () => {
@@ -269,7 +285,7 @@ describe('is utils', () => {
       [Promise.resolve(), true],
     ]
 
-    run(units, is.promise)
+    run(units, isPromise)
 
     run(
       [
@@ -277,7 +293,7 @@ describe('is utils', () => {
         [{ then: noop }, true],
         ...units,
       ],
-      is.promiseLike
+      isPromiseLike
     )
   })
 })

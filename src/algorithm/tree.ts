@@ -1,4 +1,4 @@
-import { is } from '../is'
+import { isIterable } from '../is'
 import { ExtractObjectKeys, Optional } from '../types'
 
 /**
@@ -19,7 +19,7 @@ export function walkTree<
 
   const children = node[key]
 
-  if (!is.iterable(children)) {
+  if (!isIterable(children)) {
     return
   }
 

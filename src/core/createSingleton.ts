@@ -1,4 +1,4 @@
-import { is } from '../is'
+import { isCls } from '../is'
 import { Ctor } from '../types'
 
 const singletons = new WeakMap<Function, unknown>()
@@ -25,7 +25,7 @@ export function createSingleton<T>(factory: Ctor<T, []> | (() => T)): T {
     return singletons.get(factory) as T
   }
 
-  const ins = is.cls(factory) ? new factory() : factory()
+  const ins = isCls(factory) ? new factory() : factory()
 
   singletons.set(factory, ins)
 

@@ -1,5 +1,5 @@
 import { createPromiseInstance, PromiseInstance, uuid } from '../core'
-import { is } from '../is'
+import { isNumber, isObject, isSymbol } from '../is'
 import { Fn } from '../types'
 import { Procedure, CommunicationAdapter, CommunicationProtocol } from './types'
 
@@ -107,7 +107,7 @@ function createProxy(keyPath: string[], fn: Fn): any {
 
   const p = new Proxy(_fn, {
     get(_, key) {
-      if (is.symbol(key)) {
+      if (isSymbol(key)) {
         return undefined
       }
 
@@ -123,5 +123,5 @@ export function defineProcedure<T extends Procedure>(t: T) {
 }
 
 function isCommunicationProtocol(o: unknown): o is CommunicationProtocol {
-  return is.object(o) && '_' in o && 'v' in o && is.number(o.v)
+  return isObject(o) && '_' in o && 'v' in o && isNumber(o.v)
 }

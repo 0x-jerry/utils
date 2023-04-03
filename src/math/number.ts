@@ -1,4 +1,4 @@
-import { is } from '../is'
+import { isString } from '../is'
 
 /**
  * like {@link Number.prototype.toFixed}, but return a number instead of string.
@@ -7,7 +7,7 @@ import { is } from '../is'
  * @returns
  */
 export function toFixed(num: number | string, fractionDigits: number): number {
-  num = is.string(num) ? parseFloat(num) : num
+  num = isString(num) ? parseFloat(num) : num
 
   return parseFloat(num.toFixed(fractionDigits))
 }

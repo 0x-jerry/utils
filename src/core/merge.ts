@@ -1,4 +1,4 @@
-import { is } from '../is'
+import { isArray, isObject } from '../is'
 import { DeepPartial, DeepRequired, Optional } from '../types'
 
 /**
@@ -51,7 +51,7 @@ export function deepMerge<T extends {}>(
 
     if (isPrimitiveLike(v)) {
       result[key] = mergePrimitiveLike()
-    } else if (is.object(v)) {
+    } else if (isObject(v)) {
       result[key] = deepMerge(v, ...overrideValues.map((n) => (n as any)?.[key]))
     } else {
       result[key] = mergePrimitiveLike()
@@ -64,5 +64,5 @@ export function deepMerge<T extends {}>(
 function isPrimitiveLike(v: unknown): boolean {
   const factories = [Map, Set, WeakMap, WeakSet]
 
-  return is.array(v) || !!factories.find((t) => v instanceof t)
+  return isArray(v) || !!factories.find((t) => v instanceof t)
 }
