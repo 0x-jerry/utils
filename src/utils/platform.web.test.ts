@@ -1,6 +1,4 @@
-/**
- * @vitest-environment happy-dom
- */
+// @vitest-environment happy-dom
 import { isWeb } from './platform'
 
 describe('platform check', () => {
