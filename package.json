@@ -30,22 +30,19 @@
     "build": "tsup src/index.ts --format esm --dts --clean",
     "release": "x-release"
   },
-  "optionalDependencies": {
-    "pako": "^2.1.0"
-  },
   "devDependencies": {
     "@0x-jerry/x-release": "0.3.6",
     "@types/node": "^18.15.11",
     "@types/pako": "^2.0.0",
     "@vitest/coverage-c8": "^0.29.8",
     "happy-dom": "^8.9.0",
-    "pako": "^2.1.0",
     "tsup": "^6.7.0",
     "type-fest": "^3.7.2",
     "typescript": "^5.0.2",
     "vitest": "^0.29.8"
   },
   "dependencies": {
-    "nanoid": "^4.0.2"
+    "nanoid": "^4.0.2",
+    "pako": "^2.1.0"
   }
 }
