@@ -49,6 +49,12 @@ describe('is utils', () => {
     expect(is.boolean('1')).toBe(false)
   })
 
+  it('is symbol', () => {
+    expect(is.symbol(Symbol())).toBe(true)
+    expect(is.symbol(Symbol.for('xx'))).toBe(true)
+    expect(is.symbol(1)).toBe(false)
+  })
+
   it('is fn', () => {
     const units: [unknown, boolean][] = [
       ['', false],
