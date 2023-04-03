@@ -1,5 +1,3 @@
-import pako from 'pako'
-
 /**
  * Use {@link pako} to compress text
  *
@@ -8,7 +6,9 @@ import pako from 'pako'
  * @param text
  * @returns
  */
-export function compressText(text: string): string {
+export async function compressText(text: string): Promise<string> {
+  const pako = (await import('pako')).default
+
   const compressed = pako.deflate(text)
 
   return Buffer.from(compressed).toString('base64')
@@ -22,7 +22,9 @@ export function compressText(text: string): string {
  * @param compressedText
  * @returns
  */
-export function decompressText(compressedText: string): string {
+export async function decompressText(compressedText: string): Promise<string> {
+  const pako = (await import('pako')).default
+
   const buf = Buffer.from(compressedText, 'base64')
 
   const restored = pako.inflate(buf, { to: 'string' })
