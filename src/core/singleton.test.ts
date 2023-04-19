@@ -1,4 +1,4 @@
-import { createSingleton } from './createSingleton'
+import { getInstance } from './singleton'
 
 describe('create singleton', () => {
   it('should only call once', () => {
@@ -8,9 +8,9 @@ describe('create singleton', () => {
 
     const fn = vi.fn().mockImplementation(f)
 
-    const ins1 = createSingleton(fn)
+    const ins1 = getInstance(fn)
 
-    const ins2 = createSingleton(fn)
+    const ins2 = getInstance(fn)
 
     expect(ins1).toBe(ins2)
 
@@ -28,9 +28,9 @@ describe('create singleton', () => {
       }
     }
 
-    const ins1 = createSingleton(F)
+    const ins1 = getInstance(F)
 
-    const ins2 = createSingleton(F)
+    const ins2 = getInstance(F)
 
     expect(ins1).toBe(ins2)
 

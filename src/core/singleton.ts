@@ -10,17 +10,15 @@ const singletons = new WeakMap<Function, unknown>()
  * ```ts
  * class Factory {}
  *
- * const createInstance = () => createSingleton(Factory)
- *
- * const ins1 = createInstance()
- * const ins2 = createInstance()
+ * const ins1 = getInstance(Factory)
+ * const ins2 = getInstance(Factory)
  * // ins1 === in2
  * ```
  *
  * @param factory
  * @returns
  */
-export function createSingleton<T>(factory: Ctor<T, []> | (() => T)): T {
+export function getInstance<T>(factory: Ctor<T, []> | (() => T)): T {
   if (singletons.has(factory)) {
     return singletons.get(factory) as T
   }
@@ -31,3 +29,8 @@ export function createSingleton<T>(factory: Ctor<T, []> | (() => T)): T {
 
   return ins
 }
+
+/**
+ * @deprecated use {@link getInstance} instead of.
+ */
+export const createSingleton = getInstance
