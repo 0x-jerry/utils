@@ -19,14 +19,13 @@ export function createPool<T extends (...arg: any[]) => Promise<any>>(
   const ctx = {
     maximize: opt.maximize ?? 10,
     runningCount: 0,
-    events: new Set<Function>(),
+    queue: Array<() => void>(),
   }
 
   return function (this: any, ...args: any[]) {
     return new Promise<any>((resolve, reject) => {
-      const next = () => {
+      const nextReq = () => {
         ctx.runningCount++
-        ctx.events.delete(next)
 
         request
           .apply(this, args)
@@ -35,16 +34,16 @@ export function createPool<T extends (...arg: any[]) => Promise<any>>(
           .finally(() => {
             ctx.runningCount--
 
-            const maybeNext = ctx.events.values().next()
+            const maybeNextReq = ctx.queue.shift()
 
-            !maybeNext.done && maybeNext.value()
+            maybeNextReq?.()
           })
       }
 
       if (ctx.runningCount >= ctx.maximize) {
-        ctx.events.add(next)
+        ctx.queue.push(nextReq)
       } else {
-        next()
+        nextReq()
       }
     })
   } as T
