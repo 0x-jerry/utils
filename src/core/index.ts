@@ -1,6 +1,6 @@
 export * from './array'
 export * from './sleep'
-export * from './createPromiseInstance'
+export * from './createPromise'
 export * from './singleton'
 export * from './merge'
 export * from './misc'

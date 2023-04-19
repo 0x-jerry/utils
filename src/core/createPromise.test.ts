@@ -1,8 +1,8 @@
-import { createPromiseInstance, PromiseStatus } from './createPromiseInstance'
+import { createPromise, PromiseStatus } from './createPromise'
 
 describe('createPromiseInstance', () => {
   it('resolve', async () => {
-    const ins = createPromiseInstance()
+    const ins = createPromise()
 
     ins.resolve(1)
 
@@ -10,7 +10,7 @@ describe('createPromiseInstance', () => {
   })
 
   it('reject', async () => {
-    const ins = createPromiseInstance()
+    const ins = createPromise()
 
     ins.reject('error')
 
@@ -18,7 +18,7 @@ describe('createPromiseInstance', () => {
   })
 
   it('should be always rejected if reject first', async () => {
-    const ins = createPromiseInstance()
+    const ins = createPromise()
     expect(ins.isPending).toBe(true)
     expect(ins.status).toBe(PromiseStatus.Pending)
 
@@ -34,7 +34,7 @@ describe('createPromiseInstance', () => {
   })
 
   it('should be always fulfilled if resolve first', async () => {
-    const ins = createPromiseInstance()
+    const ins = createPromise()
     expect(ins.isPending).toBe(true)
     expect(ins.status).toBe(PromiseStatus.Pending)
 

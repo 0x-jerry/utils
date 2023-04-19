@@ -1,4 +1,4 @@
-import { createPromiseInstance } from './createPromiseInstance'
+import { createPromise } from './createPromise'
 
 export type SleepResult = Promise<void> & { cancel: () => void }
 
@@ -11,7 +11,7 @@ export type SleepResult = Promise<void> & { cancel: () => void }
 export const sleep = (timeout: number = 0): SleepResult => {
   let handler: NodeJS.Timeout | number | undefined
 
-  const promise = createPromiseInstance<void>()
+  const promise = createPromise<void>()
 
   const ins = promise.instance as SleepResult
 

@@ -15,7 +15,7 @@ export enum PromiseStatus {
   Rejected = 'rejected',
 }
 
-export function createPromiseInstance<T>(): PromiseInstance<T> {
+export function createPromise<T>(): PromiseInstance<T> {
   type Resolve = (value: T | PromiseLike<T>) => void
   type Reject = (reason?: any) => void
 
@@ -58,3 +58,8 @@ export function createPromiseInstance<T>(): PromiseInstance<T> {
     reject: _reject!,
   }
 }
+
+/**
+ * @deprecated use {@link createPromise} instead of.
+ */
+export const createPromiseInstance = createPromise
