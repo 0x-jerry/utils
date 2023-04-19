@@ -1,15 +1,15 @@
-import { createAutoIncrementGenerator, hasOwn } from './misc'
+import { createAutoIncrementGenerator, has } from './misc'
 
 describe('misc', () => {
-  it('hasOwn', () => {
-    expect(hasOwn({}, 'a')).toBe(false)
+  it('has', () => {
+    expect(has({}, 'a')).toBe(false)
 
-    expect(hasOwn({ a: 1 }, 'a')).toBe(true)
+    expect(has({ a: 1 }, 'a')).toBe(true)
 
     const s = Symbol()
 
-    expect(hasOwn({ [s]: 0 }, s)).toBe(true)
-    expect(hasOwn({}, s)).toBe(false)
+    expect(has({ [s]: 0 }, s)).toBe(true)
+    expect(has({}, s)).toBe(false)
   })
 
   it('generate uuid', () => {
