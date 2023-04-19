@@ -24,9 +24,6 @@ devDependencies:
   tsup:
     specifier: ^6.7.0
     version: 6.7.0(typescript@5.0.4)
-  type-fest:
-    specifier: ^3.8.0
-    version: 3.8.0
   typescript:
     specifier: ^5.0.4
     version: 5.0.4
@@ -1760,11 +1757,6 @@ packages:
   /type-detect@4.0.8:
     resolution: {integrity: sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==}
     engines: {node: '>=4'}
-    dev: true
-
-  /type-fest@3.8.0:
-    resolution: {integrity: sha512-FVNSzGQz9Th+/9R6Lvv7WIAkstylfHN2/JYxkyhhmKFYh9At2DST8t6L6Lref9eYO8PXFTfG9Sg1Agg0K3vq3Q==}
-    engines: {node: '>=14.16'}
     dev: true
 
   /typescript@5.0.4:
