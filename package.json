@@ -33,11 +33,11 @@
   "devDependencies": {
     "@0x-jerry/x-release": "0.3.6",
     "@types/node": "^18.16.3",
-    "@vitest/coverage-c8": "^0.30.1",
+    "@vitest/coverage-c8": "^0.31.0",
     "happy-dom": "^9.10.2",
     "tsup": "^6.7.0",
     "typescript": "^5.0.4",
-    "vitest": "^0.30.1"
+    "vitest": "^0.31.0"
   },
   "dependencies": {
     "fflate": "^0.7.4",
