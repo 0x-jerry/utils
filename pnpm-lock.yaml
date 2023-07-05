@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -23,8 +23,8 @@ devDependencies:
     specifier: ^0.31.1
     version: 0.31.1(vitest@0.31.1)
   happy-dom:
-    specifier: ^9.20.3
-    version: 9.20.3
+    specifier: ^10.0.0
+    version: 10.0.0
   tsup:
     specifier: ^6.7.0
     version: 6.7.0(typescript@5.0.4)
@@ -33,7 +33,7 @@ devDependencies:
     version: 5.0.4
   vitest:
     specifier: ^0.31.1
-    version: 0.31.1(happy-dom@9.20.3)
+    version: 0.31.1(happy-dom@10.0.0)
 
 packages:
 
@@ -380,7 +380,7 @@ packages:
       magic-string: 0.30.0
       picocolors: 1.0.0
       std-env: 3.3.3
-      vitest: 0.31.1(happy-dom@9.20.3)
+      vitest: 0.31.1(happy-dom@10.0.0)
     dev: true
 
   /@vitest/expect@0.31.1:
@@ -1059,8 +1059,8 @@ packages:
       slash: 3.0.0
     dev: true
 
-  /happy-dom@9.20.3:
-    resolution: {integrity: sha512-eBsgauT435fXFvQDNcmm5QbGtYzxEzOaX35Ia+h6yP/wwa4xSWZh1CfP+mGby8Hk6Xu59mTkpyf72rUXHNxY7A==}
+  /happy-dom@10.0.0:
+    resolution: {integrity: sha512-qisxGYWhTe+Vx+8IcxOo0MgDLk3BIY0VRFC9LBLPyWYRIQWlkCAOhOEiMBqa7yVL3zh7lNxNKn+DKuIojpYHXg==}
     dependencies:
       css.escape: 1.5.1
       entities: 4.5.0
@@ -1818,7 +1818,7 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vitest@0.31.1(happy-dom@9.20.3):
+  /vitest@0.31.1(happy-dom@10.0.0):
     resolution: {integrity: sha512-/dOoOgzoFk/5pTvg1E65WVaobknWREN15+HF+0ucudo3dDG/vCZoXTQrjIfEaWvQXmqScwkRodrTbM/ScMpRcQ==}
     engines: {node: '>=v14.18.0'}
     hasBin: true
@@ -1863,7 +1863,7 @@ packages:
       chai: 4.3.7
       concordance: 5.0.4
       debug: 4.3.4
-      happy-dom: 9.20.3
+      happy-dom: 10.0.0
       local-pkg: 0.4.3
       magic-string: 0.30.0
       pathe: 1.1.0
