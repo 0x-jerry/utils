@@ -23,7 +23,7 @@ export function walkTree<
     return
   }
 
-  for (const item of children) {
+  for (const item of children as Iterable<any>) {
     walkTree(item as T, cb, key)
   }
 }
