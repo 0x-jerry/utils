@@ -37,7 +37,7 @@
     "happy-dom": "^10.1.1",
     "tsup": "^7.1.0",
     "typescript": "^5.1.6",
-    "vitest": "^0.33.0"
+    "vitest": "^0.34.0"
   },
   "dependencies": {
     "fflate": "^0.8.0",
