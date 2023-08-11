@@ -1,4 +1,4 @@
-import { createPromiseInstance, PromiseInstance, uuid } from '../core'
+import { createPromise, type PromiseInstance, uuid } from '../core'
 import { isNumber, isObject, isSymbol } from '../is'
 import { Fn } from '../types'
 import { Procedure, CommunicationAdapter, CommunicationProtocol } from './types'
@@ -90,7 +90,7 @@ export function createRPCClient<T extends Procedure>(t: ClientOptions): Promisif
       a: args,
     }
 
-    const p = createPromiseInstance()
+    const p = createPromise()
 
     callRecord.set(raw._, p)
 

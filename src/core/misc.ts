@@ -15,6 +15,8 @@ export const hasOwn = has
 
 /**
  * create a auto increment generator
+ *
+ * @deprecated use [_.uniqueId](https://lodash.com/docs/4.17.15#uniqueId) instead of.
  * @param prefix
  * @returns
  */
@@ -24,7 +26,9 @@ export const createAutoIncrementGenerator = (prefix = '') => {
 }
 
 /**
- * @deprecated use {@link createAutoIncrementGenerator} instead of.
+ * create a auto increment generator
+ *
+ * @deprecated use [_.uniqueId](https://lodash.com/docs/4.17.15#uniqueId) instead of.
  */
 /* c8 ignore next */
 export const createUUIDGenerator = createAutoIncrementGenerator
