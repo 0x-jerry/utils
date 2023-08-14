@@ -1,4 +1,3 @@
-import { zlibSync, unzlibSync } from 'fflate'
 import { isWeb } from '../utils'
 
 const encoder = /*@__PURE__*/ new TextEncoder()
@@ -10,10 +9,10 @@ const decoder = /*@__PURE__*/ new TextDecoder()
  * @param text
  * @returns
  */
-export function compressText(text: string): string {
+export async function compressText(text: string): Promise<string> {
   const buffer = encoder.encode(text)
 
-  const compressed = zlibSync(buffer)
+  const compressed = (await import('fflate')).zlibSync(buffer)
 
   const base64 = isWeb
     ? window.btoa(String.fromCharCode(...compressed))
@@ -28,10 +27,10 @@ export function compressText(text: string): string {
  * @param compressedText
  * @returns
  */
-export function decompressText(compressedText: string): string {
+export async function decompressText(compressedText: string): Promise<string> {
   const buffer = isWeb ? base64ToUint8(compressedText) : Buffer.from(compressedText, 'base64')
 
-  const restored = unzlibSync(buffer)
+  const restored = (await import('fflate')).unzlibSync(buffer)
 
   return decoder.decode(restored)
 }
