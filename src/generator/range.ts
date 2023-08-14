@@ -8,6 +8,7 @@
  * range(3, 1) // => [3,2,1]
  * range(0, 5, 2) // => [0,2,4]
  * ```
+ * @deprecated use [_.range](https://lodash.com/docs/4.17.15#range) instead of.
  *
  * @returns
  */
