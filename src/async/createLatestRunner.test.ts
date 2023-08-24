@@ -1,5 +1,5 @@
 import { sleep } from '../core'
-import { createLatestRunner } from './createLatetRunner'
+import { createLatestRunner } from './createLatestRunner'
 
 describe('latest runner', () => {
   it('should only resolve the latest promise', async () => {

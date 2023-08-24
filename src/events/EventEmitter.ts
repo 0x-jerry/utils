@@ -1,4 +1,4 @@
-import { createSimpleLogger, SimpleLogger } from '../logger'
+import { createLogger, Logger } from '../logger'
 
 interface ListenerFunction {
   (...args: any[]): any
@@ -39,7 +39,7 @@ export class EventEmitter<
 > {
   #listeners: EventListeners<Events>
   #capacity: number
-  #logger?: SimpleLogger
+  #logger?: Logger
   #once = new Set<ListenerFunction>()
 
   /**
@@ -59,7 +59,7 @@ export class EventEmitter<
     this.#listeners = {}
 
     if (opt.verbose) {
-      this.#logger = createSimpleLogger()
+      this.#logger = createLogger()
     }
   }
 
