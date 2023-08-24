@@ -27,6 +27,8 @@ export const compose: ICompose = (...fns: Fn[]) => {
 
 /**
  *
+ * @deprecated use `chain` instead of.
+ *
  * like {@link compose}, but use `pipe` style
  *
  * @example

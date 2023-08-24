@@ -1,10 +1,17 @@
-import { isPromiseLike } from '..'
+import { isPromiseLike } from '../is'
 
 export interface IChainable<In = any> {
   input: In
   fns: Function[]
-  pipe<Out>(fn: (i: In) => Out): IChainable<Out>
+  pipe<Out>(fn: (i: In) => Out): Out extends Promise<any> ? IAsyncChainable<Out> : IChainable<Out>
   done(): In
+}
+
+export interface IAsyncChainable<In = any> {
+  input: In
+  fns: Function[]
+  pipe<Out>(fn: (i: Awaited<In>) => Out): IAsyncChainable<Out>
+  done(): Promise<Awaited<In>>
 }
 
 export function chain<T>(input: T): IChainable<T> {
@@ -16,27 +23,19 @@ export function chain<T>(input: T): IChainable<T> {
   }
 
   return ctx
-
-  function createChainable(this: IChainable, fn: Function): IChainable {
-    const chainCtx: IChainable = {
-      input: this.input,
-      fns: [...this.fns],
-      pipe: createChainable,
-      done,
-    }
-
-    chainCtx.fns.push(fn)
-
-    return chainCtx
-  }
-
-  function done(this: IChainable): T {
-    return this.fns.reduce((i, fn) => fn(i), this.input)
-  }
 }
 
-const add1 = chain(3).pipe(async (n) => n + 1)
+function createChainable(this: IChainable, fn: Function) {
+  const chainCtx: IChainable = {
+    input: this.input,
+    fns: [...this.fns, fn],
+    pipe: createChainable,
+    done,
+  }
 
-const toStr = add1.pipe((n) => n.toString() + 1)
+  return chainCtx as any
+}
 
-console.log(add1.done(), toStr.done())
+function done(this: IChainable) {
+  return this.fns.reduce((i, fn) => (isPromiseLike(i) ? i.then((x) => fn(x)) : fn(i)), this.input)
+}
