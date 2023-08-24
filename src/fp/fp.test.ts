@@ -1,4 +1,4 @@
-import { compose, input } from './fp'
+import { compose } from './fp'
 
 describe('function program', () => {
   const plusOne = (n: number) => n + 1
@@ -9,11 +9,5 @@ describe('function program', () => {
 
     expect(plusOneThenToString(0)).toBe('1')
     expect(plusOneThenToString.exec(0)).toBe('1')
-  })
-
-  it('use pipe style', () => {
-    const x = input(0).pipe(plusOne).pipe(toString).exec()
-
-    expect(x).toBe('1')
   })
 })

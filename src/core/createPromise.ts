@@ -58,8 +58,3 @@ export function createPromise<T>(): PromiseInstance<T> {
     reject: _reject!,
   }
 }
-
-/**
- * @deprecated use {@link createPromise} instead of.
- */
-export const createPromiseInstance = createPromise
