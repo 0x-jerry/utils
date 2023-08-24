@@ -1,6 +1,6 @@
 {
   "name": "@0x-jerry/utils",
-  "version": "1.18.0",
+  "version": "2.0.0",
   "license": "MIT",
   "description": "Collection of useful JavaScript/TypeScript utils",
   "type": "module",
