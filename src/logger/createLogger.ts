@@ -8,7 +8,7 @@ type LoggerPrefixFunction = (type: LoggerLevel) => string
  * @param prefix
  * @returns
  */
-export function createSimpleLogger(prefix?: string | LoggerPrefixFunction) {
+export function createLogger(prefix?: string | LoggerPrefixFunction) {
   let _enable = true
 
   const printFactory =
@@ -52,4 +52,4 @@ export function createSimpleLogger(prefix?: string | LoggerPrefixFunction) {
   }
 }
 
-export type SimpleLogger = ReturnType<typeof createSimpleLogger>
+export type Logger = ReturnType<typeof createLogger>

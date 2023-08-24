@@ -1,10 +1,10 @@
-import { createSimpleLogger } from './createSimpleLogger'
+import { createLogger } from './createLogger'
 
 describe('createSimpleLogger', () => {
   it('output', () => {
     const console = mockConsole()
 
-    const logger = createSimpleLogger('[tt]')
+    const logger = createLogger('[tt]')
 
     logger.log('hello')
     expect(console.log).toHaveBeenLastCalledWith('[tt]', 'hello')
@@ -23,7 +23,7 @@ describe('createSimpleLogger', () => {
 
     let idx = 0
 
-    const logger = createSimpleLogger((t) => {
+    const logger = createLogger((t) => {
       level = t
       return `[${idx++}]`
     })
@@ -47,7 +47,7 @@ describe('createSimpleLogger', () => {
 
     let idx = 0
 
-    const logger = createSimpleLogger((t) => {
+    const logger = createLogger((t) => {
       level = t
       return `[${idx++}]`
     })
@@ -72,7 +72,7 @@ describe('createSimpleLogger', () => {
   it('should print without prefix', () => {
     const console = mockConsole()
 
-    const logger = createSimpleLogger()
+    const logger = createLogger()
 
     logger.log('hello')
     expect(console.log).toHaveBeenLastCalledWith('hello')

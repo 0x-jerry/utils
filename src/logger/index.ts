@@ -1,1 +1,1 @@
-export * from './createSimpleLogger'
+export * from './createLogger'
