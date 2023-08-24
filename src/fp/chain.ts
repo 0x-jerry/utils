@@ -14,6 +14,25 @@ export interface IAsyncChainable<In = any> {
   done(): Promise<Awaited<In>>
 }
 
+/**
+ *
+ * @example
+ *
+ * ```ts
+ * const plusOne = (n: number) => n + 1
+ * const toString = (n: number) => n.toString()
+ *
+ * const s = chain(0)
+ *  .pipe(plusOne)
+ *  .pipe(toString)
+ *  .done()
+ *
+ * console.log(s) // => '1'
+ * ```
+ *
+ * @param input
+ * @returns
+ */
 export function chain<T>(input: T): IChainable<T> {
   const ctx: IChainable = {
     input,
