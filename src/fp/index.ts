@@ -1,2 +1,2 @@
-export * from './fp'
+export * from './compose'
 export * from './chain'
