@@ -6,7 +6,7 @@ describe('compress / decompress text', () => {
 
     const compressed = await compressText(txt)
 
-    expect(compressed).toMatchSnapshot()
+    expect(compressed).toBe('eJwrSa0oMTQyNjE1AwATMwL7')
 
     const decompressed = await decompressText(compressed)
 
