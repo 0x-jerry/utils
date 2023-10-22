@@ -14,8 +14,8 @@ dependencies:
 
 devDependencies:
   '@0x-jerry/x-release':
-    specifier: ^0.3.9
-    version: 0.3.9
+    specifier: ^0.4.0
+    version: 0.4.0
   '@types/node':
     specifier: ^20.5.0
     version: 20.5.0
@@ -41,8 +41,8 @@ packages:
     resolution: {integrity: sha512-aV1qnSbezqlm1M4z+ZjL62p3u5q21986c445KDwJH1zgIErBlefXLf3Tv/Cao8DzA5o2P5iGFpeP2JNjhFRbNQ==}
     dev: true
 
-  /@0x-jerry/x-release@0.3.9:
-    resolution: {integrity: sha512-0HMw+q0kZYMJm8ysfPzNgvsZajeEtebgssVyV7tik3Cv5+6MbXB83p5vtlzH/MNGkhr+Mt+NXK3+zy13v+Blxw==}
+  /@0x-jerry/x-release@0.4.0:
+    resolution: {integrity: sha512-oE+MgEG5hbY5cCt/FeaEfIBb3xNgJVOm3jZCrN3OgQzx0DgRtzPFQVpVfpJ4MHMMqRr1N0NPfNZp0UvHLV/n+w==}
     hasBin: true
     dependencies:
       '@0x-jerry/load-pkg': 0.1.2
