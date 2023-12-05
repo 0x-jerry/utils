@@ -9,7 +9,7 @@ import { ExtractObjectKeys, Optional } from '../types'
  * @param cb
  * @param key default is `'children'`
  */
-export function walkTree<
+export function traverseTree<
   T extends {},
   Key extends ExtractObjectKeys<T, Optional<Iterable<any>>, Optional<string>>
 >(node: T, cb: (item: T) => void, key?: Key) {
@@ -27,3 +27,8 @@ export function walkTree<
     walkTree(item as T, cb, key)
   }
 }
+
+/**
+ * @deprecated use `traverseTree` insteadof
+ */
+export const walkTree = traverseTree

@@ -1,4 +1,4 @@
-import { walkTree } from './tree'
+import { traverseTree } from './tree'
 
 interface TNode {
   num: number
@@ -32,7 +32,7 @@ describe('tree', () => {
   it('should traverse all tree node in DFS order', () => {
     const nums: number[] = []
 
-    walkTree(rootNode, (o) => {
+    traverseTree(rootNode, (o) => {
       nums.push(o.num)
     })
 
