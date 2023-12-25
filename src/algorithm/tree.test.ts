@@ -38,4 +38,14 @@ describe('tree', () => {
 
     expect(nums).eql([0, 1, 4, 2])
   })
+
+  it('should traverse all tree node in parent node', () => {
+    const nums: number[] = []
+
+    traverseTree(rootNode, (_, parent) => {
+      parent && nums.push(parent.num)
+    })
+
+    expect(nums).eql([0, 1, 0])
+  })
 })
