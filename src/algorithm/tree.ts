@@ -1,5 +1,6 @@
+import { toArray } from '../core'
 import { isIterable } from '../is'
-import { ExtractObjectKeys, Optional } from '../types'
+import { Arrayable, ExtractObjectKeys, Optional } from '../types'
 
 /**
  *
@@ -12,19 +13,20 @@ import { ExtractObjectKeys, Optional } from '../types'
 export function traverseTree<
   T extends {},
   Key extends ExtractObjectKeys<T, Optional<Iterable<any>>, Optional<string>>
->(node: T, cb: (item: T) => void, key?: Key) {
-  cb(node)
+>(node: Arrayable<T>, cb: (item: T) => void, key?: Key) {
+  const nodes = toArray(node)
 
   key ??= 'children' as Key
 
-  const children = node[key]
+  for (const node of nodes) {
+    cb(node)
+    const children = node[key]
 
-  if (!isIterable(children)) {
-    return
-  }
+    if (!isIterable(children)) {
+      continue
+    }
 
-  for (const item of children as Iterable<any>) {
-    walkTree(item as T, cb, key)
+    traverseTree(children as Arrayable<T>, cb, key)
   }
 }
 
