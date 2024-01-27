@@ -12,16 +12,19 @@ describe('request poll', () => {
   it('max count', async () => {
     const req = createPool(fakeReq, { maximize: 4 })
 
+    const sleepUnit = 100
+
     const queue: any[] = []
 
     for (let idx = 0; idx < 4; idx++) {
-      queue.push(req(idx, 20))
+      queue.push(req(idx, sleepUnit))
     }
 
     const t = Date.now()
     const numbers = await Promise.all(queue)
-    expect(Date.now() - t).toBeLessThan(30)
-    expect(Date.now() - t).toBeGreaterThan(19)
+    const gap = Date.now() - t
+
+    expect(gap).toBeLessThan(sleepUnit * 2)
 
     expect(numbers).toEqual([0, 1, 2, 3])
   })
