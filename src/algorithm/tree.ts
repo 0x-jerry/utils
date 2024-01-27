@@ -1,9 +1,12 @@
 import { isIterable } from '../is'
 import { Arrayable } from '../types'
 
-export function _traverseTree<T extends {}, Key extends keyof T>(
+function _traverseTree<T extends {}, Key extends keyof T>(
   nodes: T | Iterable<T>,
-  cb: (node: T, parentNode?: T) => void,
+  /**
+   * @returns return true to stop
+   */
+  cb: (node: T, parentNode?: T) => boolean | void,
   childrenKey?: Key,
   parent?: T
 ) {
@@ -12,7 +15,10 @@ export function _traverseTree<T extends {}, Key extends keyof T>(
   childrenKey ??= 'children' as Key
 
   for (const node of _nodes) {
-    cb(node, parent)
+    if (cb(node, parent)) {
+      return
+    }
+
     const children = node[childrenKey]
 
     if (!isIterable(children)) {
@@ -28,18 +34,26 @@ export function _traverseTree<T extends {}, Key extends keyof T>(
  * DFS (Deep-first search)
  *
  * @param nodes
- * @param cb
+ * @param cb return true to stop
  * @param key default is `'children'`
  */
-export function traverseTree<T extends {}, Key extends keyof T>(
+export function traverse<T extends {}, Key extends keyof T>(
   nodes: Arrayable<T>,
-  cb: (node: T, parentNode?: T) => void,
+  /**
+   * @returns return true to stop
+   */
+  cb: (node: T, parentNode?: T) => boolean | void,
   key?: Key
 ) {
   _traverseTree(nodes, cb, key)
 }
 
 /**
- * @deprecated use `traverseTree` insteadof
+ * @deprecated use `traverse` instead of.
  */
-export const walkTree = traverseTree
+export const walkTree = traverse
+
+/**
+ * @deprecated use `traverse` instead of.
+ */
+export const traverseTree = traverse

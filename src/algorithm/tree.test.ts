@@ -1,4 +1,4 @@
-import { traverseTree } from './tree'
+import { traverse } from './tree'
 
 interface TNode {
   num: number
@@ -32,7 +32,7 @@ describe('tree', () => {
   it('should traverse all tree node in DFS order', () => {
     const nums: number[] = []
 
-    traverseTree(rootNode, (o) => {
+    traverse(rootNode, (o) => {
       nums.push(o.num)
     })
 
@@ -42,10 +42,28 @@ describe('tree', () => {
   it('should traverse all tree node in parent node', () => {
     const nums: number[] = []
 
-    traverseTree(rootNode, (_, parent) => {
+    traverse(rootNode, (_, parent) => {
       parent && nums.push(parent.num)
     })
 
     expect(nums).eql([0, 1, 0])
+  })
+
+  it('should stop when callback return true', () => {
+    let count = 0
+    traverse(rootNode, (node) => {
+      count++
+      return node.num == 1
+    })
+
+    expect(count).eql(2)
+
+    // should not stop
+    count = 0
+    traverse(rootNode, () => {
+      count++
+    })
+
+    expect(count).eql(4)
   })
 })
