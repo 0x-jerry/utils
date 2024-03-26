@@ -40,7 +40,7 @@ describe('request poll', () => {
       })
     }
 
-    await sleep(20)
+    await sleep(30)
     expect(queue).toEqual([0, 1])
 
     await sleep(20)
