@@ -59,7 +59,7 @@ describe('chainable', () => {
     const s1 = chain(0)
       .pipe(plusOne)
       .pipe(async (x) => {
-        sleep(1)
+        await sleep(1)
         throw 'async err'
         return x
       })
