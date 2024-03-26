@@ -7,9 +7,14 @@ import { Arrayable, PrimitiveType } from '../types'
  * @param arr
  * @returns
  */
-export const toArray = <T>(arr: Arrayable<T>): T[] => {
+export const ensureArray = <T>(arr: Arrayable<T>): T[] => {
   return Array.isArray(arr) ? arr : [arr]
 }
+
+/**
+ * @deprecated use {@link ensureArray} instead of.
+ */
+export const toArray = ensureArray
 
 export const remove = <T>(arr: T[], predict: T | ((item: T) => boolean)): number => {
   const idx = isFn(predict) ? arr.findIndex(predict) : arr.indexOf(predict)

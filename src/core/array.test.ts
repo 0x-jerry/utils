@@ -1,18 +1,18 @@
-import { group, remove, toArray } from './array'
+import { ensureArray, group, remove } from './array'
 
-describe('toArray', () => {
+describe('ensureArray', () => {
   it('array', () => {
-    expect(toArray([1])).toEqual([1])
+    expect(ensureArray([1])).toEqual([1])
   })
 
   it('primary value', () => {
-    expect(toArray(1)).toEqual([1])
+    expect(ensureArray(1)).toEqual([1])
 
-    expect(toArray('')).toEqual([''])
+    expect(ensureArray('')).toEqual([''])
   })
 
   it('2 dimension', () => {
-    expect(toArray([[1], [2]])).toEqual([[1], [2]])
+    expect(ensureArray([[1], [2]])).toEqual([[1], [2]])
   })
 })
 
