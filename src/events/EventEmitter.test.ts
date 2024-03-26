@@ -21,7 +21,7 @@ describe('EventEmitter', () => {
     ee.emit('bar', 12, '123')
   })
 
-  it('should only run once', () => {
+  it('should only call once', () => {
     const ee = new EventEmitter<Events>()
 
     const fn = (x: number) => expect(x).toBe(12)
@@ -110,5 +110,21 @@ describe('EventEmitter', () => {
     off2()
 
     expect(fn2).toBeCalledTimes(1)
+  })
+
+  it('should only call twice', () => {
+    const ee = new EventEmitter<Events>()
+
+    const fn = vi.fn()
+
+    ee.once('foo', fn)
+    ee.once('bar', fn)
+
+    ee.emit('foo', 12)
+    ee.emit('foo', 12)
+    ee.emit('bar', 1, '1')
+    ee.emit('bar', 1, '1')
+
+    expect(fn).toBeCalledTimes(2)
   })
 })

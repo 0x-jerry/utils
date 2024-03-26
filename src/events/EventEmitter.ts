@@ -1,18 +1,9 @@
-import { createLogger, Logger } from '../logger'
-
 interface ListenerFunction {
   (...args: any[]): any
 }
 
 type EventListeners<R extends Record<string, unknown>> = {
   [K in keyof R]?: Set<R[K]>
-}
-
-export interface EventEmitterOption {
-  /**
-   * show debug info
-   */
-  verbose?: boolean
 }
 
 /**
@@ -39,8 +30,7 @@ export class EventEmitter<
 > {
   #listeners: EventListeners<Events>
   #capacity: number
-  #logger?: Logger
-  #once = new Set<ListenerFunction>()
+  #once = new Map<keyof Events, Set<ListenerFunction>>()
 
   /**
    * Limit count of listeners for every event.
@@ -54,13 +44,9 @@ export class EventEmitter<
    * @param capacity default is 0, means unlimited.
    * @param opt
    */
-  constructor(capacity = 0, opt: EventEmitterOption = {}) {
+  constructor(capacity = 0) {
     this.#capacity = capacity
     this.#listeners = {}
-
-    if (opt.verbose) {
-      this.#logger = createLogger()
-    }
   }
 
   #checkLimit(size: number) {
@@ -92,6 +78,21 @@ export class EventEmitter<
     return this.#listeners[event]!
   }
 
+  #removeOnceMark<K extends keyof Events>(event: K, listener: ListenerFunction) {
+    const collection = this.#once.get(event)
+    return collection?.delete(listener)
+  }
+
+  #addOnceMark<K extends keyof Events>(event: K, listener: ListenerFunction): void {
+    const collection = this.#once.get(event)
+
+    if (collection) {
+      collection.add(listener)
+    } else {
+      this.#once.set(event, new Set([listener]))
+    }
+  }
+
   /**
    * Add a callback to the specified event.
    * @param event Event type
@@ -121,7 +122,7 @@ export class EventEmitter<
     this.#checkLimit(events.size)
 
     events.add(listener)
-    this.#once.add(listener)
+    this.#addOnceMark(event, listener)
 
     return () => this.off(event, listener)
   }
@@ -176,21 +177,18 @@ export class EventEmitter<
     const events = this.events(event)
     const clears: Events[K][] = []
 
-    events.forEach((event) => {
+    events.forEach((listener) => {
       try {
-        event(...args)
+        listener(...args)
       } catch (error) {
-        this.#logger?.warn('Invoke function error:', error)
+        console.error(error)
       }
 
-      if (this.#once.has(event)) {
-        this.#once.delete(event)
-        clears.push(event)
+      if (this.#removeOnceMark(event, listener)) {
+        clears.push(listener)
       }
     })
 
-    clears.forEach((event) => {
-      events.delete(event)
-    })
+    clears.forEach((event) => events.delete(event))
   }
 }
