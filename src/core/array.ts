@@ -7,7 +7,11 @@ import { Arrayable, PrimitiveType } from '../types'
  * @param arr
  * @returns
  */
-export const ensureArray = <T>(arr: Arrayable<T>): T[] => {
+export const ensureArray = <T>(arr?: Arrayable<T>): T[] => {
+  if (arr == null) {
+    return []
+  }
+
   return Array.isArray(arr) ? arr : [arr]
 }
 

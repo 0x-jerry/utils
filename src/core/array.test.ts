@@ -14,6 +14,12 @@ describe('ensureArray', () => {
   it('2 dimension', () => {
     expect(ensureArray([[1], [2]])).toEqual([[1], [2]])
   })
+
+  it('should be empty array when value is null', () => {
+    expect(ensureArray(null)).eqls([])
+    expect(ensureArray(undefined)).eqls([])
+    expect(ensureArray(0)).eqls([0])
+  })
 })
 
 describe('remove', () => {
