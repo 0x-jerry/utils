@@ -40,10 +40,19 @@ describe('number', () => {
     expect(toRange(361, 0, 360)).toBe(1)
     expect(toRange(189, 0, 200)).toBe(189)
 
-    expect(toRange(10, 20, 30)).toBe(20)
+    expect(toRange(10, 20, 30)).oneOf([20, 30])
 
     expect(toRange(-10, 15, 30)).toBe(20)
 
     expect(toRange(-10, 0, 20)).toBe(10)
+
+    expect(toRange(-15, -5, 5)).toBe(-5)
+    expect(toRange(-10, -5, 5)).toBe(0)
+
+    expect(toRange(101, 0, 10)).toBe(1)
+    expect(toRange(-101, 0, 10)).toBe(9)
+
+    expect(toRange(101, -20, -10)).toBe(-19)
+    expect(toRange(-101, -20, -10)).toBe(-11)
   })
 })

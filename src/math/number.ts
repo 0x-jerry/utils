@@ -52,12 +52,10 @@ export function toRange(value: number, start: number, end: number): number {
 
   const range = end - start
 
-  while (value < start) {
-    value += range
-  }
+  value = Math.floor(start / range) * range +  value % range
 
-  while (value > end) {
-    value -= range
+  if (value < start) {
+    value += range
   }
 
   return value
