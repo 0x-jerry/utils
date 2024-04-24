@@ -1,5 +1,7 @@
 import { Ctor, PrimitiveType } from '../types'
 
+const CLS_CHECK_STR = 'class '
+
 /**
  * check target if is a Class or not.
  *
@@ -7,7 +9,7 @@ import { Ctor, PrimitiveType } from '../types'
  * @returns
  */
 export function isCls(target: unknown): target is Ctor {
-  return /^\s*class/.test(String(target))
+  return String(target).slice(0, CLS_CHECK_STR.length) === CLS_CHECK_STR
 }
 
 /**
