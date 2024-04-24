@@ -1,9 +1,9 @@
 import { EventEmitter } from './EventEmitter'
 
-type Events = {
-  test(): void
-  foo(a: number): void
-  bar(a: number, b: string): void
+interface Events {
+  test: []
+  foo: [a: number]
+  bar: [a: number, b: string]
 }
 
 describe('EventEmitter', () => {
@@ -36,8 +36,8 @@ describe('EventEmitter', () => {
   it('off', () => {
     const ee = new EventEmitter<Events>()
 
-    const fn = () => {}
-    ee.once('test', () => {})
+    const fn = () => { }
+    ee.once('test', () => { })
     ee.once('test', fn)
 
     ee.once('foo', fn)
@@ -61,10 +61,10 @@ describe('EventEmitter', () => {
   it('limit', () => {
     const ee = new EventEmitter<Events>(1)
 
-    ee.on('test', () => {})
+    ee.on('test', () => { })
 
-    expect(() => ee.on('test', () => {})).toThrow('Listeners reached limit size: 1')
-    expect(() => ee.once('test', () => {})).toThrow('Listeners reached limit size: 1')
+    expect(() => ee.on('test', () => { })).toThrow('Listeners reached limit size: 1')
+    expect(() => ee.once('test', () => { })).toThrow('Listeners reached limit size: 1')
   })
 
   it('0 capacity size', () => {
@@ -74,7 +74,7 @@ describe('EventEmitter', () => {
 
     expect(() => {
       for (let index = 0; index < 30; index++) {
-        ee.on('test', () => {})
+        ee.on('test', () => { })
       }
     }).not.throw()
   })

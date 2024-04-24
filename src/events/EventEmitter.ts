@@ -1,18 +1,16 @@
-interface ListenerFunction {
-  (...args: any[]): any
-}
+type Listener<T extends any[] = any[]> = (...args: T) => void
 
-type EventListeners<R extends Record<string, unknown>> = {
-  [K in keyof R]?: Set<R[K]>
+type EventListenersMap<R extends Record<string, any[]>> = {
+  [K in keyof R]?: Set<Listener<R[K]>>
 }
 
 /**
  * @example
  * ```ts
  * type Events = {
- *  test(): void
- *  foo(a: number): void
- *  bar(a: number, b: string): void
+ *  test: []
+ *  foo: [a: number]
+ *  bar: [a: number, b: string]
  * }
  *
  * const event = new EventEmitter<Events>()
@@ -25,12 +23,10 @@ type EventListeners<R extends Record<string, unknown>> = {
  *
  * ```
  */
-export class EventEmitter<
-  Events extends Record<string, ListenerFunction> = Record<string, ListenerFunction>
-> {
-  #listeners: EventListeners<Events>
+export class EventEmitter<Events extends Record<string, any>> {
+  #listeners: EventListenersMap<Events>
   #capacity: number
-  #once = new Map<keyof Events, Set<ListenerFunction>>()
+  #once = new Map<keyof Events, Set<Listener>>()
 
   /**
    * Limit count of listeners for every event.
@@ -58,15 +54,15 @@ export class EventEmitter<
   /**
    * Get all events and it's listeners.
    */
-  events<K extends keyof Events>(): EventListeners<Events>
+  events<K extends keyof Events>(): EventListenersMap<Events>
   /**
    * Get all listeners of the event.
    * @param event Event type
    */
-  events<K extends keyof Events>(event: K): NonNullable<EventListeners<Events>[K]>
+  events<K extends keyof Events>(event: K): NonNullable<EventListenersMap<Events>[K]>
   events<K extends keyof Events>(
     event?: K
-  ): EventListeners<Events> | NonNullable<EventListeners<Events>[K]> {
+  ): EventListenersMap<Events> | NonNullable<EventListenersMap<Events>[K]> {
     if (!event) {
       return this.#listeners
     }
@@ -78,12 +74,12 @@ export class EventEmitter<
     return this.#listeners[event]!
   }
 
-  #removeOnceMark<K extends keyof Events>(event: K, listener: ListenerFunction) {
+  #removeOnceMark<K extends keyof Events>(event: K, listener: Listener<Events[K]>) {
     const collection = this.#once.get(event)
     return collection?.delete(listener)
   }
 
-  #addOnceMark<K extends keyof Events>(event: K, listener: ListenerFunction): void {
+  #addOnceMark<K extends keyof Events>(event: K, listener: Listener): void {
     const collection = this.#once.get(event)
 
     if (collection) {
@@ -99,7 +95,7 @@ export class EventEmitter<
    * @param listener Callback
    * @returns Remove the callback.
    */
-  on<K extends keyof Events>(event: K, listener: Events[K]): () => void {
+  on<K extends keyof Events>(event: K, listener: Listener<Events[K]>): () => void {
     const events = this.events(event)
 
     this.#checkLimit(events.size)
@@ -116,7 +112,7 @@ export class EventEmitter<
    * @param listener Callback
    * @returns Remove the callback.
    */
-  once<K extends keyof Events>(event: K, listener: Events[K]) {
+  once<K extends keyof Events>(event: K, listener: Listener<Events[K]>) {
     const events = this.events(event)
 
     this.#checkLimit(events.size)
@@ -144,10 +140,10 @@ export class EventEmitter<
    * @param listener  Callback
    * @returns Return true if listener is existed, otherwise return false.
    */
-  off<K extends keyof Events>(event: K, listener: Events[K]): boolean
-  off<K extends keyof Events>(event?: K, listener?: Events[K]): boolean {
+  off<K extends keyof Events>(event: K, listener: Listener<Events[K]>): boolean
+  off<K extends keyof Events>(event?: K, listener?: Listener<Events[K]>): boolean {
     if (!event) {
-      const collections: Set<ListenerFunction>[] = Object.values(this.#listeners)
+      const collections: Set<Listener>[] = Object.values(this.#listeners)
 
       this.#listeners = {}
       return collections.length > 0
@@ -173,9 +169,9 @@ export class EventEmitter<
    * @param event Event type
    * @param args Arguments that apply to the callback.
    */
-  emit<K extends keyof Events>(event: K, ...args: Parameters<Events[K]>) {
+  emit<K extends keyof Events>(event: K, ...args: Events[K]) {
     const events = this.events(event)
-    const clears: Events[K][] = []
+    const clears: Listener<Events[K]>[] = []
 
     events.forEach((listener) => {
       try {
