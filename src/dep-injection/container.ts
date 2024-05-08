@@ -38,7 +38,7 @@ export class Container<CtorMap extends {}> {
         conf.instance = new conf.ctor()
       }
 
-      return conf.instance
+      return conf.instance!
     }
 
     if (opt?.target) {

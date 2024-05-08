@@ -1,4 +1,4 @@
-type Listener<T extends any[] = any[]> = (...args: T) => void
+type Listener<T extends any[] = any> = (...args: T) => void
 
 type EventListenersMap<R extends Record<string, any[]>> = {
   [K in keyof R]?: Set<Listener<R[K]>>
