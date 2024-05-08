@@ -15,12 +15,6 @@ export enum PromiseStatus {
   Rejected = 'rejected',
 }
 
-/**
- * 
- * @deprecated use `Promise.withResolvers` instead of.
- * 
- * @returns 
- */
 export function createPromise<T>(): PromiseInstance<T> {
   type Resolve = (value: T | PromiseLike<T>) => void
   type Reject = (reason?: any) => void
