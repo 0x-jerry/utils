@@ -41,16 +41,16 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@0x-jerry/x-release": "^1.0.0",
-    "@types/node": "^20.11.30",
-    "@vitest/coverage-v8": "^1.4.0",
-    "happy-dom": "^14.3.8",
-    "typescript": "^5.4.3",
-    "vitest": "^1.4.0"
+    "@0x-jerry/x-release": "^1.0.1",
+    "@types/node": "^20.12.11",
+    "@vitest/coverage-v8": "^1.6.0",
+    "happy-dom": "^14.10.1",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
   },
   "dependencies": {
     "fflate": "^0.8.2",
-    "nanoid": "^5.0.6",
+    "nanoid": "^5.0.7",
     "picocolors": "^1.0.0"
   }
 }
