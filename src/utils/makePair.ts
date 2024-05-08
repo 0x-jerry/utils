@@ -1,5 +1,5 @@
 import { noop } from '../core'
-import { Fn, Optional } from '../types'
+import type { Fn, Optional } from '../types'
 
 export interface PairConfig<T extends Fn> {
   __default?: T

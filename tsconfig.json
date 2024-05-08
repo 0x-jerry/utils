@@ -12,6 +12,7 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "outDir": "dist",
+    "lib": ["DOM"],
     "types": ["vitest/globals"]
   },
   "include": ["src", "test"]

@@ -1,5 +1,5 @@
 import { isArray, isObject } from '../is'
-import { DeepPartial, DeepRequired, Optional } from '../types'
+import type { DeepPartial, DeepRequired, Optional } from '../types'
 
 /**
  *

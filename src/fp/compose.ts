@@ -1,5 +1,5 @@
-import { Fn } from '../types'
-import { ICompose, IComposeResult } from './types'
+import type { Fn } from '../types'
+import type { ICompose, IComposeResult } from './types'
 
 /**
  * Compose multiple functions into single function

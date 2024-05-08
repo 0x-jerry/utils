@@ -1,5 +1,5 @@
 import { isFn, isPrimitive } from '../is'
-import { Arrayable, PrimitiveType } from '../types'
+import type { Arrayable, PrimitiveType } from '../types'
 
 /**
  * Ensure to return a list of element T.

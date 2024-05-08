@@ -1,4 +1,4 @@
-import { CommunicationAdapter } from '../types'
+import type { CommunicationAdapter } from '../types'
 
 export function createWorkerAdaptor(m?: Worker) {
   const adaptor: CommunicationAdapter = {

@@ -1,4 +1,4 @@
-import { Fn } from '../types'
+import type { Fn } from '../types'
 
 export interface Procedure {
   [key: string]: Procedure | Fn

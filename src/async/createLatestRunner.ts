@@ -1,5 +1,5 @@
 import { createPromise } from '../core'
-import { Fn } from '../types'
+import type { Fn } from '../types'
 
 export function createLatestRunner<T extends Fn>(fn: Fn) {
   let latestId = 0

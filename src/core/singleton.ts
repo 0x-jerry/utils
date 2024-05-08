@@ -1,5 +1,5 @@
 import { isCls } from '../is'
-import { Ctor } from '../types'
+import type { Ctor } from '../types'
 
 const singletons = new WeakMap<Function, unknown>()
 
