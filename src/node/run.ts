@@ -1,6 +1,7 @@
 import { ChildProcess, spawn, type CommonSpawnOptions } from 'child_process'
 import pc from 'picocolors'
 import { createPromise } from '../core/index.js'
+import os from 'node:os'
 
 /**
  *
@@ -79,9 +80,11 @@ interface ExecResult {
 export async function _exec(cmd: string, args: readonly string[], opt?: CommonSpawnOptions) {
   const p = createPromise<ExecResult>()
 
-  const childProcess = spawn(cmd, args, {
-    ...opt,
-  })
+  const win = os.platform() === 'win32'
+
+  const childProcess = win
+    ? spawn('cmd', ['/s', '/c', [cmd, ...args].join(' ')], { ...opt })
+    : spawn(cmd, args, { ...opt })
 
   const stdio = {
     stdout: '',
