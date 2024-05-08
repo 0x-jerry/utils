@@ -1,4 +1,4 @@
-import { camelCase, kebab$case, PascalCase, snake_case } from './style'
+import { camelCase, kebab$case, PascalCase, snake_case } from './style.js'
 
 describe('string style conversion', () => {
   it('should convert to PascalCase', () => {

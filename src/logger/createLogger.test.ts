@@ -1,4 +1,4 @@
-import { createLogger } from './createLogger'
+import { createLogger } from './createLogger.js'
 
 describe('createSimpleLogger', () => {
   it('output', () => {

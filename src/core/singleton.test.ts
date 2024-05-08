@@ -1,4 +1,4 @@
-import { getInstance } from './singleton'
+import { getInstance } from './singleton.js'
 
 describe('create singleton', () => {
   it('should only call once', () => {

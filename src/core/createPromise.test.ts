@@ -1,4 +1,4 @@
-import { createPromise, PromiseStatus } from './createPromise'
+import { createPromise, PromiseStatus } from './createPromise.js'
 
 describe('createPromiseInstance', () => {
   it('resolve', async () => {

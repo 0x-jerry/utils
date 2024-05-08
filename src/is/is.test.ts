@@ -1,4 +1,4 @@
-import { noop } from '../core'
+import { noop } from '../core/index.js'
 import {
   isArray,
   isAsyncIterable,
@@ -15,7 +15,7 @@ import {
   isPromiseLike,
   isString,
   isSymbol,
-} from './is'
+} from './is.js'
 
 describe('is utils', () => {
   it('is class', () => {

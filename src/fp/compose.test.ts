@@ -1,4 +1,4 @@
-import { compose } from './compose'
+import { compose } from './compose.js'
 
 describe('function program', () => {
   const plusOne = (n: number) => n + 1

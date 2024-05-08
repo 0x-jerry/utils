@@ -1,4 +1,4 @@
-import { toValue } from './toValue'
+import { toValue } from './toValue.js'
 
 describe('toValue', () => {
   it('should be return an object', () => {

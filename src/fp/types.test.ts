@@ -1,4 +1,4 @@
-import { ICompose } from './types'
+import { ICompose } from './types.js'
 
 const compose: ICompose = (() => {}) as any
 

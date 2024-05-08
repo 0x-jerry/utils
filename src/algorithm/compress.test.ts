@@ -1,4 +1,4 @@
-import { compressText, decompressText } from './compress'
+import { compressText, decompressText } from './compress.js'
 
 describe('compress / decompress text', () => {
   it('should compress and decompress', async () => {

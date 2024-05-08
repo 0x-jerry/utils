@@ -1,4 +1,4 @@
-import { clamp, round, toFixed, toRange } from './number'
+import { clamp, round, toFixed, toRange } from './number.js'
 
 describe('number', () => {
   it('toFixed', () => {

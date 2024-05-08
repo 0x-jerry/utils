@@ -1,4 +1,4 @@
-import { traverse } from './tree'
+import { traverse } from './tree.js'
 
 interface TNode {
   num: number

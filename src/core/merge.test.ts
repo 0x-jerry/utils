@@ -1,4 +1,4 @@
-import { deepMerge } from './merge'
+import { deepMerge } from './merge.js'
 
 describe('deep merge', () => {
   it('merge simple object', () => {

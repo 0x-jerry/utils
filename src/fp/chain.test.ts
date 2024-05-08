@@ -1,5 +1,5 @@
-import { sleep } from '..'
-import { chain } from './chain'
+import { sleep } from '../core/sleep.js'
+import { chain } from './chain.js'
 
 describe('chainable', () => {
   const plusOne = (n: number) => n + 1

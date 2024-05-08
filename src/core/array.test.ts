@@ -1,4 +1,4 @@
-import { ensureArray, group, remove } from './array'
+import { ensureArray, group, remove } from './array.js'
 
 describe('ensureArray', () => {
   it('array', () => {

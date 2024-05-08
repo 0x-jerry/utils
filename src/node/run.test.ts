@@ -1,4 +1,4 @@
-import { _exec, _parseArgs, run } from './run'
+import { _exec, _parseArgs, run } from './run.js'
 
 describe('run command', () => {
   it('should parse quotes', () => {
