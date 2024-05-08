@@ -1,4 +1,4 @@
-import { isWeb } from '../utils'
+import { isWeb } from '../utils/index.js'
 
 const encoder = /*@__PURE__*/ new TextEncoder()
 const decoder = /*@__PURE__*/ new TextDecoder()

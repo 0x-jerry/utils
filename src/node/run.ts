@@ -1,6 +1,6 @@
 import { ChildProcess, spawn, type CommonSpawnOptions } from 'child_process'
 import pc from 'picocolors'
-import { createPromise } from '../core'
+import { createPromise } from '../core/index.js'
 
 /**
  *

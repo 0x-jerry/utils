@@ -1,4 +1,4 @@
-import type { Fn } from '../types'
+import type { Fn } from '../types/index.js'
 
 export type IComposeResult<T extends Fn> = T & {
   exec(...params: Parameters<T>): ReturnType<T>

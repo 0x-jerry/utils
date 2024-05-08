@@ -24,21 +24,21 @@ export type Promisable<T> = Awaitable<T>
 export type ElementOf<T> = T extends Array<infer E> ? E : never
 
 export interface Ctor<Instance = any, Params extends [] = any> {
-  new(...args: Params): Instance
+  new (...args: Params): Instance
 }
 
 export type Optional<T> = T | undefined | null | void
 
 export type DeepPartial<T> = T extends {}
   ? {
-    [Key in keyof T]?: DeepPartial<T[Key]>
-  }
+      [Key in keyof T]?: DeepPartial<T[Key]>
+    }
   : Optional<T>
 
 export type DeepRequired<T> = T extends {}
   ? {
-    [Key in keyof T]: DeepRequired<T[Key]>
-  }
+      [Key in keyof T]: DeepRequired<T[Key]>
+    }
   : NonNullable<T>
 
 export type JsonPrimitive = string | number | boolean | null | undefined

@@ -1,5 +1,5 @@
-import { noop } from '../core'
-import type { Fn, Optional } from '../types'
+import { noop } from '../core/index.js'
+import type { Fn, Optional } from '../types/index.js'
 
 export interface PairConfig<T extends Fn> {
   __default?: T

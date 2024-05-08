@@ -1,7 +1,7 @@
-import { createPromise, type PromiseInstance, uuid } from '../core'
-import { isNumber, isObject, isSymbol } from '../is'
-import type { Fn } from '../types'
-import type { Procedure, CommunicationAdapter, CommunicationProtocol } from './types'
+import { createPromise, type PromiseInstance, uuid } from '../core/index.js'
+import { isNumber, isObject, isSymbol } from '../is/index.js'
+import type { Fn } from '../types/index.js'
+import type { Procedure, CommunicationAdapter, CommunicationProtocol } from './types.js'
 
 interface RPCServerOption<M> {
   methods: M

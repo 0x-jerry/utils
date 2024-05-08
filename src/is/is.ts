@@ -1,4 +1,4 @@
-import type { Ctor, PrimitiveType } from '../types'
+import type { Ctor, PrimitiveType } from '../types/index.js'
 
 const CLS_CHECK_STR = 'class '
 

@@ -1,5 +1,5 @@
-import { createPromise } from '../core'
-import type { Fn } from '../types'
+import { createPromise } from '../core/index.js'
+import type { Fn } from '../types/index.js'
 
 export function createLatestRunner<T extends Fn>(fn: Fn) {
   let latestId = 0

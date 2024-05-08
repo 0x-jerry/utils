@@ -1,4 +1,4 @@
-import { isPromiseLike } from '../is'
+import { isPromiseLike } from '../is/index.js'
 
 export interface IChainable<In = any> {
   input: In

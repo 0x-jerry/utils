@@ -1,11 +1,9 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "ESNext",
+    "module": "Node16",
     "strict": true,
-    "moduleResolution": "bundler",
     "forceConsistentCasingInFileNames": true,
-    "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "noEmit": true,
     "esModuleInterop": true,

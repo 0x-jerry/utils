@@ -1,5 +1,5 @@
-import { isArray, isObject } from '../is'
-import type { DeepPartial, DeepRequired, Optional } from '../types'
+import { isArray, isObject } from '../is/index.js'
+import type { DeepPartial, DeepRequired, Optional } from '../types/index.js'
 
 /**
  *

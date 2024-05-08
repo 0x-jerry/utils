@@ -1,5 +1,5 @@
-import { isIterable } from '../is'
-import type { Arrayable } from '../types'
+import { isIterable } from '../is/index.js'
+import type { Arrayable } from '../types/index.js'
 
 function _traverseTree<T extends {}, Key extends keyof T>(
   nodes: T | Iterable<T>,

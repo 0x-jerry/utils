@@ -1,4 +1,4 @@
-import { isString } from '../is'
+import { isString } from '../is/index.js'
 
 /**
  * like {@link Number.prototype.toFixed}, but return a number instead of string.
@@ -52,7 +52,7 @@ export function toRange(value: number, start: number, end: number): number {
 
   const range = end - start
 
-  value = Math.floor(start / range) * range +  value % range
+  value = Math.floor(start / range) * range + (value % range)
 
   if (value < start) {
     value += range

@@ -1,4 +1,4 @@
-import { isNode } from '../utils'
+import { isNode } from '../utils/index.js'
 
 export function jsonToBase64(data: unknown) {
   const s = JSON.stringify(data)

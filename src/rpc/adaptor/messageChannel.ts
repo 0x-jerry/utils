@@ -1,4 +1,4 @@
-import type { CommunicationAdapter } from '../types'
+import type { CommunicationAdapter } from '../types.js'
 
 export function createMessageChannelAdaptor(m: MessagePort) {
   const adaptor: CommunicationAdapter = {

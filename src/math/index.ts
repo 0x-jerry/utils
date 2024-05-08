@@ -1,2 +1,2 @@
-export * from './sum'
-export * from './number'
+export * from './sum.js'
+export * from './number.js'

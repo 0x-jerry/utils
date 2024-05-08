@@ -1,3 +1,3 @@
-export * from './platform'
-export * from './makePair'
-export * from './toValue'
+export * from './platform.js'
+export * from './makePair.js'
+export * from './toValue.js'

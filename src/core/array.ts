@@ -1,5 +1,5 @@
-import { isFn, isPrimitive } from '../is'
-import type { Arrayable, PrimitiveType } from '../types'
+import { isFn, isPrimitive } from '../is/index.js'
+import type { Arrayable, PrimitiveType } from '../types/index.js'
 
 /**
  * Ensure to return a list of element T.

@@ -1,4 +1,4 @@
-import { createPromise } from './createPromise'
+import { createPromise } from './createPromise.js'
 
 export type SleepResult = Promise<void> & { cancel: () => void }
 

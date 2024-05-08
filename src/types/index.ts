@@ -1,2 +1,2 @@
-export * from './utils'
-export * from './object'
+export * from './utils.js'
+export * from './object.js'
