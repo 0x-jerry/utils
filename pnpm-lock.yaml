@@ -14,6 +14,9 @@ importers:
       nanoid:
         specifier: ^5.0.6
         version: 5.0.6
+      picocolors:
+        specifier: ^1.0.0
+        version: 1.0.0
     devDependencies:
       '@0x-jerry/x-release':
         specifier: ^1.0.0
@@ -23,7 +26,7 @@ importers:
         version: 20.11.30
       '@vitest/coverage-v8':
         specifier: ^1.4.0
-        version: 1.4.0(vitest@1.4.0)
+        version: 1.4.0(vitest@1.4.0(@types/node@20.11.30)(happy-dom@14.3.8))
       happy-dom:
         specifier: ^14.3.8
         version: 14.3.8
@@ -953,7 +956,7 @@ snapshots:
     dependencies:
       undici-types: 5.26.5
 
-  '@vitest/coverage-v8@1.4.0(vitest@1.4.0)':
+  '@vitest/coverage-v8@1.4.0(vitest@1.4.0(@types/node@20.11.30)(happy-dom@14.3.8))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -1377,16 +1380,15 @@ snapshots:
 
   vite@5.2.6(@types/node@20.11.30):
     dependencies:
-      '@types/node': 20.11.30
       esbuild: 0.20.2
       postcss: 8.4.38
       rollup: 4.13.0
     optionalDependencies:
+      '@types/node': 20.11.30
       fsevents: 2.3.3
 
   vitest@1.4.0(@types/node@20.11.30)(happy-dom@14.3.8):
     dependencies:
-      '@types/node': 20.11.30
       '@vitest/expect': 1.4.0
       '@vitest/runner': 1.4.0
       '@vitest/snapshot': 1.4.0
@@ -1396,7 +1398,6 @@ snapshots:
       chai: 4.4.1
       debug: 4.3.4
       execa: 8.0.1
-      happy-dom: 14.3.8
       local-pkg: 0.5.0
       magic-string: 0.30.8
       pathe: 1.1.2
@@ -1408,6 +1409,9 @@ snapshots:
       vite: 5.2.6(@types/node@20.11.30)
       vite-node: 1.4.0(@types/node@20.11.30)
       why-is-node-running: 2.2.2
+    optionalDependencies:
+      '@types/node': 20.11.30
+      happy-dom: 14.3.8
     transitivePeerDependencies:
       - less
       - lightningcss

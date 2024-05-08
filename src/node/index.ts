@@ -1,3 +1,1 @@
-export function test() {
-    console.log('cool')
-}
+export { run } from './run'
