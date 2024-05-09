@@ -23,7 +23,7 @@ export async function run(
 ) {
   const { collectOutput, silent } = opt || {}
 
-  if (silent) {
+  if (!silent) {
     console.log(pc.dim('$'), pc.dim(cmd))
   }
 
