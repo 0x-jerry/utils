@@ -19,11 +19,13 @@ import os from 'node:os'
 export async function run(
   cmd: string,
   env?: Record<string, string | undefined>,
-  opt: { collectOutput?: boolean } = {}
+  opt?: { collectOutput?: boolean; silent?: boolean }
 ) {
-  const { collectOutput } = opt
+  const { collectOutput, silent } = opt || {}
 
-  console.log(pc.dim('$'), pc.dim(cmd))
+  if (silent) {
+    console.log(pc.dim('$'), pc.dim(cmd))
+  }
 
   const commands = cmd
     .split('&&')
