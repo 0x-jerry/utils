@@ -30,7 +30,10 @@ describe('exec', () => {
 
 describe('run', () => {
   it('should work with &&', async () => {
-    const output = await run('echo hello && echo world', undefined, { collectOutput: true })
+    const output = await run('echo hello && echo world', undefined, {
+      collectOutput: true,
+      silent: true,
+    })
 
     expect(replaceTerminalChar(output)).toBe('hello\nworld\n')
   })

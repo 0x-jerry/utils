@@ -99,7 +99,6 @@ export async function _exec(cmd: string, args: readonly string[], opt?: CommonSp
     } else {
       stdio.stdout += String(chunk)
     }
-    console.log('123', stdio.stdout)
   })
 
   childProcess.stderr?.on('data', (chunk) => {
