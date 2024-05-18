@@ -84,9 +84,6 @@ export async function _exec(cmd: string, args: readonly string[], opt?: CommonSp
 
   const win = os.platform() === 'win32'
 
-  const stringifyArgs = (args: readonly string[]) =>
-    args.map((arg) => (/\s/.test(arg) ? JSON.stringify(arg) : arg))
-
   const childProcess = win
     ? spawn('cmd', ['/c', cmd, ...args], { ...opt })
     : spawn(cmd, args, { ...opt })
