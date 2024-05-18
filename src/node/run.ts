@@ -88,7 +88,7 @@ export async function _exec(cmd: string, args: readonly string[], opt?: CommonSp
     args.map((arg) => (/\s/.test(arg) ? JSON.stringify(arg) : arg))
 
   const childProcess = win
-    ? spawn('cmd', ['/s', '/c', [cmd, ...stringifyArgs(args)].join(' ')], { ...opt })
+    ? spawn('cmd', ['/c', cmd, ...args], { ...opt })
     : spawn(cmd, args, { ...opt })
 
   const stdio = {

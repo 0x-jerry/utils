@@ -41,10 +41,6 @@ describe('run', () => {
   it('should work with quotes', async () => {
     const output = await run('echo "hello  \'world"', undefined, { collectOutput: true })
 
-    if (isWin) {
-      expect(replaceTerminalChar(output)).toBe('\\"hello  \'world\\"\n')
-    } else {
-      expect(output).toBe("hello  'world\n")
-    }
+    expect(replaceTerminalChar(output)).toBe('"hello  \'world"\n')
   })
 })
