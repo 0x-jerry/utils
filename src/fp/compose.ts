@@ -17,7 +17,7 @@ import type { ICompose, IComposeResult } from './types.js'
  * @param fns
  * @returns
  */
-export const compose: ICompose = (...fns: Fn[]) => {
+export function compose(...fns: Fn[]) {
   const composed: IComposeResult<Fn> = (x: unknown) => fns.reduce((p, fn) => fn(p), x)
 
   composed.exec = composed

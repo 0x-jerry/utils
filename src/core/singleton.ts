@@ -1,7 +1,7 @@
 import { isCls } from '../is/index.js'
 import type { Ctor } from '../types/index.js'
 
-const singletons = new WeakMap<Function, unknown>()
+const singletons = /*@__PURE__*/ new WeakMap<Function, unknown>()
 
 /**
  *
