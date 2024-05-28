@@ -1,3 +1,5 @@
+import type { MakeEnum } from '../types/utils.js'
+
 export interface PromiseInstance<T = any> {
   readonly status: PromiseStatus
   readonly isPending: boolean
@@ -9,11 +11,13 @@ export interface PromiseInstance<T = any> {
   reject: (reason: any) => void
 }
 
-export enum PromiseStatus {
-  Pending = 'pending',
-  Fulfilled = 'fulfilled',
-  Rejected = 'rejected',
-}
+export const PromiseStatus = {
+  Pending: 'pending',
+  Fulfilled: 'fulfilled',
+  Rejected: 'rejected',
+} as const
+
+export type PromiseStatus = MakeEnum<typeof PromiseStatus>
 
 export function createPromise<T>(): PromiseInstance<T> {
   type Resolve = (value: T | PromiseLike<T>) => void
@@ -21,7 +25,7 @@ export function createPromise<T>(): PromiseInstance<T> {
 
   let _resolve: Resolve, _reject: Reject
 
-  let _status = PromiseStatus.Pending
+  let _status: PromiseStatus = PromiseStatus.Pending
 
   const p = new Promise<T>((resolve, reject) => {
     _resolve = (v) => {

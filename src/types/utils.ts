@@ -47,3 +47,6 @@ export type JsonArray = JsonValue[]
 export type JsonValue = JsonPrimitive | JsonObject | JsonArray
 
 export type PrimitiveType = JsonPrimitive | bigint | symbol
+
+export type MakeEnum<Enum extends Record<string, string | number | boolean | null | undefined>> =
+  Enum[keyof Enum]
