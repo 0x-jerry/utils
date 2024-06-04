@@ -67,7 +67,7 @@ export function isArray<T = any>(target: unknown): target is Array<T> {
  * @param target
  * @returns
  */
-export function isObject(target: unknown): target is Object {
+export function isObject(target: unknown): target is Record<string, any> {
   return target !== null && typeof target === 'object'
 }
 
