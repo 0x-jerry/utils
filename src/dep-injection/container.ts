@@ -1,9 +1,13 @@
+import { isCls, isFn } from '../is/is.js'
+
 interface BindConfig {
   singleton?: boolean
 }
 
+type MaybeConstructor<T> = (new () => T) | (() => T) | T
+
 interface CtorConfig<T = unknown> {
-  ctor: new () => T
+  ctor: MaybeConstructor<T>
 
   config?: BindConfig
 
@@ -18,7 +22,7 @@ interface CtorConfig<T = unknown> {
 export class Container<CtorMap extends {}> {
   #ctorMap = new Map<keyof CtorMap, CtorConfig>()
 
-  bind<K extends keyof CtorMap>(key: K, ctor: new () => CtorMap[K], config?: BindConfig) {
+  bind<K extends keyof CtorMap>(key: K, ctor: MaybeConstructor<CtorMap[K]>, config?: BindConfig) {
     if (this.#ctorMap.has(key)) {
       throw new Error(`Key ${String(key)} has set!`)
     }
@@ -35,7 +39,7 @@ export class Container<CtorMap extends {}> {
 
     if (conf.config?.singleton) {
       if (!conf.instance) {
-        conf.instance = new conf.ctor()
+        conf.instance = instantiation(conf.ctor)
       }
 
       return conf.instance!
@@ -47,14 +51,14 @@ export class Container<CtorMap extends {}> {
       }
 
       if (!conf.targetMap.has(opt.target)) {
-        const instance = new conf.ctor()
-        conf.targetMap.set(opt.target, instance)
+        const _instance = instantiation(conf.ctor)
+        conf.targetMap.set(opt.target, _instance)
       }
 
       return conf.targetMap.get(opt.target)!
     }
 
-    return new conf.ctor()
+    return instantiation(conf.ctor)
   }
 
   /**
@@ -89,4 +93,16 @@ export class Container<CtorMap extends {}> {
       this.#ctorMap.clear()
     }
   }
+}
+
+function instantiation<T>(Ctor: MaybeConstructor<T>): T {
+  if (isCls(Ctor)) {
+    return new Ctor()
+  }
+
+  if (isFn(Ctor)) {
+    return Ctor()
+  }
+
+  return Ctor
 }

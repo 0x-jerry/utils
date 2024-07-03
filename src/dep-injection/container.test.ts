@@ -118,4 +118,28 @@ describe('container', () => {
     expect(() => di.get('a')).toThrowError('Key a is not binding.')
     expect(() => di.get('b')).toThrowError('Key b is not binding.')
   })
+
+  it('should work with function', () => {
+    const di = new Container<CtorMap>()
+    const fnA = vi.fn()
+    const fnB = vi.fn()
+
+    di.bind('a', () => ({ a: fnA }))
+    di.bind('b', () => ({ b: fnB }))
+
+    expect(di.get('a').a).toBe(fnA)
+    expect(di.get('b').b).toBe(fnB)
+  })
+
+  it('should work with object', () => {
+    const di = new Container<CtorMap>()
+    const fnA = vi.fn()
+    const fnB = vi.fn()
+
+    di.bind('a', { a: fnA })
+    di.bind('b', { b: fnB })
+
+    expect(di.get('a').a).toBe(fnA)
+    expect(di.get('b').b).toBe(fnB)
+  })
 })

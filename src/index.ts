@@ -1,5 +1,6 @@
 export * from './algorithm/index.js'
 export * from './core/index.js'
+export * from './dep-injection/index.js'
 export * from './events/index.js'
 export * from './fp/index.js'
 export * from './is/index.js'
