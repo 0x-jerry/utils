@@ -65,8 +65,10 @@ export class Container<CtorMap extends {}> {
    * Only support standard decorator https://github.com/tc39/proposal-decorators#class-fields
    */
   inject<K extends keyof CtorMap>(key: K) {
-    return (_: unknown, _ctx: ClassFieldDecoratorContext): CtorMap[K] => {
-      return this.get(key)
+    type IValueType = CtorMap[K]
+
+    return (_: unknown, _ctx: ClassFieldDecoratorContext<unknown, IValueType>) => {
+      return (_initialValue: unknown) => this.get(key)
     }
   }
 
@@ -74,12 +76,14 @@ export class Container<CtorMap extends {}> {
    * Only support standard decorator https://github.com/tc39/proposal-decorators#class-fields
    */
   lazyInject<K extends keyof CtorMap>(key: K) {
-    return (_: unknown, ctx: ClassFieldDecoratorContext) => {
-      const t = this
+    type IValueType = CtorMap[K]
+    return (_: unknown, ctx: ClassFieldDecoratorContext<unknown, IValueType>) => {
+      const DI = this
+
       ctx.addInitializer(function (this: unknown) {
         Object.defineProperty(this, ctx.name, {
           get() {
-            return t.get(key)
+            return DI.get(key)
           },
         })
       })

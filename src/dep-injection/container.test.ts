@@ -143,3 +143,44 @@ describe('container', () => {
     expect(di.get('b').b).toBe(fnB)
   })
 })
+
+// TODO: vitest not support new decorator!
+// Track: https://github.com/vitest-dev/vitest/issues/3140
+//
+// describe('dep injection', () => {
+//   interface A {}
+//   interface B {
+//     a: A
+//   }
+
+//   interface C {
+//     b: B
+//   }
+
+//   interface DIMap {
+//     a: A
+//     b: B
+//     c: C
+//   }
+
+//   it('get', () => {
+//     const DI = new Container<DIMap>()
+//     class ImplA implements A {}
+
+//     class ImplB implements B {
+//       @DI.inject('a')
+//       a!: A
+//     }
+
+//     class ImplC implements C {
+//       @DI.inject('b')
+//       b!: B
+//     }
+
+//     const c = DI.get('c')
+
+//     expect(c).instanceOf(ImplC)
+//     expect(c.b).instanceof(ImplB)
+//     expect(c.b.a).instanceof(ImplA)
+//   })
+// })
