@@ -94,4 +94,28 @@ describe('container', () => {
     b.b()
     expect(aCtor).toBeCalledTimes(1)
   })
+
+  it('#clear', () => {
+    class A {
+      a = vi.fn()
+    }
+
+    class B {
+      b = vi.fn()
+    }
+
+    const di = new Container<CtorMap>()
+    di.bind('a', A)
+    di.bind('b', B)
+
+    expect(di.get('a')).toBeTruthy()
+    di.clear('a')
+
+    expect(() => di.get('a')).toThrowError('Key a is not binding.')
+    expect(di.get('b')).toBeTruthy()
+
+    di.clear()
+    expect(() => di.get('a')).toThrowError('Key a is not binding.')
+    expect(() => di.get('b')).toThrowError('Key b is not binding.')
+  })
 })

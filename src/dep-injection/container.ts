@@ -28,7 +28,7 @@ export class Container<CtorMap extends {}> {
 
   get<K extends keyof CtorMap>(key: K, opt?: { target?: unknown }): CtorMap[K] {
     if (!this.#ctorMap.get(key)) {
-      throw new Error('Key ' + String(key) + ' not binding.')
+      throw new Error('Key ' + String(key) + ' is not binding.')
     }
 
     const conf = this.#ctorMap.get(key)! as CtorConfig<CtorMap[K]>
@@ -79,6 +79,14 @@ export class Container<CtorMap extends {}> {
           },
         })
       })
+    }
+  }
+
+  clear<K extends keyof CtorMap>(key?: K) {
+    if (key != null) {
+      this.#ctorMap.delete(key)
+    } else {
+      this.#ctorMap.clear()
     }
   }
 }
