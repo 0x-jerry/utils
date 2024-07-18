@@ -142,45 +142,56 @@ describe('container', () => {
     expect(di.get('a').a).toBe(fnA)
     expect(di.get('b').b).toBe(fnB)
   })
+
+  it('bind with the same key should throw a error', () => {
+    const di = new Container<CtorMap>()
+    const fnA = vi.fn()
+    const fnB = vi.fn()
+
+    di.bind('a', { a: fnA })
+
+    expect(() => di.bind('a', { a: fnB })).toThrow('Key a has set!')
+  })
 })
 
-// TODO: vitest not support new decorator!
-// Track: https://github.com/vitest-dev/vitest/issues/3140
-//
-// describe('dep injection', () => {
-//   interface A {}
-//   interface B {
-//     a: A
-//   }
+describe('ES decorator', () => {
+  interface A {}
+  interface B {
+    a: A
+  }
 
-//   interface C {
-//     b: B
-//   }
+  interface C {
+    b: B
+  }
 
-//   interface DIMap {
-//     a: A
-//     b: B
-//     c: C
-//   }
+  interface DIMap {
+    a: A
+    b: B
+    c: C
+  }
 
-//   it('get', () => {
-//     const DI = new Container<DIMap>()
-//     class ImplA implements A {}
+  it('get', () => {
+    const DI = new Container<DIMap>()
+    class ImplA implements A {}
 
-//     class ImplB implements B {
-//       @DI.inject('a')
-//       a!: A
-//     }
+    class ImplB implements B {
+      @DI.inject('a')
+      a!: A
+    }
 
-//     class ImplC implements C {
-//       @DI.inject('b')
-//       b!: B
-//     }
+    class ImplC implements C {
+      @DI.lazyInject('b')
+      b!: B
+    }
 
-//     const c = DI.get('c')
+    DI.bind('a', ImplA)
+    DI.bind('b', ImplB)
+    DI.bind('c', ImplC)
 
-//     expect(c).instanceOf(ImplC)
-//     expect(c.b).instanceof(ImplB)
-//     expect(c.b.a).instanceof(ImplA)
-//   })
-// })
+    const c = DI.get('c')
+
+    expect(c).instanceOf(ImplC)
+    expect(c.b).instanceof(ImplB)
+    expect(c.b.a).instanceof(ImplA)
+  })
+})
