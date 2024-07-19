@@ -34,7 +34,7 @@ export function textTableToString(input: TableCellType[][], opt?: TextTableToStr
   return str.join('\n')
 }
 
-function uniformTable(table: TableCellType[][]) {
+export function uniformTable(table: TableCellType[][]) {
   const colLens = calcColLength(table)
 
   const uniformed: string[][] = []
@@ -43,7 +43,7 @@ function uniformTable(table: TableCellType[][]) {
     const uniformedRow: string[] = []
 
     for (const [idx, s] of row.entries()) {
-      uniformedRow[idx] = toString(s).padEnd(colLens[idx], ' ')
+      uniformedRow[idx] = padEnd(s, colLens[idx], ' ')
     }
 
     uniformed.push(uniformedRow)
@@ -72,6 +72,15 @@ function toString(cell: TableCellType) {
   return (cell ?? '').toString()
 }
 
+const StyleRE = /\x1b\[\d+m/g
+
 function getLength(cell: TableCellType) {
-  return toString(cell).length
+  return toString(cell).replace(StyleRE, '').length
+}
+
+function padEnd(cell: TableCellType, maxLength: number, fillString = ' '): string {
+  const currentLen = getLength(cell)
+  const padNumber = maxLength - currentLen
+
+  return padNumber > 0 ? toString(cell) + fillString.repeat(padNumber) : toString(cell)
 }
