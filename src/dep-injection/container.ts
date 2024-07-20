@@ -1,6 +1,6 @@
 import { isCls, isFn } from '../is/is.js'
 
-interface BindConfig {
+export interface BindConfig {
   singleton?: boolean
 }
 

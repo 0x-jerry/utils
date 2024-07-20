@@ -1,6 +1,6 @@
-type Listener<T extends any[] = any> = (...args: T) => void
+export type Listener<T extends any[] = any> = (...args: T) => void
 
-type EventListenersMap<R extends Record<string, any[]>> = {
+export type EventListenersMap<R extends Record<string, any[]>> = {
   [K in keyof R]?: Set<Listener<R[K]>>
 }
 
@@ -38,7 +38,6 @@ export class EventEmitter<Events extends Record<string, any>> {
   /**
    *
    * @param capacity default is 0, means unlimited.
-   * @param opt
    */
   constructor(capacity = 0) {
     this.#capacity = capacity

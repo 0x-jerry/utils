@@ -49,11 +49,11 @@ export function traverse<T extends {}, Key extends keyof T>(
 }
 
 /**
- * @deprecated use `traverse` instead of.
+ * @deprecated use {@link traverse } instead of.
  */
 export const walkTree = traverse
 
 /**
- * @deprecated use `traverse` instead of.
+ * @deprecated use {@link traverse} instead of.
  */
 export const traverseTree = traverse
