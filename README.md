@@ -6,4 +6,4 @@
 
 Collection of useful JavaScript/TypeScript utils.
 
-[Generated API Doc](https://paka.dev/npm/@0x-jerry/utils)
+[Generated API Doc](https://0x-jerry.github.io/utils/)
