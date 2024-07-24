@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - run: pnpm i
 
@@ -38,3 +38,4 @@ jobs:
           name: codecov-umbrella
           fail_ci_if_error: false
           verbose: false
+          token: ${{ secrets.CODECOV_TOKEN }}
