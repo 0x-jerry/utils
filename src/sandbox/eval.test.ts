@@ -1,0 +1,62 @@
+import { createSaferEval } from './eval.js'
+
+describe('eval', () => {
+  it('should support parameters', async () => {
+    const saferEval = createSaferEval()
+
+    const ctx = { a: 0 }
+    await saferEval<[typeof ctx]>('$', '$.a = 1')(ctx)
+
+    expect(ctx.a).toBe(1)
+  })
+
+  it('should disabled almost all global objects', async () => {
+    const saferEval = createSaferEval()
+
+    const ctx = { fetch: 0 }
+    await saferEval('$', '$.fetch = fetch')(ctx)
+
+    expect(ctx.fetch).toBe(undefined)
+  })
+
+  it('should have a very small set of global objects', async () => {
+    const saferEval = createSaferEval()
+
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    const ctx: any = { x: null }
+    await saferEval('$', '$.x = globalThis')(ctx)
+
+    expect(ctx.x.global).toBe(ctx.x)
+    expect(ctx.x.window).toBe(ctx.x)
+
+    expect(Object.keys(ctx.x).sort()).toEqual([
+      'Array',
+      'BigInt',
+      'Blob',
+      'Boolean',
+      'Date',
+      'Infinity',
+      'Map',
+      'NaN',
+      'Number',
+      'RegExp',
+      'Set',
+      'String',
+      'console',
+      'global',
+      'globalThis',
+      'window',
+    ])
+  })
+
+  it('should support configure with global objects', async () => {
+    const saferEval = createSaferEval({
+      allowedGlobalKeys: ['fetch'],
+    })
+
+    const ctx = { fetch: null }
+    await saferEval('$', '$.fetch = fetch')(ctx)
+
+    expect(ctx.fetch).toBe(globalThis.fetch)
+  })
+})
