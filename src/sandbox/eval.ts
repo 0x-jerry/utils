@@ -5,6 +5,41 @@ export interface MakeSaferEvalOption {
    * @default ['console']
    */
   allowedGlobalKeys?: string[]
+  /**
+   * Extends global objects
+   */
+  globals?: Record<string, unknown>
+  /**
+   * If allow side effects is true, then it will use global version of that function,
+   * which may cause memory leak if not clear the side effect.
+   *
+   * By default, it will create a side effect free version of those function.
+   *
+   * @todo not implement
+   */
+  allowSideEffects?: {
+    /**
+     * Auto call clearTimeout after execution is done
+     */
+    setTimeout?: boolean
+    /**
+     * Auto call clearInterval after execution is done
+     */
+    setInterval?: boolean
+    /**
+     * Auto call cancelAnimationFrame after execution is done
+     */
+    requestAnimationFrame?: boolean
+    /**
+     * Auto call cancelIdleCallback after execution is done
+     */
+    requestIdleCallback?: boolean
+    /**
+     * This will create a AbortController for all fetch calls, and it will
+     * call abort() after execution is done
+     */
+    fetch?: boolean
+  }
 }
 
 /**
@@ -28,8 +63,18 @@ export interface MakeSaferEvalOption {
 export function createSaferEval(opt: MakeSaferEvalOption = {}) {
   opt.allowedGlobalKeys ??= ['console']
 
+  if (opt.globals) {
+    opt.allowedGlobalKeys.push(...Object.keys(opt.globals))
+  }
+
   const { safeGlobalThis, forbiddenKeys } = _makeGlobalObjects(opt)
-  const safeGlobalThisEntities = Object.entries(safeGlobalThis)
+
+  const extendedGlobalThis = {
+    ...safeGlobalThis,
+    ...opt.globals,
+  }
+
+  const safeGlobalThisEntities = Object.entries(extendedGlobalThis)
 
   const globalAllowedKeys = safeGlobalThisEntities.map((n) => n[0])
   const globalValues = safeGlobalThisEntities.map((n) => n[1])
@@ -70,6 +115,7 @@ function _makeGlobalObjects(opt: MakeGlobalObjectOption = {}) {
   safeGlobalThis.globalThis = safeGlobalThis
   safeGlobalThis.window = safeGlobalThis
   safeGlobalThis.global = safeGlobalThis
+
   if (safeGlobalThis.console) {
     safeGlobalThis.console = {
       ...globalThis.console,

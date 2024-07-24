@@ -59,4 +59,23 @@ describe('eval', () => {
 
     expect(ctx.fetch).toBe(globalThis.fetch)
   })
+
+  it('should support extends global object', async () => {
+    const msgs: string[] = []
+
+    const saferEval = createSaferEval({
+      allowedGlobalKeys: ['fetch'],
+      globals: {
+        console: {
+          log(...args: string[]) {
+            msgs.push(...args)
+          },
+        },
+      },
+    })
+
+    await saferEval("console.log('hello', 'world')")()
+
+    expect(msgs).toEqual(['hello', 'world'])
+  })
 })
