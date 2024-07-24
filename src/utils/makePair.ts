@@ -36,7 +36,7 @@ export function makePair<T extends Fn>(config: PairConfig<T>) {
   const handler = (type: string, ...args: In): Optional<Out> => {
     const fn = config[type] || config.__default || noop
 
-    return fn(...args)
+    return fn(...args) as Out
   }
 
   return handler
