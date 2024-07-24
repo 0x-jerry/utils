@@ -13,8 +13,8 @@ describe('number', () => {
     expect(toFixed('.12', 2)).toBe(0.12)
     expect(toFixed('.002', 2)).toBe(0)
 
-    expect(toFixed('as12', 2)).toBe(NaN)
-    expect(toFixed('a.12', 2)).toBe(NaN)
+    expect(toFixed('as12', 2)).toBe(Number.NaN)
+    expect(toFixed('a.12', 2)).toBe(Number.NaN)
   })
 
   it('clamp', () => {

@@ -28,6 +28,7 @@ describe('remove', () => {
 
     expect(remove(item, 2)).toBe(1)
     expect(item).toEqual([1, { a: 1 }])
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     expect(remove(item, (o: any) => o.a === 1)).toBe(1)
     expect(item).toEqual([1])
   })

@@ -5,7 +5,11 @@ describe('sleep', () => {
     let v = 1
     const p = sleep()
 
-    p.then(() => (v = 2)).catch(() => (v = 3))
+    p.then(() => {
+      v = 2
+    }).catch(() => {
+      v = 3
+    })
 
     expect(v).toBe(1)
     p.cancel()

@@ -1,6 +1,6 @@
 import type { MakeEnum } from '../types/utils.js'
 
-export interface PromiseInstance<T = any> {
+export interface PromiseInstance<T = unknown> {
   readonly status: PromiseStatus
   readonly isPending: boolean
   readonly isFulfilled: boolean
@@ -8,7 +8,7 @@ export interface PromiseInstance<T = any> {
 
   instance: Promise<T>
   resolve: (data: T | PromiseLike<T>) => void
-  reject: (reason: any) => void
+  reject: (reason: unknown) => void
 }
 
 export const PromiseStatus = {
@@ -21,9 +21,10 @@ export type PromiseStatus = MakeEnum<typeof PromiseStatus>
 
 export function createPromise<T>(): PromiseInstance<T> {
   type Resolve = (value: T | PromiseLike<T>) => void
-  type Reject = (reason?: any) => void
+  type Reject = (reason?: unknown) => void
 
-  let _resolve: Resolve, _reject: Reject
+  let _resolve: Resolve
+  let _reject: Reject
 
   let _status: PromiseStatus = PromiseStatus.Pending
 
@@ -58,7 +59,9 @@ export function createPromise<T>(): PromiseInstance<T> {
       return _status === PromiseStatus.Rejected
     },
     instance: p,
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
     resolve: _resolve!,
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
     reject: _reject!,
   }
 }

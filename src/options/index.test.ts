@@ -1,8 +1,8 @@
 import {
-  getOptionLabelByValue,
-  getOptionByValue,
-  getOptionByLabel,
   type SimpleOption,
+  getOptionByLabel,
+  getOptionByValue,
+  getOptionLabelByValue,
 } from './index.js'
 
 describe('options', () => {

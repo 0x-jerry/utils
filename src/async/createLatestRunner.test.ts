@@ -17,9 +17,15 @@ describe('latest runner', () => {
 
     let res = -1
 
-    runner.run(100).then((n) => (res = n))
-    runner.run(200).then((n) => (res = n))
-    runner.run(10).then((n) => (res = n))
+    runner.run(100).then((n) => {
+      res = n
+    })
+    runner.run(200).then((n) => {
+      res = n
+    })
+    runner.run(10).then((n) => {
+      res = n
+    })
 
     await sleep(240)
 

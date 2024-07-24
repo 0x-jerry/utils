@@ -11,11 +11,11 @@ for (let count = 0; count < maxCount; count++) {
     .fill(0)
     .map((_, idx) => {
       const ii = idx + 1
-      return `fn${ii}: Fn<${ii === count + 2 ? 'O' : 'M' + ii}, [${ii === 1 ? 'I' : 'M' + idx}]>`
+      return `fn${ii}: Fn<${ii === count + 2 ? 'O' : `M${ii}`}, [${ii === 1 ? 'I' : `M${idx}`}]>`
     })
 
-  let signature = `<I, ${midTypes.join(', ')},O>(${fnTypes.join(
-    ', '
+  const signature = `<I, ${midTypes.join(', ')},O>(${fnTypes.join(
+    ', ',
   )}): IComposeResult<(i: I) => O>;`
 
   signatures.push(signature)

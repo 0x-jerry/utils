@@ -155,7 +155,10 @@ describe('container', () => {
 })
 
 describe('ES decorator', () => {
-  interface A {}
+  type A = {
+    _?: number
+  }
+
   interface B {
     a: A
   }

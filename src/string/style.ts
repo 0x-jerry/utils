@@ -24,7 +24,7 @@ export function snake_case(str: string) {
       // kebab-case
       .replace(/\-/g, '_')
       // PascalCase or camelCase
-      .replace(/(?!^)[A-Z]/g, (n) => '_' + n.toLowerCase())
+      .replace(/(?!^)[A-Z]/g, (n) => `_${n.toLowerCase()}`)
       // PascalCase
       .replace(/^[A-Z]/g, (n) => n.toLowerCase())
   )
@@ -36,7 +36,7 @@ export function kebab$case(str: string) {
       // snake_case
       .replace(/_/g, '-')
       // PascalCase or camelCase
-      .replace(/(?!^)[A-Z]/g, (n) => '-' + n.toLowerCase())
+      .replace(/(?!^)[A-Z]/g, (n) => `-${n.toLowerCase()}`)
       // PascalCase
       .replace(/^[A-Z]/g, (n) => n.toLowerCase())
   )

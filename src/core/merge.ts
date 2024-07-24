@@ -6,6 +6,7 @@ import type { DeepPartial, DeepRequired, Optional } from '../types/index.js'
  * @param defaultValue
  * @param overrideValues
  * @example
+ * @deprecated will remove in the next major version
  *
  * ```ts
  * deepMerge({
@@ -39,12 +40,14 @@ export function deepMerge<T extends {}>(
   defaultValue: T,
   ...overrideValues: Optional<DeepPartial<T>>[]
 ): DeepRequired<T> {
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   const result: any = {}
 
   for (const key in defaultValue) {
     const v = defaultValue[key]
 
     const mergePrimitiveLike = () => {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       const values = [v, ...overrideValues.map((n) => (n as any)?.[key])]
       return values.reduceRight((v, cur) => v ?? cur, null)
     }
@@ -52,6 +55,7 @@ export function deepMerge<T extends {}>(
     if (isPrimitiveLike(v)) {
       result[key] = mergePrimitiveLike()
     } else if (isObject(v)) {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       result[key] = deepMerge(v, ...overrideValues.map((n) => (n as any)?.[key]))
     } else {
       result[key] = mergePrimitiveLike()

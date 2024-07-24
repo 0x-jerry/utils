@@ -1,15 +1,18 @@
 import { isPromiseLike } from '../is/index.js'
+import type { Fn } from '../types/utils.js'
 
-export interface IChainable<In = any> {
+export interface IChainable<In = unknown> {
   input: In
-  fns: Function[]
-  pipe<Out>(fn: (i: In) => Out): Out extends Promise<any> ? IAsyncChainable<Out> : IChainable<Out>
+  fns: Fn[]
+  pipe<Out>(
+    fn: (i: In) => Out,
+  ): Out extends Promise<unknown> ? IAsyncChainable<Out> : IChainable<Out>
   done(): In
 }
 
-export interface IAsyncChainable<In = any> {
+export interface IAsyncChainable<In = unknown> {
   input: In
-  fns: Function[]
+  fns: Fn[]
   pipe<Out>(fn: (i: Awaited<In>) => Out): IAsyncChainable<Out>
   done(): Promise<Awaited<In>>
 }
@@ -34,25 +37,27 @@ export interface IAsyncChainable<In = any> {
  * @returns
  */
 export function chain<T>(input: T): IChainable<T> {
-  const ctx: IChainable = {
+  const ctx: IChainable<T> = {
     input,
-    fns: [] as Function[],
-    pipe: createChainable,
-    done,
+    fns: [],
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    pipe: createChainable as any,
+    done: done as () => T,
   }
 
   return ctx
 }
 
-function createChainable(this: IChainable, fn: Function) {
+function createChainable(this: IChainable, fn: Fn) {
   const chainCtx: IChainable = {
     input: this.input,
     fns: [...this.fns, fn],
-    pipe: createChainable,
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    pipe: createChainable as any,
     done,
   }
 
-  return chainCtx as any
+  return chainCtx as IChainable
 }
 
 function done(this: IChainable) {

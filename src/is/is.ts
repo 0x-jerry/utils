@@ -1,4 +1,4 @@
-import type { Ctor, PrimitiveType } from '../types/index.js'
+import type { Ctor, Fn, PrimitiveType } from '../types/index.js'
 
 const CLS_CHECK_STR = 'class '
 
@@ -49,7 +49,7 @@ export function isBoolean(target: unknown): target is boolean {
 /**
  * return true when {@link target} is a function, but not a class.
  */
-export function isFn(target: unknown): target is Function {
+export function isFn(target: unknown): target is Fn {
   return typeof target === 'function' && !isCls(target)
 }
 
@@ -58,7 +58,7 @@ export function isFn(target: unknown): target is Function {
  * @param target
  * @returns
  */
-export function isArray<T = any>(target: unknown): target is Array<T> {
+export function isArray<T = unknown>(target: unknown): target is Array<T> {
   return Array.isArray(target)
 }
 
@@ -67,32 +67,44 @@ export function isArray<T = any>(target: unknown): target is Array<T> {
  * @param target
  * @returns
  */
-export function isObject(target: unknown): target is Record<string, any> {
+export function isObject(target: unknown): target is Record<string, unknown> {
   return target !== null && typeof target === 'object'
 }
 
 /**
  * - if target is array or Set or Map, check if it's size is 0
- * - if target is iterable, check if it has any iterative item
  * - if target is object, check if it has any properties
+ * - if target is string, check if it's length is 0
  * - if target is null or undefined, return true
  * - other wise, return false
  * @param target
  */
+
+// biome-ignore lint/complexity/noBannedTypes: <explanation>
 export function isEmpty(target: number | bigint | boolean | Function): false
 export function isEmpty(target: unknown): boolean
 export function isEmpty(target: unknown): boolean {
   if (isNullish(target)) {
     return true
-  } else if (typeof target === 'string') {
+  }
+
+  if (typeof target === 'string') {
     return target.length === 0
-  } else if (target instanceof Set || target instanceof Map) {
+  }
+
+  if (target instanceof Set || target instanceof Map) {
     return target.size === 0
-  } else if (isArray(target)) {
+  }
+
+  if (isArray(target)) {
     return target.length === 0
-  } else if (isPromise(target)) {
+  }
+
+  if (isPromise(target)) {
     return false
-  } else if (isObject(target) && Object.keys(target).length === 0) {
+  }
+
+  if (isObject(target) && Object.keys(target).length === 0) {
     return true
   }
 

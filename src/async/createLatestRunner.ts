@@ -1,7 +1,7 @@
 import { createPromise } from '../core/index.js'
 import type { Fn } from '../types/index.js'
 
-export function createLatestRunner<T extends Fn>(fn: Fn) {
+export function createLatestRunner<T extends Fn>(fn: T) {
   let latestId = 0
 
   return {
@@ -9,14 +9,14 @@ export function createLatestRunner<T extends Fn>(fn: Fn) {
   }
 
   function run(...args: Parameters<T>) {
-    const p = createPromise<Awaited<ReturnType<Fn>>>()
+    const p = createPromise<Awaited<ReturnType<T>>>()
 
     const id = ++latestId
 
     _run(...args)
       .then((data) => {
         if (id === latestId) {
-          p.resolve(data)
+          p.resolve(data as Awaited<ReturnType<T>>)
         }
       })
       .catch((e) => p.reject(e))

@@ -5,7 +5,7 @@ describe('text table', () => {
     const input = [
       ['head1', 'head2'],
       [1234, 'text2'],
-      [, false],
+      [undefined, false],
       ['tttttttttt1', 'ttttttttttttt3'],
     ]
 
@@ -22,7 +22,7 @@ describe('text table', () => {
     const input = [
       ['head1', 'head2'],
       [1234, 'text2'],
-      [, false],
+      [undefined, false],
       ['tttttttttt1', 'ttttttttttttt3'],
     ]
 

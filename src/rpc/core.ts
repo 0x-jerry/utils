@@ -1,7 +1,7 @@
-import { createPromise, type PromiseInstance, uuid } from '../core/index.js'
+import { type PromiseInstance, createPromise, uuid } from '../core/index.js'
 import { isNumber, isObject, isSymbol } from '../is/index.js'
 import type { Fn } from '../types/index.js'
-import type { Procedure, CommunicationAdapter, CommunicationProtocol } from './types.js'
+import type { CommunicationAdapter, CommunicationProtocol, Procedure } from './types.js'
 
 interface RPCServerOption<M> {
   methods: M
@@ -40,14 +40,20 @@ export function createRPCServer<M extends Procedure>(opt: RPCServerOption<M>) {
   }
 }
 
-function getFn(methods: any | undefined, keyPath: string[]): Fn | null {
+function getFn(methods: Procedure | undefined, keyPath: string[]): Fn | null {
   const [key, ...resetKeyPath] = keyPath
 
   if (resetKeyPath.length === 0) {
-    return methods?.[key]
+    if (typeof methods?.[key] === 'function') {
+      return methods[key]
+    }
   }
 
-  return getFn(methods?.[key], resetKeyPath)
+  if (typeof methods?.[key] === 'object') {
+    return getFn(methods?.[key], resetKeyPath)
+  }
+
+  return null
 }
 
 type Promisify<T> = {
@@ -80,9 +86,10 @@ export function createRPCClient<T extends Procedure>(t: ClientOptions): Promisif
     }
   })
 
-  return createProxy([], send)
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  return createProxy([], send) as any
 
-  async function send(keyPath: string[], ...args: any[]) {
+  async function send(keyPath: string[], ...args: unknown[]) {
     const raw: CommunicationProtocol = {
       _: uuid(),
       v: 0,
@@ -102,8 +109,8 @@ export function createRPCClient<T extends Procedure>(t: ClientOptions): Promisif
   }
 }
 
-function createProxy(keyPath: string[], fn: Fn): any {
-  const _fn = (...args: any[]) => fn(keyPath, ...args)
+function createProxy(keyPath: string[], fn: Fn) {
+  const _fn = (...args: unknown[]) => fn(keyPath, ...args)
 
   const p = new Proxy(_fn, {
     get(_, key) {

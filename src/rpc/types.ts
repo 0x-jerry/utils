@@ -5,9 +5,13 @@ export interface Procedure {
 }
 
 export interface CommunicationAdapter {
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   serialize(o: any): any
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   deserialize(o: any): any
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   receive(receiver: Fn<any, [any]>): any
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   send(data: any): any
 }
 
@@ -30,7 +34,7 @@ export interface CommunicationProtocol {
   /**
    * arguments
    */
-  a?: any[]
+  a?: unknown[]
 
   /**
    * error
@@ -40,5 +44,5 @@ export interface CommunicationProtocol {
   /**
    * response data
    */
-  d?: any
+  d?: unknown
 }

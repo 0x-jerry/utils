@@ -19,6 +19,6 @@ export type ExtractObjectKeys<T extends {}, TrueCondition, FalseCondition = neve
   [key in keyof T]: T[key] extends FalseCondition
     ? never
     : T[key] extends TrueCondition
-    ? key
-    : never
+      ? key
+      : never
 }[keyof T]

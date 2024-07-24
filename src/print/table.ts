@@ -58,9 +58,9 @@ function calcColLength(table: TableCellType[][]) {
   for (let idx = 0; idx < header.length; idx++) {
     let maxLen = getLength(header[idx])
 
-    content.forEach((row) => {
+    for (const row of content) {
       maxLen = Math.max(getLength(row[idx]), maxLen)
-    })
+    }
 
     colLens[idx] = maxLen
   }
@@ -68,19 +68,20 @@ function calcColLength(table: TableCellType[][]) {
   return colLens
 }
 
-function toString(cell: TableCellType) {
+function _toString(cell: TableCellType) {
   return (cell ?? '').toString()
 }
 
+// biome-ignore lint/suspicious/noControlCharactersInRegex: <explanation>
 const StyleRE = /\x1b\[\d+m/g
 
 function getLength(cell: TableCellType) {
-  return toString(cell).replace(StyleRE, '').length
+  return _toString(cell).replace(StyleRE, '').length
 }
 
 function padEnd(cell: TableCellType, maxLength: number, fillString = ' '): string {
   const currentLen = getLength(cell)
   const padNumber = maxLength - currentLen
 
-  return padNumber > 0 ? toString(cell) + fillString.repeat(padNumber) : toString(cell)
+  return padNumber > 0 ? _toString(cell) + fillString.repeat(padNumber) : _toString(cell)
 }

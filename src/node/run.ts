@@ -1,7 +1,7 @@
-import { ChildProcess, spawn, type CommonSpawnOptions } from 'child_process'
+import { type ChildProcess, type CommonSpawnOptions, spawn } from 'node:child_process'
+import os from 'node:os'
 import pc from 'picocolors'
 import { createPromise } from '../core/index.js'
-import os from 'node:os'
 
 /**
  *
@@ -19,7 +19,7 @@ import os from 'node:os'
 export async function run(
   cmd: string,
   env?: Record<string, string | undefined>,
-  opt?: { collectOutput?: boolean; silent?: boolean }
+  opt?: { collectOutput?: boolean; silent?: boolean },
 ) {
   const { collectOutput, silent } = opt || {}
 
@@ -55,17 +55,16 @@ export function _parseArgs(cmd: string) {
   const _cmd = cmd.replace(/(['"]).+?\1/g, (n) => {
     const idx = args.length
     args.push(n.slice(1, -1))
-    return '__$' + idx
+    return `__\$${idx}`
   })
 
-  const normalized = _cmd.split(/\s+/).map((part) => {
-    part = part.trim()
+  const normalized = _cmd.split(/\s+/).map((_part) => {
+    const part = _part.trim()
 
     if (part.startsWith('__$')) {
       return args[+part.slice(3)]
-    } else {
-      return part
     }
+    return part
   })
 
   return normalized

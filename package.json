@@ -18,9 +18,7 @@
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "exports": {
     ".": {
       "default": "./dist/index.js",
@@ -41,12 +39,11 @@
     "prepublishOnly": "npm run build"
   },
   "release": {
-    "clean": [
-      "dist"
-    ]
+    "clean": ["dist"]
   },
   "devDependencies": {
     "@0x-jerry/x-release": "^2.2.2",
+    "@biomejs/biome": "^1.8.3",
     "@types/node": "^20.14.11",
     "@vitest/coverage-v8": "^2.0.3",
     "happy-dom": "^14.12.3",

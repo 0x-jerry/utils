@@ -15,7 +15,7 @@ describe('parse url', () => {
 })
 
 describe('parse fallback', () => {
-  let _canParse = URL.canParse
+  const _canParse = URL.canParse
   beforeAll(() => {
     // @ts-ignore
     URL.canParse = undefined

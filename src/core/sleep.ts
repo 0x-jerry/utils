@@ -8,7 +8,8 @@ export type SleepResult = Promise<void> & { cancel: () => void }
  * @param timeout
  * @returns
  */
-export function sleep(timeout: number = 0): SleepResult {
+export function sleep(timeout = 0): SleepResult {
+  // biome-ignore lint/style/useConst: <explanation>
   let handler: NodeJS.Timeout | number | undefined
 
   const promise = createPromise<void>()

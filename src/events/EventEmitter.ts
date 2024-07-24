@@ -1,6 +1,7 @@
-export type Listener<T extends any[] = any> = (...args: T) => void
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+export type Listener<T extends unknown[] = any> = (...args: T) => void
 
-export type EventListenersMap<R extends Record<string, any[]>> = {
+export type EventListenersMap<R extends Record<string, unknown[]>> = {
   [K in keyof R]?: Set<Listener<R[K]>>
 }
 
@@ -23,6 +24,7 @@ export type EventListenersMap<R extends Record<string, any[]>> = {
  *
  * ```
  */
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export class EventEmitter<Events extends Record<string, any>> {
   #listeners: EventListenersMap<Events>
   #capacity: number
@@ -46,7 +48,7 @@ export class EventEmitter<Events extends Record<string, any>> {
 
   #checkLimit(size: number) {
     if (this.#capacity && size >= this.#capacity) {
-      throw new Error('Listeners reached limit size: ' + this.#capacity)
+      throw new Error(`Listeners reached limit size: ${this.#capacity}`)
     }
   }
 
@@ -60,7 +62,7 @@ export class EventEmitter<Events extends Record<string, any>> {
    */
   events<K extends keyof Events>(event: K): NonNullable<EventListenersMap<Events>[K]>
   events<K extends keyof Events>(
-    event?: K
+    event?: K,
   ): EventListenersMap<Events> | NonNullable<EventListenersMap<Events>[K]> {
     if (!event) {
       return this.#listeners
@@ -70,6 +72,7 @@ export class EventEmitter<Events extends Record<string, any>> {
       this.#listeners[event] = new Set()
     }
 
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
     return this.#listeners[event]!
   }
 
@@ -172,7 +175,7 @@ export class EventEmitter<Events extends Record<string, any>> {
     const events = this.events(event)
     const clears: Listener<Events[K]>[] = []
 
-    events.forEach((listener) => {
+    for (const listener of events) {
       try {
         listener(...args)
       } catch (error) {
@@ -182,8 +185,10 @@ export class EventEmitter<Events extends Record<string, any>> {
       if (this.#removeOnceMark(event, listener)) {
         clears.push(listener)
       }
-    })
+    }
 
-    clears.forEach((event) => events.delete(event))
+    for (const event of events) {
+      events.delete(event)
+    }
   }
 }

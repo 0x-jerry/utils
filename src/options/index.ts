@@ -1,7 +1,7 @@
 export interface SimpleOption<T = string> {
   label?: string
   value: T
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export function getOptionByLabel(options: SimpleOption[], label?: string) {

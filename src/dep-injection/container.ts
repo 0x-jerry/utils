@@ -16,7 +16,8 @@ interface CtorConfig<T = unknown> {
    */
   instance?: T
 
-  targetMap?: WeakMap<{}, T>
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  targetMap?: WeakMap<any, T>
 }
 
 export class Container<CtorMap extends {}> {
@@ -32,9 +33,10 @@ export class Container<CtorMap extends {}> {
 
   get<K extends keyof CtorMap>(key: K, opt?: { target?: unknown }): CtorMap[K] {
     if (!this.#ctorMap.get(key)) {
-      throw new Error('Key ' + String(key) + ' is not binding.')
+      throw new Error(`Key ${String(key)} is not binding.`)
     }
 
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
     const conf = this.#ctorMap.get(key)! as CtorConfig<CtorMap[K]>
 
     if (conf.config?.singleton) {
@@ -42,6 +44,7 @@ export class Container<CtorMap extends {}> {
         conf.instance = instantiation(conf.ctor)
       }
 
+      // biome-ignore lint/style/noNonNullAssertion: <explanation>
       return conf.instance!
     }
 
@@ -55,6 +58,7 @@ export class Container<CtorMap extends {}> {
         conf.targetMap.set(opt.target, _instance)
       }
 
+      // biome-ignore lint/style/noNonNullAssertion: <explanation>
       return conf.targetMap.get(opt.target)!
     }
 

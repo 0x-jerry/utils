@@ -7,9 +7,9 @@ import { isString } from '../is/index.js'
  * @returns
  */
 export function toFixed(num: number | string, fractionDigits: number): number {
-  num = isString(num) ? parseFloat(num) : num
+  const _num = isString(num) ? Number.parseFloat(num) : num
 
-  return parseFloat(num.toFixed(fractionDigits))
+  return Number.parseFloat(_num.toFixed(fractionDigits))
 }
 
 /**
@@ -31,7 +31,7 @@ export function clamp(value: number, min: number, max: number): number {
  * @returns
  */
 export function round(value: number, fractionDigits: number): number {
-  const u = Math.pow(10, fractionDigits)
+  const u = 10 ** fractionDigits
 
   // 1207.411 / 100
   return toFixed(Math.round(value * u) / u, fractionDigits)
@@ -52,11 +52,11 @@ export function toRange(value: number, start: number, end: number): number {
 
   const range = end - start
 
-  value = Math.floor(start / range) * range + (value % range)
+  let _value = Math.floor(start / range) * range + (value % range)
 
-  if (value < start) {
-    value += range
+  if (_value < start) {
+    _value += range
   }
 
-  return value
+  return _value
 }

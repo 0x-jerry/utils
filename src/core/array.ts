@@ -35,15 +35,18 @@ type GroupResult<T, U> = U extends PrimitiveType
 /**
  *
  * @experiment
+ * @deprecated will remove in the next major version
  * @param arr
  * @param callbackFn
  * @returns
  */
 export function group<T, U>(arr: T[], callbackFn: (item: T) => U): GroupResult<T, U> {
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   let record: any = null
 
   let recordIsMap = false
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   function initRecord(value: any) {
     if (isPrimitive(value)) {
       record = {}

@@ -3,7 +3,7 @@ import { chain } from './chain.js'
 
 describe('chainable', () => {
   const plusOne = (n: number) => n + 1
-  const toString = (n: number) => n.toString()
+  const _toString = (n: number) => n.toString()
 
   const asyncPlusOne = async (n: number) => {
     await sleep(1)
@@ -19,7 +19,7 @@ describe('chainable', () => {
     const s = chain(0)
       //
       .pipe(plusOne)
-      .pipe(toString)
+      .pipe(_toString)
       .done()
 
     expect(s).toBe('1')
@@ -28,7 +28,7 @@ describe('chainable', () => {
   it('should be reuseable', () => {
     const s = chain(0).pipe(plusOne)
 
-    const s2 = s.pipe(toString)
+    const s2 = s.pipe(_toString)
 
     expect(s2.done()).toBe('1')
     expect(s.done()).toBe(1)
@@ -48,7 +48,7 @@ describe('chainable', () => {
     const s = chain(0)
       .pipe(plusOne)
       .pipe((x) => {
-        throw new Error('err')
+        if (x) throw new Error('err')
         return x
       })
       .pipe(asyncPlusOne)
@@ -61,7 +61,6 @@ describe('chainable', () => {
       .pipe(async (x) => {
         await sleep(1)
         throw 'async err'
-        return x
       })
       .pipe(asyncPlusOne)
 

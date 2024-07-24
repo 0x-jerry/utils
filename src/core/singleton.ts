@@ -1,6 +1,7 @@
 import { isCls } from '../is/index.js'
 import type { Ctor } from '../types/index.js'
 
+// biome-ignore lint/complexity/noBannedTypes: <explanation>
 const singletons = /*@__PURE__*/ new WeakMap<Function, unknown>()
 
 /**
@@ -17,6 +18,7 @@ const singletons = /*@__PURE__*/ new WeakMap<Function, unknown>()
  * ```
  *
  * @param factory
+ * @deprecated will remove in the next major version
  * @returns
  */
 export function getInstance<T>(factory: Ctor<T, []> | (() => T)): T {

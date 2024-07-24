@@ -10,7 +10,7 @@ describe('deep merge', () => {
       },
       {
         c: '234',
-      }
+      },
     )
 
     expect(r).eql({
@@ -33,7 +33,7 @@ describe('deep merge', () => {
         b: {
           b: true,
         },
-      }
+      },
     )
 
     expect(r).eql({
@@ -56,7 +56,7 @@ describe('deep merge', () => {
       },
       {
         b: [2],
-      }
+      },
     )
 
     expect(r).eql({
@@ -85,7 +85,7 @@ describe('deep merge', () => {
         d: {
           a: new Map([[2, 1]]),
         },
-      }
+      },
     )
 
     expect(r).eql({

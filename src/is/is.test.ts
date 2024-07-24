@@ -289,11 +289,11 @@ describe('is utils', () => {
 
     run(
       [
-        //
+        // biome-ignore lint/suspicious/noThenProperty: <explanation>
         [{ then: noop }, true],
         ...units,
       ],
-      isPromiseLike
+      isPromiseLike,
     )
   })
 })

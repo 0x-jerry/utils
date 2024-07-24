@@ -12,9 +12,11 @@ export interface PoolOption {
  * @param opt
  * @returns
  */
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function createPool<T extends (...arg: any[]) => Promise<any>>(
   request: T,
-  opt: Partial<PoolOption> = {}
+  opt: Partial<PoolOption> = {},
 ): T {
   const ctx = {
     maximize: opt.maximize ?? 10,
@@ -22,8 +24,8 @@ export function createPool<T extends (...arg: any[]) => Promise<any>>(
     queue: Array<() => void>(),
   }
 
-  return function (this: any, ...args: any[]) {
-    return new Promise<any>((resolve, reject) => {
+  return function (this: unknown, ...args: unknown[]) {
+    return new Promise((resolve, reject) => {
       const nextReq = () => {
         ctx.runningCount++
 

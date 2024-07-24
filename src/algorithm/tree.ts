@@ -1,31 +1,37 @@
 import { isIterable } from '../is/index.js'
 import type { Arrayable } from '../types/index.js'
 
+interface TraverseCallback<T> {
+  // biome-ignore lint/suspicious/noConfusingVoidType: <explanation>
+  // biome-ignore lint/style/useShorthandFunctionType: <explanation>
+  (node: T, parentNode?: T): void | boolean
+}
+
 function _traverseTree<T extends {}, Key extends keyof T>(
   nodes: T | Iterable<T>,
   /**
    * @returns return true to stop
    */
-  cb: (node: T, parentNode?: T) => boolean | void,
+  cb: TraverseCallback<T>,
   childrenKey?: Key,
-  parent?: T
+  parent?: T,
 ) {
   const _nodes = isIterable(nodes) ? nodes : [nodes]
 
-  childrenKey ??= 'children' as Key
+  const _childrenKey = childrenKey ?? ('children' as Key)
 
   for (const node of _nodes) {
     if (cb(node, parent)) {
       return
     }
 
-    const children = node[childrenKey]
+    const children = node[_childrenKey]
 
     if (!isIterable(children)) {
       continue
     }
 
-    _traverseTree(children as T[], cb, childrenKey, node)
+    _traverseTree(children as T[], cb, _childrenKey, node)
   }
 }
 
@@ -42,8 +48,8 @@ export function traverse<T extends {}, Key extends keyof T>(
   /**
    * @returns return true to stop
    */
-  cb: (node: T, parentNode?: T) => boolean | void,
-  key?: Key
+  cb: TraverseCallback<T>,
+  key?: Key,
 ) {
   _traverseTree(nodes, cb, key)
 }

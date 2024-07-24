@@ -1,7 +1,10 @@
 /**
  * Function
  */
-export type Fn<Return = any, Parameters extends any[] = any[]> = (...params: Parameters) => Return
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+export type Fn<Return = unknown, Parameters extends unknown[] = any[]> = (
+  ...params: Parameters
+) => Return
 
 /**
  * Array, or not.
@@ -23,19 +26,19 @@ export type Promisable<T> = Awaitable<T>
  */
 export type ElementOf<T> = T extends Array<infer E> ? E : never
 
-export interface Ctor<Instance = any, Params extends [] = any> {
+export interface Ctor<Instance = unknown, Params extends unknown[] = unknown[]> {
   new (...args: Params): Instance
 }
 
-export type Optional<T> = T | undefined | null | void
+export type Optional<T> = T | undefined | null
 
-export type DeepPartial<T> = T extends {}
+export type DeepPartial<T> = T extends Record<string | number, unknown>
   ? {
       [Key in keyof T]?: DeepPartial<T[Key]>
     }
   : Optional<T>
 
-export type DeepRequired<T> = T extends {}
+export type DeepRequired<T> = T extends Record<string | number, unknown>
   ? {
       [Key in keyof T]: DeepRequired<T[Key]>
     }

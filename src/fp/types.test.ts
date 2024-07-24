@@ -1,11 +1,12 @@
 import type { ICompose } from './types.js'
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const compose: ICompose = (() => {}) as any
 
 describe('compose type check', () => {
   it('expect error at type check', () => {
     // @ts-expect-error
-    compose(parseInt, (x: string) => x)
-    compose(parseInt, String)
+    compose(Number.parseInt, (x: string) => x)
+    compose(Number.parseInt, String)
   })
 })

@@ -14,7 +14,7 @@ describe('request poll', () => {
 
     const sleepUnit = 100
 
-    const queue: any[] = []
+    const queue: Promise<number>[] = []
 
     for (let idx = 0; idx < 4; idx++) {
       queue.push(req(idx, sleepUnit))
@@ -32,7 +32,7 @@ describe('request poll', () => {
   it('request time', async () => {
     const req = createPool(fakeReq, { maximize: 2 })
 
-    const queue: any[] = []
+    const queue: number[] = []
 
     for (let idx = 0; idx < 5; idx++) {
       req(idx, 20).then((res) => {
@@ -51,7 +51,7 @@ describe('request poll', () => {
   })
 
   it('request failed', async () => {
-    const fakeReq = async (throwError: boolean = false) => {
+    const fakeReq = async (throwError = false) => {
       await sleep(10)
       if (throwError) {
         throw new Error('error')

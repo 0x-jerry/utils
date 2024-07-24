@@ -1,4 +1,4 @@
-import { createLogger } from './createLogger.js'
+import { type LoggerLevel, createLogger } from './createLogger.js'
 
 describe('createSimpleLogger', () => {
   it('output', () => {
@@ -17,7 +17,7 @@ describe('createSimpleLogger', () => {
   })
 
   it('function prefix', () => {
-    let level
+    let level: LoggerLevel | undefined
 
     const console = mockConsole()
 
@@ -43,7 +43,7 @@ describe('createSimpleLogger', () => {
   })
 
   it('enable/disable', () => {
-    let level
+    let level: LoggerLevel | undefined
 
     let idx = 0
 
