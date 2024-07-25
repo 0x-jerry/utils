@@ -5,7 +5,7 @@ describe('eval', () => {
     const saferEval = createSaferEval()
 
     const ctx = { a: 0 }
-    await saferEval<[typeof ctx]>('$', '$.a = 1')(ctx)
+    await saferEval('$', '$.a = 1')(ctx)
 
     expect(ctx.a).toBe(1)
   })
@@ -77,5 +77,15 @@ describe('eval', () => {
     await saferEval("console.log('hello', 'world')")()
 
     expect(msgs).toEqual(['hello', 'world'])
+  })
+
+  it('should support return value', async () => {
+    const saferEval = createSaferEval()
+
+    type EvalType = () => string
+
+    const r = await saferEval<EvalType>('return `hello`')()
+
+    expect(r).toEqual('hello')
   })
 })

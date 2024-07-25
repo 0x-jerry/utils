@@ -1,3 +1,5 @@
+import type { Fn } from '../types/utils.js'
+
 const AsyncFunction = (async () => {}).constructor
 
 export interface MakeSaferEvalOption {
@@ -81,7 +83,7 @@ export function createSaferEval(opt: MakeSaferEvalOption = {}) {
 
   return saferEval
 
-  function saferEval<Parameters extends unknown[] = unknown[]>(...parameters: string[]) {
+  function saferEval<T extends Fn>(...parameters: string[]) {
     const code = parameters.at(-1)
 
     const parameterNames = parameters.slice(0, parameters.length - 1)
@@ -93,8 +95,9 @@ export function createSaferEval(opt: MakeSaferEvalOption = {}) {
       `'use strict';\n${code}`,
     )
 
-    return async (...args: Parameters) => {
-      await fn(...globalValues, ...args)
+    return async (...args: Parameters<T>) => {
+      const result = await fn(...globalValues, ...args)
+      return result as ReturnType<T>
     }
   }
 }
