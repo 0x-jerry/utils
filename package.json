@@ -1,6 +1,6 @@
 {
   "name": "@0x-jerry/utils",
-  "version": "2.4.3",
+  "version": "2.5.0",
   "license": "MIT",
   "description": "Collection of useful JavaScript/TypeScript utils",
   "type": "module",
@@ -18,7 +18,9 @@
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "default": "./dist/index.js",
@@ -39,7 +41,9 @@
     "prepublishOnly": "npm run build"
   },
   "release": {
-    "clean": ["dist"]
+    "clean": [
+      "dist"
+    ]
   },
   "devDependencies": {
     "@0x-jerry/x-release": "^2.2.2",
