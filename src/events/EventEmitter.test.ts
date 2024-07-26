@@ -31,7 +31,25 @@ describe('EventEmitter', () => {
 
     ee.emit('foo', 12)
 
-    expect(ee.events('foo').size).toBe(0)
+    expect(ee.events('foo').length).toBe(0)
+  })
+
+  it('should work on both once and on ', () => {
+    const ee = new EventEmitter<Events>()
+
+    let value = 0
+    const fn = (x: number) => {
+      value = x
+    }
+
+    ee.once('foo', fn)
+    ee.on('foo', fn)
+
+    ee.emit('foo', 12)
+    expect(value).toBe(12)
+
+    ee.emit('foo', 13)
+    expect(value).toBe(13)
   })
 
   it('off', () => {
@@ -45,15 +63,15 @@ describe('EventEmitter', () => {
 
     ee.once('bar', fn)
 
-    expect(ee.events('test').size).toBe(2)
-    expect(ee.events('foo').size).toBe(1)
-    expect(ee.events('bar').size).toBe(1)
+    expect(ee.events('test').length).toBe(2)
+    expect(ee.events('foo').length).toBe(1)
+    expect(ee.events('bar').length).toBe(1)
 
     ee.off('test', fn)
-    expect(ee.events('test').has(fn)).toBe(false)
+    expect(ee.events('test').includes(fn)).toBe(false)
 
     ee.off('test')
-    expect(ee.events('test').size).toBe(0)
+    expect(ee.events('test').length).toBe(0)
 
     ee.off()
     expect(Object.keys(ee.events()).length).toBe(0)
@@ -123,8 +141,12 @@ describe('EventEmitter', () => {
 
     ee.emit('foo', 12)
     ee.emit('foo', 12)
+
+    expect(ee.events('foo').length).toBe(0)
+
     ee.emit('bar', 1, '1')
     ee.emit('bar', 1, '1')
+    expect(ee.events('bar').length).toBe(0)
 
     expect(fn).toBeCalledTimes(2)
   })
