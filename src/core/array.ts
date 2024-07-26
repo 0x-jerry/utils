@@ -15,11 +15,6 @@ export const ensureArray = <T>(arr?: Arrayable<T>): T[] => {
   return Array.isArray(arr) ? arr : [arr]
 }
 
-/**
- * @deprecated use {@link ensureArray} instead of.
- */
-export const toArray = ensureArray
-
 export const remove = <T>(arr: T[], predict: T | ((item: T) => boolean)): number => {
   const idx = isFn(predict) ? arr.findIndex(predict) : arr.indexOf(predict)
 
@@ -31,50 +26,3 @@ export const remove = <T>(arr: T[], predict: T | ((item: T) => boolean)): number
 type GroupResult<T, U> = U extends PrimitiveType
   ? Record<string | number | symbol, T[]>
   : Map<U, T[]>
-
-/**
- *
- * @experiment
- * @deprecated will remove in the next major version
- * @param arr
- * @param callbackFn
- * @returns
- */
-export function group<T, U>(arr: T[], callbackFn: (item: T) => U): GroupResult<T, U> {
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  let record: any = null
-
-  let recordIsMap = false
-
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  function initRecord(value: any) {
-    if (isPrimitive(value)) {
-      record = {}
-    } else {
-      recordIsMap = true
-      record = new Map()
-    }
-  }
-
-  for (const item of arr) {
-    const value = callbackFn(item)
-
-    if (!record) initRecord(value)
-
-    const exist = recordIsMap ? record.get(value) : record[value]
-
-    if (exist) {
-      exist.push(item)
-    } else {
-      const g = [item]
-
-      if (recordIsMap) {
-        record.set(value, g)
-      } else {
-        record[value] = g
-      }
-    }
-  }
-
-  return record || new Map()
-}

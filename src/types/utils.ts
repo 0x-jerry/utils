@@ -17,11 +17,6 @@ export type Arrayable<T> = T | T[]
 export type Awaitable<T> = T | PromiseLike<T>
 
 /**
- * @deprecated use {@link Awaitable} instead of.
- */
-export type Promisable<T> = Awaitable<T>
-
-/**
  * Infers the element type of an array.
  */
 export type ElementOf<T> = T extends Array<infer E> ? E : never

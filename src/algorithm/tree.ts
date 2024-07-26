@@ -53,13 +53,3 @@ export function traverse<T extends {}, Key extends keyof T>(
 ) {
   _traverseTree(nodes, cb, key)
 }
-
-/**
- * @deprecated use {@link traverse } instead of.
- */
-export const walkTree = traverse
-
-/**
- * @deprecated use {@link traverse} instead of.
- */
-export const traverseTree = traverse

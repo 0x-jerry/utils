@@ -1,6 +1,4 @@
 export * from './array.js'
 export * from './sleep.js'
 export * from './createPromise.js'
-export * from './singleton.js'
-export * from './merge.js'
 export * from './misc.js'
