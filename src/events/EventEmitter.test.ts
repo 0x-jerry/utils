@@ -10,15 +10,16 @@ describe('EventEmitter', () => {
   it('should add a listener', () => {
     const ee = new EventEmitter<Events>()
 
+    let resp: number | string = 0
     ee.on('bar', (a) => {
-      expect(a).toBe(12)
+      resp = a
     })
 
-    ee.on('bar', (_, b) => {
-      expect(b).toBe('123')
-    })
+    ee.emit('bar', 12, '12')
+    expect(resp).toBe(12)
 
-    ee.emit('bar', 12, '123')
+    ee.emit('bar', 13, '13')
+    expect(resp).toBe(13)
   })
 
   it('should only call once', () => {

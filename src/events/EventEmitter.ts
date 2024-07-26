@@ -187,7 +187,7 @@ export class EventEmitter<Events extends Record<string, any>> {
       }
     }
 
-    for (const event of events) {
+    for (const event of clears) {
       events.delete(event)
     }
   }
