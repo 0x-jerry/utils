@@ -1,4 +1,4 @@
-import { ensureArray, group, remove } from './array.js'
+import { ensureArray, remove } from './array.js'
 
 describe('ensureArray', () => {
   it('array', () => {
@@ -39,33 +39,5 @@ describe('remove', () => {
     expect(remove(item, 3)).toBe(-1)
     expect(remove(item, (o) => o === 3)).toBe(-1)
     expect(item).toEqual([1, 2])
-  })
-})
-
-describe('group', () => {
-  it('should group by string', () => {
-    const items = [
-      { type: 1, name: '1' },
-      { type: 1, name: '2' },
-      { type: 2, name: '3' },
-    ]
-
-    const result = group(items, (item) => item.type)
-
-    expect(result).toMatchSnapshot()
-  })
-
-  it('should group by object', () => {
-    const keys = [{ key: 1 }, { key: 2 }]
-
-    const items = [
-      { type: keys[0], name: '1' },
-      { type: keys[0], name: '2' },
-      { type: keys[1], name: '3' },
-    ]
-
-    const result = group(items, (item) => item.type)
-
-    expect(result).toMatchSnapshot()
   })
 })
