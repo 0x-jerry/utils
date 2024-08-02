@@ -4,14 +4,22 @@ export interface SimpleOption<T = string> {
   [key: string]: unknown
 }
 
-export function getOptionByLabel(options: SimpleOption[], label?: string) {
+export type GetSimpleOptionValue<T> = T extends SimpleOption<infer V> ? V : unknown
+
+export function getOptionByLabel<T extends SimpleOption>(options: T[], label?: string) {
   return options.find((o) => o.label === label)
 }
 
-export function getOptionByValue<T>(options: SimpleOption<T>[], value?: T) {
+export function getOptionByValue<T extends SimpleOption>(
+  options: T[],
+  value?: GetSimpleOptionValue<T>,
+) {
   return options.find((o) => o.value === value)
 }
 
-export function getOptionLabelByValue<T>(options: SimpleOption<T>[], value?: T) {
+export function getOptionLabelByValue<T extends SimpleOption>(
+  options: T[],
+  value?: GetSimpleOptionValue<T>,
+) {
   return getOptionByValue(options, value)?.label
 }
