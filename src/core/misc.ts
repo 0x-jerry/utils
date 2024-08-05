@@ -1,5 +1,11 @@
 /* c8 ignore next */
-export { nanoid as uuid } from 'nanoid'
+export { nanoid } from 'nanoid'
+
+import { nanoid } from 'nanoid'
+/**
+ * @deprecated use {@link nanoid} instead of
+ */
+export const uuid = nanoid
 
 /* c8 ignore next */
 export function noop() {}
