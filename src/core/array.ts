@@ -1,5 +1,5 @@
-import { isFn, isPrimitive } from '../is/index.js'
-import type { Arrayable, PrimitiveType } from '../types/index.js'
+import { isFn } from '../is/index.js'
+import type { Arrayable } from '../types/index.js'
 
 /**
  * Ensure to return a list of element T.
@@ -22,7 +22,3 @@ export const remove = <T>(arr: T[], predict: T | ((item: T) => boolean)): number
 
   return idx
 }
-
-type GroupResult<T, U> = U extends PrimitiveType
-  ? Record<string | number | symbol, T[]>
-  : Map<U, T[]>
