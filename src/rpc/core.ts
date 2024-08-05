@@ -1,7 +1,12 @@
 import { type PromiseInstance, createPromise, uuid } from '../core/index.js'
-import { isNumber, isObject, isSymbol } from '../is/index.js'
+import { isFn, isObject, isString, isSymbol } from '../is/index.js'
 import type { Fn } from '../types/index.js'
-import type { CommunicationAdapter, CommunicationProtocol, Procedure } from './types.js'
+import {
+  MessageFlag,
+  type CommunicationAdapter,
+  type CommunicationProtocol,
+  type Procedure,
+} from './types.js'
 
 interface RPCServerOption<M> {
   methods: M
@@ -11,26 +16,23 @@ interface RPCServerOption<M> {
 export function createRPCServer<M extends Procedure>(opt: RPCServerOption<M>) {
   const { adaptor, methods } = opt
 
-  adaptor.receive(async (raw) => {
-    const data = adaptor.deserialize(raw)
-
+  adaptor.receive(async (data) => {
     if (!isCommunicationProtocol(data)) return
 
     const m = getFn(methods, data.k || [])
 
-    const respRaw: CommunicationProtocol = {
+    const resp: CommunicationProtocol = {
       _: data._,
-      v: 0,
+      f: MessageFlag.Response,
     }
 
     try {
       const respData = await m?.(...(data.a || []))
 
-      respRaw.d = respData
+      resp.d = respData
     } catch (error) {
-      respRaw.e = String(error)
+      resp.e = String(error)
     } finally {
-      const resp = adaptor.serialize(respRaw)
       adaptor.send(resp)
     }
   })
@@ -44,12 +46,12 @@ function getFn(methods: Procedure | undefined, keyPath: string[]): Fn | null {
   const [key, ...resetKeyPath] = keyPath
 
   if (resetKeyPath.length === 0) {
-    if (typeof methods?.[key] === 'function') {
+    if (isFn(methods?.[key])) {
       return methods[key]
     }
   }
 
-  if (typeof methods?.[key] === 'object') {
+  if (isObject(methods?.[key])) {
     return getFn(methods?.[key], resetKeyPath)
   }
 
@@ -69,10 +71,9 @@ export function createRPCClient<T extends Procedure>(t: ClientOptions): Promisif
 
   const callRecord = new Map<string, PromiseInstance>()
 
-  adaptor.receive((_data) => {
-    const data = adaptor.deserialize(_data)
-
-    if (!isCommunicationProtocol(data)) return
+  adaptor.receive((data) => {
+    // Check response message
+    if (!isResponseMessage(data)) return
 
     const p = callRecord.get(data._)
     if (!p) return
@@ -86,30 +87,26 @@ export function createRPCClient<T extends Procedure>(t: ClientOptions): Promisif
     }
   })
 
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  return createProxy([], send) as any
+  return createProxy<Promisify<T>>([], send)
 
   async function send(keyPath: string[], ...args: unknown[]) {
-    const raw: CommunicationProtocol = {
+    const resp: CommunicationProtocol = {
       _: uuid(),
-      v: 0,
       k: keyPath,
       a: args,
     }
 
     const p = createPromise()
 
-    callRecord.set(raw._, p)
+    callRecord.set(resp._, p)
 
-    const data = adaptor.serialize(raw)
-
-    adaptor.send(data)
+    adaptor.send(resp)
 
     return p.instance
   }
 }
 
-function createProxy(keyPath: string[], fn: Fn) {
+function createProxy<T>(keyPath: string[], fn: Fn) {
   const _fn = (...args: unknown[]) => fn(keyPath, ...args)
 
   const p = new Proxy(_fn, {
@@ -122,13 +119,17 @@ function createProxy(keyPath: string[], fn: Fn) {
     },
   })
 
-  return p
+  return p as T
 }
 
 export function defineProcedure<T extends Procedure>(t: T) {
   return t
 }
 
+function isResponseMessage(o: unknown): o is CommunicationProtocol {
+  return isCommunicationProtocol(o) && !!((o.f || 0) & MessageFlag.Response)
+}
+
 function isCommunicationProtocol(o: unknown): o is CommunicationProtocol {
-  return isObject(o) && '_' in o && 'v' in o && isNumber(o.v)
+  return isObject(o) && '_' in o && isString(o._)
 }

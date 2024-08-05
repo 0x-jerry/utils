@@ -1,18 +1,20 @@
+import type { Fn } from '../../types/utils.js'
 import type { CommunicationAdapter } from '../types.js'
 
 export function createMessageChannelAdaptor(m: MessagePort) {
+  let fn: Fn
+
   const adaptor: CommunicationAdapter = {
-    serialize(o) {
-      return o
-    },
-    deserialize(o) {
-      return o
-    },
     send(data) {
       m.postMessage(data)
     },
     receive(receiver) {
-      m.addEventListener('message', (ev) => receiver(ev.data))
+      fn = (ev) => receiver(ev.data)
+
+      m.addEventListener('message', fn)
+    },
+    destory() {
+      m.removeEventListener('message', fn)
     },
   }
 

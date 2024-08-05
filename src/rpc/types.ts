@@ -4,27 +4,29 @@ export interface Procedure {
   [key: string]: Procedure | Fn
 }
 
-export interface CommunicationAdapter {
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  serialize(o: any): any
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  deserialize(o: any): any
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  receive(receiver: Fn<any, [any]>): any
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  send(data: any): any
+export interface CommunicationAdapter<T extends CommunicationProtocol = CommunicationProtocol> {
+  receive(receiver: Fn<void, [data: T]>): void
+  send(data: T): void
+  destory?(): void
+}
+
+export enum MessageFlag {
+  /**
+   * remote response
+   */
+  Response = 1,
 }
 
 export interface CommunicationProtocol {
   /**
-   * version
-   */
-  v: number
-
-  /**
    * id
    */
   _: string
+
+  /**
+   * flags
+   */
+  f?: number
 
   /**
    * key path

@@ -1,26 +1,22 @@
+import type { Fn } from '../../types/index.js'
 import type { CommunicationAdapter } from '../types.js'
 
 export function createWorkerAdaptor(m?: Worker) {
+  let fn: Fn
+
+  const host = m ?? globalThis
+
   const adaptor: CommunicationAdapter = {
-    serialize(o) {
-      return o
-    },
-    deserialize(o) {
-      return o
-    },
     send(data) {
-      if (m) {
-        m.postMessage(data)
-      } else {
-        globalThis.postMessage(data)
-      }
+      host.postMessage(data)
     },
     receive(receiver) {
-      if (m) {
-        m.addEventListener('message', (ev) => receiver(ev.data))
-      } else {
-        globalThis.addEventListener('message', (ev) => receiver(ev.data))
-      }
+      fn = (ev) => receiver(ev.data)
+
+      host.addEventListener('message', fn)
+    },
+    destory() {
+      host.removeEventListener('message', fn)
     },
   }
 
