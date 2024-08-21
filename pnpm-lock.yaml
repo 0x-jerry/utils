@@ -29,16 +29,16 @@ importers:
         version: 20.14.11
       '@vitest/coverage-v8':
         specifier: ^2.0.3
-        version: 2.0.3(vitest@2.0.3(@types/node@20.14.11)(happy-dom@14.12.3))
+        version: 2.0.3(vitest@2.0.3(@types/node@20.14.11)(happy-dom@15.0.0))
       happy-dom:
-        specifier: ^14.12.3
-        version: 14.12.3
+        specifier: ^15.0.0
+        version: 15.0.0
       typescript:
         specifier: ^5.5.3
         version: 5.5.3
       vitest:
         specifier: ^2.0.3
-        version: 2.0.3(@types/node@20.14.11)(happy-dom@14.12.3)
+        version: 2.0.3(@types/node@20.14.11)(happy-dom@15.0.0)
 
   example:
     devDependencies:
@@ -914,9 +914,9 @@ packages:
     resolution: {integrity: sha512-jhIXaOzy1sb8IyocaruWSn1TjmnBVs8Ayhcy83rmxNJ8q2uWKCAj3CnJY+KpGSXCueAPc0i05kVvVKtP1t9S3g==}
     engines: {node: '>=10'}
 
-  happy-dom@14.12.3:
-    resolution: {integrity: sha512-vsYlEs3E9gLwA1Hp+w3qzu+RUDFf4VTT8cyKqVICoZ2k7WM++Qyd2LwzyTi5bqMJFiIC/vNpTDYuxdreENRK/g==}
-    engines: {node: '>=16.0.0'}
+  happy-dom@15.0.0:
+    resolution: {integrity: sha512-DsvANUcxxY20iCo3Yllm7dqwzPVPduGfVFxa7mONwMBLczFeQgkN0LpDir1kIY322JMh+hrcPV3aGLyHCESDlA==}
+    engines: {node: '>=18.0.0'}
 
   has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
@@ -1846,7 +1846,7 @@ snapshots:
     dependencies:
       undici-types: 5.26.5
 
-  '@vitest/coverage-v8@2.0.3(vitest@2.0.3(@types/node@20.14.11)(happy-dom@14.12.3))':
+  '@vitest/coverage-v8@2.0.3(vitest@2.0.3(@types/node@20.14.11)(happy-dom@15.0.0))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -1861,7 +1861,7 @@ snapshots:
       strip-literal: 2.1.0
       test-exclude: 7.0.1
       tinyrainbow: 1.2.0
-      vitest: 2.0.3(@types/node@20.14.11)(happy-dom@14.12.3)
+      vitest: 2.0.3(@types/node@20.14.11)(happy-dom@15.0.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -2170,7 +2170,7 @@ snapshots:
       merge2: 1.4.1
       slash: 3.0.0
 
-  happy-dom@14.12.3:
+  happy-dom@15.0.0:
     dependencies:
       entities: 4.5.0
       webidl-conversions: 7.0.0
@@ -2607,7 +2607,7 @@ snapshots:
       '@types/node': 20.14.11
       fsevents: 2.3.3
 
-  vitest@2.0.3(@types/node@20.14.11)(happy-dom@14.12.3):
+  vitest@2.0.3(@types/node@20.14.11)(happy-dom@15.0.0):
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@vitest/expect': 2.0.3
@@ -2630,7 +2630,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 20.14.11
-      happy-dom: 14.12.3
+      happy-dom: 15.0.0
     transitivePeerDependencies:
       - less
       - lightningcss
