@@ -1,4 +1,7 @@
 {
   "editor.formatOnSave": true,
-  "testing.openTesting": "openOnTestFailure"
+  "testing.openTesting": "openOnTestFailure",
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  }
 }
