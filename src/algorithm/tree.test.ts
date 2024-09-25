@@ -53,10 +53,10 @@ describe('tree', () => {
     let count = 0
     traverse(rootNode, (node) => {
       count++
-      return node.num === 1
+      return node.num === 4
     })
 
-    expect(count).eql(2)
+    expect(count).eql(3)
 
     // should not stop
     count = 0

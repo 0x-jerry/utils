@@ -15,14 +15,14 @@ function _traverseTree<T extends {}, Key extends keyof T>(
   cb: TraverseCallback<T>,
   childrenKey?: Key,
   parent?: T,
-) {
+): boolean {
   const _nodes = isIterable(nodes) ? nodes : [nodes]
 
   const _childrenKey = childrenKey ?? ('children' as Key)
 
   for (const node of _nodes) {
     if (cb(node, parent)) {
-      return
+      return true
     }
 
     const children = node[_childrenKey]
@@ -31,8 +31,12 @@ function _traverseTree<T extends {}, Key extends keyof T>(
       continue
     }
 
-    _traverseTree(children as T[], cb, _childrenKey, node)
+    if (_traverseTree(children as T[], cb, _childrenKey, node)) {
+      return true
+    }
   }
+
+  return false
 }
 
 /**
