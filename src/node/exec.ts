@@ -3,6 +3,21 @@ import os from 'node:os'
 import pc from 'picocolors'
 import { createPromise } from '../core/index.js'
 
+export interface ExecOpitons {
+  /**
+   * default is false
+   */
+  collectOutput?: boolean
+  /**
+   * if collectOutput is true, then is is true, otherwise, default is false
+   */
+  silent?: boolean
+  /**
+   * default is `process.env`
+   */
+  env?: Record<string, string | undefined>
+}
+
 /**
  *
  * @example
@@ -10,18 +25,9 @@ import { createPromise } from '../core/index.js'
  * ```ts
  * await run('echo "hello world" && echo cool things') // will print `hello world\ncool\nthings\n`
  * ```
- *
- * @param cmd
- * @param env
- * @param opt
- * @returns
  */
-export async function run(
-  cmd: string,
-  env?: Record<string, string | undefined>,
-  opt?: { collectOutput?: boolean; silent?: boolean },
-) {
-  const { collectOutput, silent } = opt || {}
+export async function exec(cmd: string, opt: ExecOpitons = {}) {
+  const { env = process.env, collectOutput = false, silent = collectOutput } = opt
 
   if (!silent) {
     console.log(pc.dim('$'), pc.dim(cmd))
@@ -38,7 +44,7 @@ export async function run(
     const [_cmd, ...args] = _parseArgs(cmd)
     const p = await _exec(_cmd, args, {
       stdio: collectOutput ? 'pipe' : 'inherit',
-      env: env || process.env,
+      env: env,
     })
 
     if (collectOutput) {
@@ -48,6 +54,20 @@ export async function run(
 
   return output
 }
+
+/**
+ *
+ * @example
+ *
+ * ```ts
+ * await run('echo "hello world" && echo cool things') // will print `hello world\ncool\nthings\n`
+ * ```
+ *
+ * @deprecated Use {@link exec} instead of
+ * @param env Default is `process.env`
+ */
+export const run = (cmd: string, env?: Record<string, string>, opt?: Omit<ExecOpitons, 'env'>) =>
+  exec(cmd, { ...opt, env })
 
 export function _parseArgs(cmd: string) {
   const args: string[] = []
@@ -70,7 +90,7 @@ export function _parseArgs(cmd: string) {
   return normalized
 }
 
-interface ExecResult {
+export interface ExecResult {
   process: ChildProcess
   stdio: {
     stdout: string

@@ -1,1 +1,1 @@
-export { run } from './run.js'
+export { run, exec, type ExecOpitons } from './exec.js'
