@@ -1,0 +1,43 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`tree#filterTreeNodes > should filter nodes by num < 0 1`] = `
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [],
+            "num": -1,
+          },
+        ],
+        "num": 2,
+      },
+    ],
+    "num": 0,
+  },
+]
+`;
+
+exports[`tree#filterTreeNodes > should filter nodes by num >= 2 1`] = `
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [],
+            "num": 4,
+          },
+        ],
+        "num": 1,
+      },
+      {
+        "children": [],
+        "num": 2,
+      },
+    ],
+    "num": 0,
+  },
+]
+`;

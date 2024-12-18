@@ -1,37 +1,33 @@
+import { ensureArray } from '../index.js'
 import { isIterable } from '../is/index.js'
 import type { Arrayable } from '../types/index.js'
 
-interface TraverseCallback<T> {
-  // biome-ignore lint/suspicious/noConfusingVoidType: <explanation>
-  // biome-ignore lint/style/useShorthandFunctionType: <explanation>
-  (node: T, parentNode?: T): void | boolean
-}
+// biome-ignore lint/suspicious/noConfusingVoidType: <explanation>
+type TreeVisitCallback<T> = (node: T, parentNode?: T) => void | boolean
 
 function _traverseTree<T extends {}, Key extends keyof T>(
   nodes: T | Iterable<T>,
   /**
    * @returns return true to stop
    */
-  cb: TraverseCallback<T>,
-  childrenKey?: Key,
+  cb: TreeVisitCallback<T>,
+  childrenKey: Key,
   parent?: T,
 ): boolean {
   const _nodes = isIterable(nodes) ? nodes : [nodes]
-
-  const _childrenKey = childrenKey ?? ('children' as Key)
 
   for (const node of _nodes) {
     if (cb(node, parent)) {
       return true
     }
 
-    const children = node[_childrenKey]
+    const children = node[childrenKey]
 
     if (!isIterable(children)) {
       continue
     }
 
-    if (_traverseTree(children as T[], cb, _childrenKey, node)) {
+    if (_traverseTree(children as T[], cb, childrenKey, node)) {
       return true
     }
   }
@@ -52,8 +48,78 @@ export function traverse<T extends {}, Key extends keyof T>(
   /**
    * @returns return true to stop
    */
-  cb: TraverseCallback<T>,
+  cb: TreeVisitCallback<T>,
   key?: Key,
 ) {
-  _traverseTree(nodes, cb, key)
+  const childrenKey = key ?? ('children' as Key)
+
+  _traverseTree(nodes, cb, childrenKey)
+}
+
+/**
+ *
+ * @param key default is `'children'`
+ */
+export function findNodeInTree<T extends {}, Key extends keyof T>(
+  nodes: Arrayable<T>,
+  predicate: TreeVisitCallback<T>,
+  key?: Key,
+) {
+  let resultNode: T | undefined
+
+  const childrenKey = key ?? ('children' as Key)
+
+  _traverseTree(
+    nodes,
+    (node, parentNode) => {
+      if (predicate(node, parentNode)) {
+        resultNode = node
+        return true
+      }
+    },
+    childrenKey,
+  )
+
+  return resultNode
+}
+
+function _filterTreeNodes<T extends {}, Key extends keyof T>(
+  nodes: Arrayable<T>,
+  /**
+   * @returns return true to stop
+   */
+  predicate: TreeVisitCallback<T>,
+  childrenKey: Key,
+  parent?: T,
+): T[] {
+  const nodesArr = ensureArray(nodes)
+
+  const newTree: T[] = []
+
+  for (const node of nodesArr) {
+    const _node = { ...node }
+
+    const children = _filterTreeNodes(_node[childrenKey] as T[], predicate, childrenKey, _node)
+
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    _node[childrenKey] = children as any
+
+    const shouldInclude = predicate(_node, parent)
+
+    if (shouldInclude || (_node[childrenKey] as T[]).length) {
+      newTree.push(_node)
+    }
+  }
+
+  return newTree
+}
+
+export function filterTreeNodes<T extends {}, Key extends keyof T>(
+  nodes: Arrayable<T>,
+  predicate: TreeVisitCallback<T>,
+  key?: Key,
+): T[] {
+  const childrenKey = key ?? ('children' as Key)
+
+  return _filterTreeNodes(nodes, predicate, childrenKey)
 }

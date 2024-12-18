@@ -1,34 +1,34 @@
-import { traverse } from './tree.js'
+import { filterTreeNodes, findNodeInTree, traverse } from './tree.js'
 
 interface TNode {
   num: number
   children?: TNode[]
 
   // --- type test
-  d: string
+  d?: string
   s?: string
   c?: string[]
-  e: string[]
+  e?: string[]
 }
 
-const rootNode = {
-  num: 0,
-  children: [
-    {
-      num: 1,
-      children: [
-        {
-          num: 4,
-        },
-      ],
-    },
-    {
-      num: 2,
-    },
-  ],
-} as TNode
+describe('tree#traverse', () => {
+  const rootNode: TNode = {
+    num: 0,
+    children: [
+      {
+        num: 1,
+        children: [
+          {
+            num: 4,
+          },
+        ],
+      },
+      {
+        num: 2,
+      },
+    ],
+  }
 
-describe('tree', () => {
   it('should traverse all tree node in DFS order', () => {
     const nums: number[] = []
 
@@ -65,5 +65,105 @@ describe('tree', () => {
     })
 
     expect(count).eql(4)
+  })
+})
+
+describe('tree#findNodeInTree', () => {
+  const testNode: TNode = {
+    num: 4,
+  }
+
+  const rootNode: TNode = {
+    num: 0,
+    children: [
+      {
+        num: 1,
+        children: [testNode],
+      },
+      {
+        num: 2,
+      },
+    ],
+  }
+
+  it('should find node by num === 4', () => {
+    let count = 0
+    const findedNode = findNodeInTree(rootNode, (node) => {
+      count++
+      return node.num === 4
+    })
+
+    expect(count).eql(3)
+    expect(findedNode).toBe(testNode)
+  })
+
+  it('should can not find node by num === -2', () => {
+    let count = 0
+    const findedNode = findNodeInTree(rootNode, (node) => {
+      count++
+      return node.num === -2
+    })
+
+    expect(count).eql(4)
+    expect(findedNode).toBeUndefined()
+  })
+})
+
+describe('tree#filterTreeNodes', () => {
+  const rootNode: TNode = {
+    num: 0,
+    children: [
+      {
+        num: 1,
+        children: [
+          {
+            num: 4,
+          },
+        ],
+      },
+      {
+        num: 2,
+        children: [
+          {
+            num: -1,
+          },
+        ],
+      },
+    ],
+  }
+
+  it('should filter nodes by num >= 2', () => {
+    let count = 0
+    const newTree = filterTreeNodes(rootNode, (node) => {
+      count++
+      return node.num >= 2
+    })
+
+    expect(count).eql(5)
+
+    expect(newTree).matchSnapshot()
+  })
+
+  it('should filter nodes by num < 0', () => {
+    let count = 0
+    const newTree = filterTreeNodes(rootNode, (node) => {
+      count++
+      return node.num < 0
+    })
+
+    expect(count).eql(5)
+
+    expect(newTree).matchSnapshot()
+  })
+  it('should filter nodes by num < -2', () => {
+    let count = 0
+    const newTree = filterTreeNodes(rootNode, (node) => {
+      count++
+      return node.num < -2
+    })
+
+    expect(count).eql(5)
+
+    expect(newTree.length).toBe(0)
   })
 })
