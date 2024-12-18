@@ -3,5 +3,6 @@
   "testing.openTesting": "openOnTestFailure",
   "[typescript]": {
     "editor.defaultFormatter": "biomejs.biome"
-  }
+  },
+  "testing.automaticallyOpenTestResults": "openOnTestFailure"
 }
