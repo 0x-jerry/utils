@@ -24,20 +24,36 @@ describe('ensureArray', () => {
 
 describe('remove', () => {
   it('should remove exists item', () => {
-    const item = [1, 2, { a: 1 }]
+    const arrItem = { a: 1 }
+    const item = [1, 2, arrItem]
 
-    expect(remove(item, 2)).toBe(1)
-    expect(item).toEqual([1, { a: 1 }])
+    expect(remove(item, 2)).toEqual([2])
+    expect(item).toEqual([1, arrItem])
+
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    expect(remove(item, (o: any) => o.a === 1)).toBe(1)
+    expect(remove(item, (o: any) => o.a === 1)).toEqual([arrItem])
     expect(item).toEqual([1])
   })
 
-  it('should return -1', () => {
+  it('should return []', () => {
     const item = [1, 2]
 
-    expect(remove(item, 3)).toBe(-1)
-    expect(remove(item, (o) => o === 3)).toBe(-1)
+    expect(remove(item, 3)).toEqual([])
+    expect(remove(item, (o) => o === 3)).toEqual([])
     expect(item).toEqual([1, 2])
+  })
+
+  it('should remove mulitple items', () => {
+    const item = [1, 2, 3, 4, 5, 6]
+
+    expect(remove(item, (n) => n > 2 && n < 5)).toEqual([3, 4])
+    expect(item).toEqual([1, 2, 5, 6])
+  })
+
+  it('should remove all items', () => {
+    const item = [1, 2, 3, 4, 5, 6]
+
+    expect(remove(item, (n) => n > 0)).toEqual([1, 2, 3, 4, 5, 6])
+    expect(item).toEqual([])
   })
 })

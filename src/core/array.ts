@@ -15,10 +15,25 @@ export const ensureArray = <T>(arr?: Arrayable<T>): T[] => {
   return Array.isArray(arr) ? arr : [arr]
 }
 
-export const remove = <T>(arr: T[], predict: T | ((item: T) => boolean)): number => {
-  const idx = isFn(predict) ? arr.findIndex(predict) : arr.indexOf(predict)
+export const remove = <T>(arr: T[], predicate: T | ((item: T, index: number) => boolean)): T[] => {
+  const removed: T[] = []
 
-  if (idx >= 0) arr.splice(idx, 1)
+  if (isFn(predicate)) {
+    for (let idx = 0; idx < arr.length; idx++) {
+      const shouldRemove = predicate(arr[idx], idx)
 
-  return idx
+      if (shouldRemove) {
+        removed.push(...arr.splice(idx, 1))
+        idx--
+      }
+    }
+  } else {
+    const idx = arr.indexOf(predicate)
+
+    if (idx >= 0) {
+      removed.push(...arr.splice(idx, 1))
+    }
+  }
+
+  return removed
 }
