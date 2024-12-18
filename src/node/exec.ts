@@ -55,20 +55,6 @@ export async function exec(cmd: string, opt: ExecOpitons = {}) {
   return output
 }
 
-/**
- *
- * @example
- *
- * ```ts
- * await run('echo "hello world" && echo cool things') // will print `hello world\ncool\nthings\n`
- * ```
- *
- * @deprecated Use {@link exec} instead of
- * @param env Default is `process.env`
- */
-export const run = (cmd: string, env?: Record<string, string>, opt?: Omit<ExecOpitons, 'env'>) =>
-  exec(cmd, { ...opt, env })
-
 export function _parseArgs(cmd: string) {
   const args: string[] = []
 

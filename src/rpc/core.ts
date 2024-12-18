@@ -1,4 +1,4 @@
-import { type PromiseInstance, createPromise, uuid } from '../core/index.js'
+import { type PromiseInstance, createPromise, nanoid } from '../core/index.js'
 import { isFn, isObject, isString, isSymbol } from '../is/index.js'
 import type { Fn } from '../types/index.js'
 import {
@@ -91,7 +91,7 @@ export function createRPCClient<T extends Procedure>(t: ClientOptions): Promisif
 
   async function send(keyPath: string[], ...args: unknown[]) {
     const resp: CommunicationProtocol = {
-      _: uuid(),
+      _: nanoid(),
       k: keyPath,
       a: args,
     }
