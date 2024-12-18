@@ -47,16 +47,16 @@
   },
   "devDependencies": {
     "@0x-jerry/x-release": "^2.2.2",
-    "@biomejs/biome": "^1.8.3",
-    "@types/node": "^20.14.11",
-    "@vitest/coverage-v8": "^2.0.3",
-    "happy-dom": "^15.0.0",
-    "typescript": "^5.5.3",
-    "vitest": "^2.0.3"
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "^22.10.2",
+    "@vitest/coverage-v8": "^2.1.8",
+    "happy-dom": "^15.11.7",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
   },
   "dependencies": {
     "fflate": "^0.8.2",
-    "nanoid": "^5.0.7",
-    "picocolors": "^1.0.1"
+    "nanoid": "^5.0.9",
+    "picocolors": "^1.1.1"
   }
 }
