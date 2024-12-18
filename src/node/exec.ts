@@ -9,7 +9,7 @@ export interface ExecOpitons {
    */
   collectOutput?: boolean
   /**
-   * if collectOutput is true, then is is true, otherwise, default is false
+   * if collectOutput is true, then this is true, otherwise, this is false
    */
   silent?: boolean
   /**
