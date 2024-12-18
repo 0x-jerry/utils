@@ -3,7 +3,7 @@ import os from 'node:os'
 import pc from 'picocolors'
 import { createPromise } from '../core/index.js'
 
-export interface ExecOpitons {
+export interface ExecOptions {
   /**
    * default is false
    */
@@ -26,7 +26,7 @@ export interface ExecOpitons {
  * await run('echo "hello world" && echo cool things') // will print `hello world\ncool\nthings\n`
  * ```
  */
-export async function exec(cmd: string, opt: ExecOpitons = {}) {
+export async function exec(cmd: string, opt: ExecOptions = {}) {
   const { env = process.env, collectOutput = false, silent = collectOutput } = opt
 
   if (!silent) {
