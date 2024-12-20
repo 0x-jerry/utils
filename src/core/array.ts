@@ -1,5 +1,5 @@
-import { isFn } from '../is/index.js'
-import type { Arrayable } from '../types/index.js'
+import { isFn } from '../is'
+import type { Arrayable } from '../types'
 
 /**
  * Ensure to return a list of element T.

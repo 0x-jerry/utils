@@ -1,12 +1,12 @@
-import { type PromiseInstance, createPromise, nanoid } from '../core/index.js'
-import { isFn, isObject, isString, isSymbol } from '../is/index.js'
-import type { Fn } from '../types/index.js'
+import { type PromiseInstance, createPromise, nanoid } from '../core'
+import { isFn, isObject, isString, isSymbol } from '../is'
+import type { Fn } from '../types'
 import {
   MessageFlag,
   type CommunicationAdapter,
   type CommunicationProtocol,
   type Procedure,
-} from './types.js'
+} from './types'
 
 interface RPCServerOption<M> {
   methods: M

@@ -1,3 +1,3 @@
-export * from './compress.js'
-export * from './encoding.js'
-export * from './tree.js'
+export * from './compress'
+export * from './encoding'
+export * from './tree'

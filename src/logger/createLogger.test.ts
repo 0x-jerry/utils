@@ -1,4 +1,4 @@
-import { type LoggerLevel, createLogger } from './createLogger.js'
+import { type LoggerLevel, createLogger } from './createLogger'
 
 describe('createSimpleLogger', () => {
   it('output', () => {

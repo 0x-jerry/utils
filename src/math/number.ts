@@ -1,4 +1,4 @@
-import { isString } from '../is/index.js'
+import { isString } from '../is'
 
 /**
  * like {@link Number.prototype.toFixed}, but return a number instead of string.

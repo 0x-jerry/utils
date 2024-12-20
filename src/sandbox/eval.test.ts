@@ -1,4 +1,4 @@
-import { createSaferEval } from './eval.js'
+import { createSaferEval } from './eval'
 
 describe('eval', () => {
   it('should support parameters', async () => {

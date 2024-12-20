@@ -1,4 +1,4 @@
-import { parseURL } from './parse.js'
+import { parseURL } from './parse'
 
 describe('parse url', () => {
   it('should parse valid url', () => {

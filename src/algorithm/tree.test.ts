@@ -1,4 +1,4 @@
-import { filterTreeNodes, findNodeInTree, traverse } from './tree.js'
+import { filterTreeNodes, findNodeInTree, traverse } from './tree'
 
 interface TNode {
   num: number

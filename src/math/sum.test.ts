@@ -1,4 +1,4 @@
-import { sum } from './sum.js'
+import { sum } from './sum'
 
 describe('sum', () => {
   it('should work with array', () => {

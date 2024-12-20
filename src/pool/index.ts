@@ -1,1 +1,1 @@
-export * from './createPool.js'
+export * from './createPool'

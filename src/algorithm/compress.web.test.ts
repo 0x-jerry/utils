@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import { compressText, decompressText } from './compress.js'
+import { compressText, decompressText } from './compress'
 
 describe('compress / decompress text', () => {
   it('should compress and decompress', async () => {

@@ -1,5 +1,5 @@
-import { isPromiseLike } from '../is/index.js'
-import type { Fn } from '../types/utils.js'
+import { isPromiseLike } from '../is'
+import type { Fn } from '../types'
 
 export interface IChainable<In = unknown> {
   input: In

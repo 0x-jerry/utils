@@ -1,5 +1,5 @@
-import type { Fn } from '../types/index.js'
-import type { ICompose, IComposeResult } from './types.js'
+import type { Fn } from '../types'
+import type { ICompose, IComposeResult } from './types'
 
 /**
  * Compose multiple functions into single function

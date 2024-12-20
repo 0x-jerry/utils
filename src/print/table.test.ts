@@ -1,4 +1,4 @@
-import { textTable, textTableToString, uniformTable } from './table.js'
+import { textTable, textTableToString, uniformTable } from './table'
 
 describe('text table', () => {
   it('should format input into a table text', () => {

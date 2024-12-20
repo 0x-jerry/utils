@@ -1,3 +1,3 @@
-export * from './core.js'
-export * from './adaptor/index.js'
-export * from './types.js'
+export * from './core'
+export * from './adaptor'
+export * from './types'

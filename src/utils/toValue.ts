@@ -1,4 +1,4 @@
-import { isFn } from '../is/index.js'
+import { isFn } from '../is'
 
 export type Value<T> = T | (() => T)
 

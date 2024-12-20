@@ -1,9 +1,4 @@
-import {
-  type SimpleOption,
-  getOptionByLabel,
-  getOptionByValue,
-  getOptionLabelByValue,
-} from './index.js'
+import { type SimpleOption, getOptionByLabel, getOptionByValue, getOptionLabelByValue } from '.'
 
 describe('options', () => {
   const options: SimpleOption[] = [

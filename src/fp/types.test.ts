@@ -1,4 +1,4 @@
-import type { ICompose } from './types.js'
+import type { ICompose } from './types'
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const compose: ICompose = (() => {}) as any

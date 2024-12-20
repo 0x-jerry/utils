@@ -1,5 +1,5 @@
-import { sleep } from '../core/sleep.js'
-import { createPool } from './createPool.js'
+import { sleep } from '../core'
+import { createPool } from './createPool'
 
 const fakeReq = async (n: number, time: number) => {
   const ts = time

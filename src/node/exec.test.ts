@@ -1,5 +1,5 @@
 import { platform } from 'node:os'
-import { _exec, _parseArgs, exec } from './exec.js'
+import { _exec, _parseArgs, exec } from './exec'
 
 const isWin = platform() === 'win32'
 

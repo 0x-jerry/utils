@@ -1,4 +1,4 @@
-import { isCls, isFn } from '../is/is.js'
+import { isCls, isFn } from '../is'
 
 export interface BindConfig {
   singleton?: boolean

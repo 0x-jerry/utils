@@ -1,5 +1,5 @@
-import { createMessageChannelAdaptor } from './adaptor/messageChannel.js'
-import { createRPCClient, createRPCServer } from './core.js'
+import { createMessageChannelAdaptor } from './adaptor'
+import { createRPCClient, createRPCServer } from './core'
 
 describe('rpc', () => {
   const m = new MessageChannel()

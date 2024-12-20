@@ -1,4 +1,4 @@
-import { ensureArray, remove } from './array.js'
+import { ensureArray, remove } from './array'
 
 describe('ensureArray', () => {
   it('array', () => {

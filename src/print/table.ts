@@ -1,4 +1,4 @@
-import type { Optional } from '../types/index.js'
+import type { Optional } from '../types'
 
 export interface TextTableOption {
   highlight?: (cell: string) => string

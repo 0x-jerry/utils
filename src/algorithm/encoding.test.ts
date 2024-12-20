@@ -1,4 +1,4 @@
-import { base64ToJson, jsonToBase64 } from './encoding.js'
+import { base64ToJson, jsonToBase64 } from './encoding'
 
 describe('encoding', () => {
   it('should convert json to base64', () => {

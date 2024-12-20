@@ -1,4 +1,4 @@
-import { has } from './misc.js'
+import { has } from './misc'
 
 describe('misc', () => {
   it('has', () => {

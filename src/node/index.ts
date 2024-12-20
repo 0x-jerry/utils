@@ -1,1 +1,1 @@
-export { exec, type ExecOptions as ExecOpitons } from './exec.js'
+export { exec, type ExecOptions as ExecOpitons } from './exec'

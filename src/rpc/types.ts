@@ -1,4 +1,4 @@
-import type { Fn } from '../types/index.js'
+import type { Fn } from '../types'
 
 export interface Procedure {
   [key: string]: Procedure | Fn

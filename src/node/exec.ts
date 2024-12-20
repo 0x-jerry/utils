@@ -1,7 +1,7 @@
 import { type ChildProcess, type CommonSpawnOptions, spawn } from 'node:child_process'
 import os from 'node:os'
 import pc from 'picocolors'
-import { createPromise } from '../core/index.js'
+import { createPromise } from '../core'
 
 export interface ExecOptions {
   /**

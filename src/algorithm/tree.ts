@@ -1,6 +1,6 @@
-import { ensureArray } from '../index.js'
-import { isIterable } from '../is/index.js'
-import type { Arrayable } from '../types/index.js'
+import { ensureArray } from '../core'
+import { isIterable } from '../is'
+import type { Arrayable } from '../types'
 
 // biome-ignore lint/suspicious/noConfusingVoidType: <explanation>
 type TreeVisitCallback<T> = (node: T, parentNode?: T) => void | boolean

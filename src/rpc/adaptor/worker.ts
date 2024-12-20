@@ -1,5 +1,5 @@
-import type { Fn } from '../../types/index.js'
-import type { CommunicationAdapter } from '../types.js'
+import type { Fn } from '../../types'
+import type { CommunicationAdapter } from '../types'
 
 export function createWorkerAdaptor(m?: Worker) {
   let fn: Fn

@@ -1,4 +1,4 @@
-import { sleep } from './sleep.js'
+import { sleep } from './sleep'
 
 describe('sleep', () => {
   it('cancel sleep', async () => {

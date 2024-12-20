@@ -1,5 +1,5 @@
-import type { Fn } from '../../types/utils.js'
-import type { CommunicationAdapter } from '../types.js'
+import type { Fn } from '../../types'
+import type { CommunicationAdapter } from '../types'
 
 export function createMessageChannelAdaptor(m: MessagePort) {
   let fn: Fn

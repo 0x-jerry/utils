@@ -1,4 +1,4 @@
-import { makeDictPair, makePair } from './makePair.js'
+import { makeDictPair, makePair } from './makePair'
 
 describe('makePair', () => {
   it('should works with default value', () => {

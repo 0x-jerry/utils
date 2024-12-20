@@ -1,2 +1,2 @@
-export * from './messageChannel.js'
-export * from './worker.js'
+export * from './messageChannel'
+export * from './worker'

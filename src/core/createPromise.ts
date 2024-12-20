@@ -1,4 +1,4 @@
-import type { MakeEnum } from '../types/utils.js'
+import type { MakeEnum } from '../types/utils'
 
 export interface PromiseInstance<T = unknown> {
   readonly status: PromiseStatus
