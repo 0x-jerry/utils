@@ -22,3 +22,8 @@ export type ExtractObjectKeys<T extends {}, TrueCondition, FalseCondition = neve
       ? key
       : never
 }[keyof T]
+
+// biome-ignore lint/complexity/noBannedTypes: <explanation>
+export type EmptyObject = {}
+
+export type PlainObject<T = string> = Record<string, T>
