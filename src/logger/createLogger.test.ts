@@ -1,13 +1,13 @@
-import { type LoggerLevel, createLogger } from './createLogger'
+import { type LoggerLevel, type LoggerOption, createLogger } from './createLogger'
 
 describe('createSimpleLogger', () => {
   it('output', () => {
-    const console = mockConsole()
+    const { console, write } = mockConsole()
 
-    const logger = createLogger('[tt]')
+    const logger = createLogger('[tt]', { write })
 
     logger.log('hello')
-    expect(console.log).toHaveBeenLastCalledWith('[tt]', 'hello')
+    expect(console.info).toHaveBeenLastCalledWith('[tt]', 'hello')
 
     logger.warn('hello')
     expect(console.warn).toHaveBeenLastCalledWith('[tt]', 'hello')
@@ -19,18 +19,21 @@ describe('createSimpleLogger', () => {
   it('function prefix', () => {
     let level: LoggerLevel | undefined
 
-    const console = mockConsole()
+    const { console, write } = mockConsole()
 
     let idx = 0
 
-    const logger = createLogger((t) => {
-      level = t
-      return `[${idx++}]`
-    })
+    const logger = createLogger(
+      (t) => {
+        level = t
+        return `[${idx++}]`
+      },
+      { write },
+    )
 
     logger.log('hello')
-    expect(console.log).toBeCalledTimes(1)
-    expect(console.log.mock.calls[0][0]).toBe('[0]')
+    expect(console.info).toBeCalledTimes(1)
+    expect(console.info.mock.calls[0][0]).toBe('[0]')
     expect(level).toBe('info')
 
     logger.warn('hello')
@@ -47,10 +50,15 @@ describe('createSimpleLogger', () => {
 
     let idx = 0
 
-    const logger = createLogger((t) => {
-      level = t
-      return `[${idx++}]`
-    })
+    const { console, write } = mockConsole()
+
+    const logger = createLogger(
+      (t) => {
+        level = t
+        return `[${idx++}]`
+      },
+      { write },
+    )
 
     logger.log('hello')
     expect(level).toBe('info')
@@ -70,12 +78,12 @@ describe('createSimpleLogger', () => {
   })
 
   it('should print without prefix', () => {
-    const console = mockConsole()
+    const { console, write } = mockConsole()
 
-    const logger = createLogger()
+    const logger = createLogger(undefined, { write })
 
     logger.log('hello')
-    expect(console.log).toHaveBeenLastCalledWith('hello')
+    expect(console.info).toHaveBeenLastCalledWith('hello')
 
     logger.warn('hello')
     expect(console.warn).toHaveBeenLastCalledWith('hello')
@@ -86,13 +94,18 @@ describe('createSimpleLogger', () => {
 })
 
 function mockConsole() {
-  const warn = vi.spyOn(console, 'warn')
-  const log = vi.spyOn(console, 'info')
-  const error = vi.spyOn(console, 'error')
+  const console = {
+    warn: vi.fn(),
+    info: vi.fn(),
+    error: vi.fn(),
+  }
+
+  const write: LoggerOption['write'] = (type, ...params) => {
+    console[type](...params)
+  }
 
   return {
-    log,
-    warn,
-    error,
+    write,
+    console,
   }
 }

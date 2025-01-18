@@ -2,19 +2,33 @@ export type LoggerLevel = 'info' | 'warn' | 'error'
 
 type LoggerPrefixFunction = (type: LoggerLevel) => string
 
+export interface LoggerOption {
+  write?: (type: LoggerLevel, ...params: unknown[]) => void
+}
+
 /**
  * create a simple logger, support print prefix, and enable/disable.
  *
  * @param prefix
  * @returns
  */
-export function createLogger(prefix?: string | LoggerPrefixFunction) {
+export function createLogger(prefix?: string | LoggerPrefixFunction, opt?: LoggerOption) {
   let _enable = true
 
   const printFactory =
     (type: LoggerLevel) =>
-    (...params: unknown[]) =>
-      print(type, params)
+    (...params: unknown[]) => {
+      if (!_enable) return
+
+      const printFn = opt?.write || console[type]
+
+      const prefix = getPrefix(type)
+      if (prefix) {
+        return printFn(type, prefix, ...params)
+      }
+
+      return printFn(type, ...params)
+    }
 
   return {
     get isEnabled() {
@@ -37,18 +51,6 @@ export function createLogger(prefix?: string | LoggerPrefixFunction) {
     }
 
     return typeof prefix === 'string' ? prefix : prefix(type)
-  }
-
-  function print(type: LoggerLevel, params: unknown[]) {
-    if (!_enable) return
-
-    const prefix = getPrefix(type)
-
-    if (prefix === undefined) {
-      console[type](...params)
-    } else {
-      console[type](prefix, ...params)
-    }
   }
 }
 
