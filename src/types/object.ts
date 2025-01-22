@@ -1,3 +1,5 @@
+import type { Optional } from './utils'
+
 /**
  *
  * @example
@@ -27,3 +29,18 @@ export type ExtractObjectKeys<T extends {}, TrueCondition, FalseCondition = neve
 export type EmptyObject = {}
 
 export type PlainObject<T = string> = Record<string, T>
+
+export type ObjectValues<E extends Record<string, string | number | boolean | null | undefined>> =
+  E[keyof E]
+
+export type DeepPartial<T> = T extends Record<string | number, unknown>
+  ? {
+      [Key in keyof T]?: DeepPartial<T[Key]>
+    }
+  : Optional<T>
+
+export type DeepRequired<T> = T extends Record<string | number, unknown>
+  ? {
+      [Key in keyof T]: DeepRequired<T[Key]>
+    }
+  : NonNullable<T>
