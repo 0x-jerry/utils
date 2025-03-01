@@ -48,16 +48,16 @@
   "devDependencies": {
     "@0x-jerry/x-release": "^2.2.2",
     "@biomejs/biome": "^1.9.4",
-    "@types/node": "^22.10.7",
-    "@vitest/coverage-v8": "^3.0.2",
-    "happy-dom": "^17.0.0",
-    "tsup": "^8.3.5",
-    "typescript": "^5.7.3",
-    "vitest": "^3.0.2"
+    "@types/node": "^22.13.8",
+    "@vitest/coverage-v8": "^3.0.7",
+    "happy-dom": "^17.1.8",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.7"
   },
   "dependencies": {
     "fflate": "^0.8.2",
-    "nanoid": "^5.0.9",
+    "nanoid": "^5.1.2",
     "picocolors": "^1.1.1"
   }
 }
