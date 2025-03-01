@@ -1,4 +1,4 @@
-import { PromiseStatus, createPromise } from './createPromise'
+import { createPromise } from './createPromise'
 
 describe('createPromiseInstance', () => {
   it('resolve', async () => {
@@ -20,15 +20,12 @@ describe('createPromiseInstance', () => {
   it('should be always rejected if reject first', async () => {
     const ins = createPromise()
     expect(ins.isPending).toBe(true)
-    expect(ins.status).toBe(PromiseStatus.Pending)
 
     ins.reject('error')
     expect(ins.isRejected).toBe(true)
-    expect(ins.status).toBe(PromiseStatus.Rejected)
 
     ins.resolve('1')
     expect(ins.isRejected).toBe(true)
-    expect(ins.status).toBe(PromiseStatus.Rejected)
 
     await expect(ins.instance).rejects.toBe('error')
   })
@@ -36,15 +33,12 @@ describe('createPromiseInstance', () => {
   it('should be always fulfilled if resolve first', async () => {
     const ins = createPromise()
     expect(ins.isPending).toBe(true)
-    expect(ins.status).toBe(PromiseStatus.Pending)
 
     ins.resolve(1)
     expect(ins.isFulfilled).toBe(true)
-    expect(ins.status).toBe(PromiseStatus.Fulfilled)
 
     ins.reject('1')
     expect(ins.isFulfilled).toBe(true)
-    expect(ins.status).toBe(PromiseStatus.Fulfilled)
 
     await expect(ins.instance).resolves.toBe(1)
   })
