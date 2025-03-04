@@ -67,7 +67,7 @@ describe('migration', () => {
     })
   })
 
-  it('upgrade corupt data', async () => {
+  it('upgrade corrupt data', async () => {
     const data = {
       a: false,
     }
