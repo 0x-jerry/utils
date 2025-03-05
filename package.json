@@ -46,11 +46,11 @@
     ]
   },
   "devDependencies": {
-    "@0x-jerry/x-release": "^2.2.2",
+    "@0x-jerry/x-release": "^2.3.0",
     "@biomejs/biome": "^1.9.4",
-    "@types/node": "^22.13.8",
+    "@types/node": "^22.13.9",
     "@vitest/coverage-v8": "^3.0.7",
-    "happy-dom": "^17.1.8",
+    "happy-dom": "^17.2.2",
     "memfs": "^4.17.0",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
