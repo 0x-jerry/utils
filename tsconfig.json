@@ -11,7 +11,8 @@
     "skipLibCheck": true,
     "outDir": "dist",
     "lib": [
-      "DOM"
+      "DOM",
+      "ESNext"
     ],
     "skipDefaultLibCheck": true,
     "types": [

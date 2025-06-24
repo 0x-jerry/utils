@@ -1,4 +1,3 @@
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export type Listener<T extends unknown[] = any> = (...args: T) => void
 
 export type EventListenersMap<R extends Record<string, unknown[]>> = {
@@ -30,7 +29,6 @@ enum Flag {
  *
  * ```
  */
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export class EventEmitter<Events extends Record<string, any>> {
   #listeners: EventListenersMap<Events>
   #capacity: number
@@ -60,7 +58,7 @@ export class EventEmitter<Events extends Record<string, any>> {
   /**
    * Get all events and it's listeners.
    */
-  #events<K extends keyof Events>(): EventListenersMap<Events>
+  #events(): EventListenersMap<Events>
   /**
    * Get all listeners of the event.
    * @param event Event type
@@ -77,7 +75,6 @@ export class EventEmitter<Events extends Record<string, any>> {
       this.#listeners[event] = new Map()
     }
 
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
     return this.#listeners[event]!
   }
 
@@ -109,7 +106,7 @@ export class EventEmitter<Events extends Record<string, any>> {
 
     this.#checkLimit(events.size)
 
-    const flag = events.get(listener) || Flag.None
+    const flag = events.get(listener) ?? Flag.None
     events.set(listener, flag | Flag.On)
 
     return () => this.off(event, listener)
@@ -127,7 +124,7 @@ export class EventEmitter<Events extends Record<string, any>> {
 
     this.#checkLimit(events.size)
 
-    const flag = events.get(listener) || Flag.None
+    const flag = events.get(listener) ?? Flag.None
     events.set(listener, flag | Flag.Once)
 
     return () => this.off(event, listener)
@@ -136,7 +133,7 @@ export class EventEmitter<Events extends Record<string, any>> {
   /**
    * Remove all listeners of all events.
    */
-  off<K extends keyof Events>(): boolean
+  off(): boolean
   /**
    *
    * Remove all listeners of the event.
@@ -165,7 +162,7 @@ export class EventEmitter<Events extends Record<string, any>> {
         delete this.#listeners[event]
       }
 
-      return (events?.size || 0) > 0
+      return (events?.size ?? 0) > 0
     }
 
     const events = this.#events(event)
@@ -180,8 +177,8 @@ export class EventEmitter<Events extends Record<string, any>> {
    * @param args Arguments that apply to the callback.
    */
   emit<K extends keyof Events>(event: K, ...args: Events[K]) {
-    const events = this.#events(event)
-    const clears: Listener<Events[K]>[] = []
+    const _events = this.#events(event)
+    const events = _events.entries()
 
     for (const [listener, flag] of events) {
       try {
@@ -191,16 +188,14 @@ export class EventEmitter<Events extends Record<string, any>> {
       }
 
       if (flag & Flag.Once) {
-        if (flag & Flag.On) {
-          events.set(listener, Flag.On)
+        const newFlag = flag ^ Flag.Once
+
+        if (newFlag === Flag.None) {
+          _events.delete(listener)
         } else {
-          clears.push(listener)
+          _events.set(listener, newFlag)
         }
       }
-    }
-
-    for (const event of clears) {
-      events.delete(event)
     }
   }
 }
