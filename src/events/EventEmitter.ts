@@ -30,30 +30,7 @@ enum Flag {
  * ```
  */
 export class EventEmitter<Events extends Record<string, any>> {
-  #listeners: EventListenersMap<Events>
-  #capacity: number
-
-  /**
-   * Limit count of listeners for every event.
-   */
-  get capacity() {
-    return this.#capacity
-  }
-
-  /**
-   *
-   * @param capacity default is 0, means unlimited.
-   */
-  constructor(capacity = 0) {
-    this.#capacity = capacity
-    this.#listeners = {}
-  }
-
-  #checkLimit(size: number) {
-    if (this.#capacity && size >= this.#capacity) {
-      throw new Error(`Listeners reached limit size: ${this.#capacity}`)
-    }
-  }
+  #listeners: EventListenersMap<Events> = {}
 
   /**
    * Get all events and it's listeners.
@@ -104,8 +81,6 @@ export class EventEmitter<Events extends Record<string, any>> {
   on<K extends keyof Events>(event: K, listener: Listener<Events[K]>): () => void {
     const events = this.#events(event)
 
-    this.#checkLimit(events.size)
-
     const flag = events.get(listener) ?? Flag.None
     events.set(listener, flag | Flag.On)
 
@@ -121,8 +96,6 @@ export class EventEmitter<Events extends Record<string, any>> {
    */
   once<K extends keyof Events>(event: K, listener: Listener<Events[K]>) {
     const events = this.#events(event)
-
-    this.#checkLimit(events.size)
 
     const flag = events.get(listener) ?? Flag.None
     events.set(listener, flag | Flag.Once)
