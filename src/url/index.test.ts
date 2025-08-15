@@ -1,4 +1,4 @@
-import { parseURL } from './parse'
+import { parseURL, withQuery } from './utils'
 
 describe('parse url', () => {
   it('should parse valid url', () => {
@@ -38,5 +38,13 @@ describe('parse fallback', () => {
     const t = parseURL('/path')
 
     expect(t).toBe(false)
+  })
+})
+
+describe('URL utils', () => {
+  it('#withQuery', () => {
+    const u = withQuery('http://example.com', { a: 1, b: false, c: 'xx' })
+
+    expect(u.toString()).toBe('http://example.com/?a=1&b=false&c=xx')
   })
 })
