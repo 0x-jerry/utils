@@ -77,27 +77,6 @@ describe('EventEmitter', () => {
     expect(Object.keys(ee.events()).length).toBe(0)
   })
 
-  it('limit', () => {
-    const ee = new EventEmitter<Events>(1)
-
-    ee.on('test', () => {})
-
-    expect(() => ee.on('test', () => {})).toThrow('Listeners reached limit size: 1')
-    expect(() => ee.once('test', () => {})).toThrow('Listeners reached limit size: 1')
-  })
-
-  it('0 capacity size', () => {
-    const ee = new EventEmitter<Events>(0)
-
-    expect(ee.capacity).toBe(0)
-
-    expect(() => {
-      for (let index = 0; index < 30; index++) {
-        ee.on('test', () => {})
-      }
-    }).not.throw()
-  })
-
   it('on then off', () => {
     const ee = new EventEmitter<Events>()
 

@@ -18,7 +18,7 @@ describe('text table', () => {
     ])
   })
 
-  it('should return a formatted table string', () => {
+  it('should return a formatted table string', async () => {
     const input = [
       ['head1', 'head2'],
       [1234, 'text2'],
@@ -28,10 +28,10 @@ describe('text table', () => {
 
     const s = textTableToString(input)
 
-    expect(s).toMatchFileSnapshot('./out/table.txt')
+    await expect(s).toMatchFileSnapshot('./out/table.txt')
   })
 
-  it('should work with terminal text color and text style', () => {
+  it('should work with terminal text color and text style', async () => {
     const input = [
       ['head1', 'head2'],
       ['\x1B[36m1234\x1B[0m', 'text2'],
@@ -45,6 +45,6 @@ describe('text table', () => {
     ])
 
     const str = textTableToString(input)
-    expect(str).toMatchFileSnapshot('./out/table-with-style.txt')
+    await expect(str).toMatchFileSnapshot('./out/table-with-style.txt')
   })
 })

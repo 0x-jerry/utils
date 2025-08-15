@@ -40,7 +40,7 @@ describe('rpc', () => {
   it('should reject when throw error', async () => {
     const e = c.error()
 
-    expect(e).rejects.toBe(String(Error('error')))
+    await expect(e).rejects.toBe(String(Error('error')))
   })
 
   it('should work with deep object', async () => {
