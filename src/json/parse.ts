@@ -13,7 +13,7 @@ export function parseJson<T>(jsonContent: string, opt?: ParesJsonOption<T>): T |
   try {
     const result = JSON.parse(jsonContent)
     return opt?.transform ? opt.transform(result) : result
-  } catch (error) {
+  } catch (_error) {
     // ignore error
     return opt?.transform?.(undefined)
   }

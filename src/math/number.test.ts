@@ -1,4 +1,4 @@
-import { clamp, round, toFixed, toRange } from './number'
+import { clamp, normalizeToRange, round, toFixed } from './number'
 
 describe('number', () => {
   it('toFixed', () => {
@@ -36,23 +36,23 @@ describe('number', () => {
     expect(round(12.99411, 2)).toBe(12.99)
   })
 
-  it('toRange', () => {
-    expect(toRange(361, 0, 360)).toBe(1)
-    expect(toRange(189, 0, 200)).toBe(189)
+  it('modToRange', () => {
+    expect(normalizeToRange(361, 0, 360)).toBe(1)
+    expect(normalizeToRange(189, 0, 200)).toBe(189)
 
-    expect(toRange(10, 20, 30)).oneOf([20, 30])
+    expect(normalizeToRange(10, 20, 30)).oneOf([20, 30])
 
-    expect(toRange(-10, 15, 30)).toBe(20)
+    expect(normalizeToRange(-10, 15, 30)).toBe(20)
 
-    expect(toRange(-10, 0, 20)).toBe(10)
+    expect(normalizeToRange(-10, 0, 20)).toBe(10)
 
-    expect(toRange(-15, -5, 5)).toBe(-5)
-    expect(toRange(-10, -5, 5)).toBe(0)
+    expect(normalizeToRange(-15, -5, 5)).toBe(-5)
+    expect(normalizeToRange(-10, -5, 5)).toBe(0)
 
-    expect(toRange(101, 0, 10)).toBe(1)
-    expect(toRange(-101, 0, 10)).toBe(9)
+    expect(normalizeToRange(101, 0, 10)).toBe(1)
+    expect(normalizeToRange(-101, 0, 10)).toBe(9)
 
-    expect(toRange(101, -20, -10)).toBe(-19)
-    expect(toRange(-101, -20, -10)).toBe(-11)
+    expect(normalizeToRange(101, -20, -10)).toBe(-19)
+    expect(normalizeToRange(-101, -20, -10)).toBe(-11)
   })
 })

@@ -38,14 +38,14 @@ export function round(value: number, fractionDigits: number): number {
 }
 
 /**
- * convert value to the range [start, end]
+ * Convert value to the range [start, end]
  *
  * @param value
  * @param start
  * @param end
  * @returns
  */
-export function toRange(value: number, start: number, end: number): number {
+export function normalizeToRange(value: number, start: number, end: number): number {
   if (start >= end) {
     throw new Error('start should less than the end')
   }

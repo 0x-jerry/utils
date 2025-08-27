@@ -80,8 +80,7 @@ export function isObject(target: unknown): target is Record<string, unknown> {
  * @param target
  */
 
-// biome-ignore lint/complexity/noBannedTypes: <explanation>
-export function isEmpty(target: number | bigint | boolean | Function): false
+export function isEmpty(target: number | bigint | boolean | Fn): false
 export function isEmpty(target: unknown): boolean
 export function isEmpty(target: unknown): boolean {
   if (isNullish(target)) {
