@@ -1,3 +1,6 @@
+import { createPromise } from '../core'
+import type { Fn } from '../types'
+
 export interface PoolOption {
   /**
    * @default 10
@@ -13,40 +16,42 @@ export interface PoolOption {
  * @returns
  */
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export function createPool<T extends (...arg: any[]) => Promise<any>>(
-  request: T,
-  opt: Partial<PoolOption> = {},
-): T {
+export function createPool<T extends Fn>(request: T, opt: Partial<PoolOption> = {}) {
   const ctx = {
     maximize: opt.maximize ?? 10,
     runningCount: 0,
-    queue: Array<() => void>(),
+    queue: [] as Array<() => void>,
   }
 
-  return function (this: unknown, ...args: unknown[]) {
-    return new Promise((resolve, reject) => {
-      const nextReq = () => {
-        ctx.runningCount++
+  return function (this: unknown, ...args: Parameters<T>): Promise<Awaited<ReturnType<T>>> {
+    const { promise, reject, resolve } = createPromise<Awaited<ReturnType<T>>>()
 
-        request
-          .apply(this, args)
-          .then(resolve)
-          .catch(reject)
-          .finally(() => {
-            ctx.runningCount--
+    const nextReq = () => {
+      ctx.runningCount++
 
-            const maybeNextReq = ctx.queue.shift()
+      invokeToPromise(() => request.apply(this, args) as Awaited<ReturnType<T>>)
+        .then(resolve)
+        .catch(reject)
+        .finally(() => {
+          ctx.runningCount--
 
-            maybeNextReq?.()
-          })
-      }
+          const maybeNextReq = ctx.queue.shift()
 
-      if (ctx.runningCount >= ctx.maximize) {
-        ctx.queue.push(nextReq)
-      } else {
-        nextReq()
-      }
-    })
-  } as T
+          maybeNextReq?.()
+        })
+    }
+
+    if (ctx.runningCount >= ctx.maximize) {
+      ctx.queue.push(nextReq)
+    } else {
+      nextReq()
+    }
+
+    return promise
+  }
+}
+
+// biome-ignore lint/suspicious/noExplicitAny: internal usage
+async function invokeToPromise<T extends () => any>(fn: T): Promise<ReturnType<T>> {
+  return fn()
 }

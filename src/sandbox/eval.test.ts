@@ -22,7 +22,7 @@ describe('eval', () => {
   it('should have a very small set of global objects', async () => {
     const saferEval = createSaferEval()
 
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    // biome-ignore lint/suspicious/noExplicitAny: for test
     const ctx: any = { x: null }
     await saferEval('$', '$.x = globalThis')(ctx)
 
