@@ -7,14 +7,14 @@ export interface IChainable<In = unknown> {
   pipe<Out>(
     fn: (i: In) => Out,
   ): Out extends Promise<unknown> ? IAsyncChainable<Out> : IChainable<Out>
-  done(): In
+  exec(): In
 }
 
 export interface IAsyncChainable<In = unknown> {
   input: In
   fns: Fn[]
   pipe<Out>(fn: (i: Awaited<In>) => Out): IAsyncChainable<Out>
-  done(): Promise<Awaited<In>>
+  exec(): Promise<Awaited<In>>
 }
 
 /**
@@ -28,7 +28,7 @@ export interface IAsyncChainable<In = unknown> {
  * const s = chain(0)
  *  .pipe(plusOne)
  *  .pipe(toString)
- *  .done()
+ *  .exec()
  *
  * console.log(s) // => '1'
  * ```
@@ -40,9 +40,9 @@ export function chain<T>(input: T): IChainable<T> {
   const ctx: IChainable<T> = {
     input,
     fns: [],
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    // biome-ignore lint/suspicious/noExplicitAny: internal usage
     pipe: createChainable as any,
-    done: done as () => T,
+    exec: exec as () => T,
   }
 
   return ctx
@@ -52,14 +52,14 @@ function createChainable(this: IChainable, fn: Fn) {
   const chainCtx: IChainable = {
     input: this.input,
     fns: [...this.fns, fn],
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    // biome-ignore lint/suspicious/noExplicitAny: internal usage
     pipe: createChainable as any,
-    done,
+    exec: exec,
   }
 
   return chainCtx as IChainable
 }
 
-function done(this: IChainable) {
+function exec(this: IChainable) {
   return this.fns.reduce((i, fn) => (isPromiseLike(i) ? i.then((x) => fn(x)) : fn(i)), this.input)
 }

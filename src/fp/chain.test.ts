@@ -20,7 +20,7 @@ describe('chainable', () => {
       //
       .pipe(plusOne)
       .pipe(_toString)
-      .done()
+      .exec()
 
     expect(s).toBe('1')
   })
@@ -30,18 +30,18 @@ describe('chainable', () => {
 
     const s2 = s.pipe(_toString)
 
-    expect(s2.done()).toBe('1')
-    expect(s.done()).toBe(1)
+    expect(s2.exec()).toBe('1')
+    expect(s.exec()).toBe(1)
   })
 
   it('should be an async chainable', async () => {
     const s = chain(0).pipe(plusOne).pipe(asyncPlusOne)
-    expect(s.done()).instanceOf(Promise)
-    expect(await s.done()).toBe(2)
+    expect(s.exec()).instanceOf(Promise)
+    expect(await s.exec()).toBe(2)
 
     const s2 = s.pipe(asyncToString)
-    expect(s2.done()).instanceOf(Promise)
-    expect(await s2.done()).toBe('2')
+    expect(s2.exec()).instanceOf(Promise)
+    expect(await s2.exec()).toBe('2')
   })
 
   it('should throw an error', async () => {
@@ -53,7 +53,7 @@ describe('chainable', () => {
       })
       .pipe(asyncPlusOne)
 
-    expect(() => s.done()).toThrow('err')
+    expect(() => s.exec()).toThrow('err')
 
     // async error
     const s1 = chain(0)
@@ -64,6 +64,6 @@ describe('chainable', () => {
       })
       .pipe(asyncPlusOne)
 
-    await expect(s1.done()).rejects.toBe('async err')
+    await expect(s1.exec()).rejects.toBe('async err')
   })
 })
