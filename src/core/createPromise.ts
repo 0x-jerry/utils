@@ -1,59 +1,27 @@
-export interface PromiseInstance<T = unknown> {
-  readonly isPending: boolean
-  readonly isFulfilled: boolean
-  readonly isRejected: boolean
-
-  instance: Promise<T>
-  resolve: (data: T | PromiseLike<T>) => void
-  reject: (reason: unknown) => void
-}
-
-enum PromiseStatus {
-  Pending = 0,
-  Fulfilled = 1,
-  Rejected = 2,
-}
+export type PromiseInstance<T = unknown> = PromiseWithResolvers<T>
 
 export function createPromise<T>(): PromiseInstance<T> {
-  type Resolve = (value: T | PromiseLike<T>) => void
-  type Reject = (reason?: unknown) => void
+  if (Promise.withResolvers) {
+    return Promise.withResolvers()
+  }
+
+  type Resolve = PromiseWithResolvers<T>['resolve']
+  type Reject = PromiseWithResolvers<T>['reject']
 
   let _resolve: Resolve
   let _reject: Reject
 
-  let _status: PromiseStatus = PromiseStatus.Pending
+  const _promise = new Promise<T>((resolve, reject) => {
+    _resolve = resolve
 
-  const p = new Promise<T>((resolve, reject) => {
-    _resolve = (v) => {
-      if (_status !== PromiseStatus.Pending) return
-
-      _status = PromiseStatus.Fulfilled
-      resolve(v)
-    }
-
-    _reject = (r) => {
-      if (_status !== PromiseStatus.Pending) return
-
-      _status = PromiseStatus.Rejected
-
-      reject(r)
-    }
+    _reject = reject
   })
 
   return {
-    get isPending() {
-      return _status === PromiseStatus.Pending
-    },
-    get isFulfilled() {
-      return _status === PromiseStatus.Fulfilled
-    },
-    get isRejected() {
-      return _status === PromiseStatus.Rejected
-    },
-    instance: p,
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    promise: _promise,
+    // biome-ignore lint/style/noNonNullAssertion: has set
     resolve: _resolve!,
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    // biome-ignore lint/style/noNonNullAssertion: has set
     reject: _reject!,
   }
 }
