@@ -1,6 +1,4 @@
-export type PromiseInstance<T = unknown> = PromiseWithResolvers<T>
-
-export function createPromise<T>(): PromiseInstance<T> {
+export function createPromise<T>(): PromiseWithResolvers<T> {
   if (Promise.withResolvers) {
     return Promise.withResolvers()
   }

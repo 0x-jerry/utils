@@ -127,5 +127,5 @@ export async function _exec(cmd: string, args: readonly string[], opt?: CommonSp
     }
   })
 
-  return p.instance
+  return p.promise
 }

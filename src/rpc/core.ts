@@ -1,4 +1,4 @@
-import { type PromiseInstance, createPromise, nanoid } from '../core'
+import { createPromise, nanoid } from '../core'
 import { isFn, isObject, isString, isSymbol } from '../is'
 import type { Fn } from '../types'
 import {
@@ -69,7 +69,7 @@ interface ClientOptions {
 export function createRPCClient<T extends Procedure>(t: ClientOptions): Promisify<T> {
   const { adaptor } = t
 
-  const callRecord = new Map<string, PromiseInstance>()
+  const callRecord = new Map<string, PromiseWithResolvers<unknown>>()
 
   adaptor.receive((data) => {
     // Check response message
@@ -102,7 +102,7 @@ export function createRPCClient<T extends Procedure>(t: ClientOptions): Promisif
 
     adaptor.send(resp)
 
-    return p.instance
+    return p.promise
   }
 }
 
