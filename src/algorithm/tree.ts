@@ -2,7 +2,7 @@ import { ensureArray } from '../core'
 import { isIterable } from '../is'
 import type { Arrayable } from '../types'
 
-// biome-ignore lint/suspicious/noConfusingVoidType: <explanation>
+// biome-ignore lint/suspicious/noConfusingVoidType: on purpopse
 type TreeVisitCallback<T> = (node: T, parentNode?: T) => void | boolean
 
 function _traverseTree<T extends {}, Key extends keyof T>(
@@ -41,7 +41,7 @@ function _traverseTree<T extends {}, Key extends keyof T>(
  *
  * @param nodes
  * @param cb return true to stop
- * @param key default is `'children'`
+ * @param childrenKey default is `'children'`
  */
 export function traverse<T extends {}, Key extends keyof T>(
   nodes: Arrayable<T>,
@@ -49,25 +49,25 @@ export function traverse<T extends {}, Key extends keyof T>(
    * @returns return true to stop
    */
   cb: TreeVisitCallback<T>,
-  key?: Key,
+  childrenKey?: Key,
 ) {
-  const childrenKey = key ?? ('children' as Key)
+  const _childrenKey = childrenKey ?? ('children' as Key)
 
-  _traverseTree(nodes, cb, childrenKey)
+  _traverseTree(nodes, cb, _childrenKey)
 }
 
 /**
  *
- * @param key default is `'children'`
+ * @param childrenKey default is `'children'`
  */
 export function findNodeInTree<T extends {}, Key extends keyof T>(
   nodes: Arrayable<T>,
   predicate: TreeVisitCallback<T>,
-  key?: Key,
+  childrenKey?: Key,
 ) {
   let resultNode: T | undefined
 
-  const childrenKey = key ?? ('children' as Key)
+  const _childrenKey = childrenKey ?? ('children' as Key)
 
   _traverseTree(
     nodes,
@@ -77,7 +77,7 @@ export function findNodeInTree<T extends {}, Key extends keyof T>(
         return true
       }
     },
-    childrenKey,
+    _childrenKey,
   )
 
   return resultNode
@@ -117,9 +117,9 @@ function _filterTreeNodes<T extends {}, Key extends keyof T>(
 export function filterTreeNodes<T extends {}, Key extends keyof T>(
   nodes: Arrayable<T>,
   predicate: TreeVisitCallback<T>,
-  key?: Key,
+  childrenKey?: Key,
 ): T[] {
-  const childrenKey = key ?? ('children' as Key)
+  const _childrenKey = childrenKey ?? ('children' as Key)
 
-  return _filterTreeNodes(nodes, predicate, childrenKey)
+  return _filterTreeNodes(nodes, predicate, _childrenKey)
 }
