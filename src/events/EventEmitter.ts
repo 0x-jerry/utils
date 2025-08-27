@@ -1,6 +1,6 @@
-export type Listener<T extends unknown[] = any> = (...args: T) => void
+import type { Listener } from './types'
 
-export type EventListenersMap<R extends Record<string, unknown[]>> = {
+type EventListenersMap<R extends Record<string, unknown[]>> = {
   [K in keyof R]?: Map<Listener<R[K]>, number>
 }
 
