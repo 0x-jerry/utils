@@ -11,6 +11,6 @@
   "description": "",
   "devDependencies": {
     "@0x-jerry/utils": "workspace:*",
-    "tsup": "^8.5.0"
+    "tsup": "^8.3.5"
   }
 }
