@@ -38,7 +38,7 @@ export function round(value: number, fractionDigits: number): number {
 }
 
 /**
- * Convert value to the range [start, end]
+ * Convert value to the range [start, end)
  *
  * @param value
  * @param start
@@ -52,6 +52,5 @@ export function normalizeToRange(value: number, start: number, end: number): num
 
   const range = end - start
 
-  return ((value - start) % range + range) % range + start;
+  return ((((value - start) % range) + range) % range) + start
 }
-

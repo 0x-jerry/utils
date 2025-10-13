@@ -54,5 +54,7 @@ describe('number', () => {
 
     expect(normalizeToRange(101, -20, -10)).toBe(-19)
     expect(normalizeToRange(-101, -20, -10)).toBe(-11)
+
+    expect(normalizeToRange(10, 0, 10)).toBe(0)
   })
 })
