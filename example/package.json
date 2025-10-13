@@ -10,7 +10,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "tsup": "^8.0.2",
-    "@0x-jerry/utils": "workspace:*"
+    "@0x-jerry/utils": "workspace:*",
+    "tsup": "^8.5.0"
   }
 }
