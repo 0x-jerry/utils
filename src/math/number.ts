@@ -50,13 +50,11 @@ export function normalizeToRange(value: number, start: number, end: number): num
     throw new Error('start should less than the end')
   }
 
-  const range = end - start
-
-  let _value = Math.floor(start / range) * range + (value % range)
-
-  if (_value < start) {
-    _value += range
-  }
-
-  return _value
+  return wrapToRange(value, start, end)
 }
+
+export function wrapToRange(x: number, a: number, b: number): number {
+  const range = b - a;
+  return ((x - a) % range + range) % range + a;
+}
+
