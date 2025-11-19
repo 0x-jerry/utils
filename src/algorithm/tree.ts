@@ -2,7 +2,7 @@ import { ensureArray } from '../core'
 import { isIterable } from '../is'
 import type { Arrayable } from '../types'
 
-// biome-ignore lint/suspicious/noConfusingVoidType: on purpopse
+// biome-ignore lint/suspicious/noConfusingVoidType: on purpose
 type TreeVisitCallback<T> = (node: T, parentNode?: T) => void | boolean
 
 function _traverseTree<T extends {}, Key extends keyof T>(
