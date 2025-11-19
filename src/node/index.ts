@@ -1,2 +1,2 @@
-export { exec, type ExecOptions } from './exec'
+export { type ExecOptions, exec } from './exec'
 export * from './fs'

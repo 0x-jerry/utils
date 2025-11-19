@@ -2,9 +2,9 @@ import { createPromise, nanoid } from '../core'
 import { isFn, isObject, isString, isSymbol } from '../is'
 import type { Fn } from '../types'
 import {
-  MessageFlag,
   type CommunicationAdapter,
   type CommunicationProtocol,
+  MessageFlag,
   type Procedure,
 } from './types'
 

@@ -5,5 +5,5 @@ export { nanoid } from 'nanoid'
 export function noop() {}
 
 export function has<T extends {}>(o: T, name: string | symbol | number) {
-  return Object.prototype.hasOwnProperty.call(o, name)
+  return Object.hasOwn(o, name)
 }

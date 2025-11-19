@@ -61,7 +61,7 @@ export function _parseArgs(cmd: string) {
   const _cmd = cmd.replace(/(['"]).+?\1/g, (n) => {
     const idx = args.length
     args.push(n.slice(1, -1))
-    return `__\$${idx}`
+    return `__$${idx}`
   })
 
   const normalized = _cmd.split(/\s+/).map((_part) => {

@@ -1,6 +1,6 @@
 import type { PathLike } from 'node:fs'
 import { readFile } from 'node:fs/promises'
-import { parseJson, type ParesJsonOption } from '../json'
+import { type ParesJsonOption, parseJson } from '../json'
 
 export function readText(path: PathLike) {
   return readFile(path, { encoding: 'utf8' })

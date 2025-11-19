@@ -22,7 +22,7 @@ export function snake_case(str: string) {
   return (
     str
       // kebab-case
-      .replace(/\-/g, '_')
+      .replace(/-/g, '_')
       // PascalCase or camelCase
       .replace(/(?!^)[A-Z]/g, (n) => `_${n.toLowerCase()}`)
       // PascalCase
