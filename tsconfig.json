@@ -11,8 +11,7 @@
     "skipLibCheck": true,
     "outDir": "dist",
     "lib": ["DOM", "ESNext"],
-    "skipDefaultLibCheck": true,
-    "types": ["vitest/globals"]
+    "skipDefaultLibCheck": true
   },
-  "include": ["src", "test"]
+  "include": ["src", "env.d.ts"]
 }
