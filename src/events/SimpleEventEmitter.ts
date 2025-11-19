@@ -18,6 +18,8 @@ export class SimpleEventEmitter<Args extends unknown[] = []> {
   }
 
   emit(...args: Args) {
-    this.#listeners.forEach((listener) => listener(...args))
+    this.#listeners.forEach((listener) => {
+      listener(...args)
+    })
   }
 }
