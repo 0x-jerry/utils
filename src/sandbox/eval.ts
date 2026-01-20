@@ -1,6 +1,8 @@
 import type { Fn } from '../types'
 
-const AsyncFunction = (async () => {}).constructor
+function getAsyncFunctionConstructor() {
+  return (async () => {}).constructor
+}
 
 export interface MakeSaferEvalOption {
   /**
@@ -87,6 +89,8 @@ export function createSaferEval(opt: MakeSaferEvalOption = {}) {
     const code = parameters.at(-1)
 
     const parameterNames = parameters.slice(0, parameters.length - 1)
+
+    const AsyncFunction = getAsyncFunctionConstructor();
 
     const fn = AsyncFunction(
       ...globalAllowedKeys,
