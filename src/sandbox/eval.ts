@@ -51,7 +51,7 @@ export interface MakeSaferEvalOption {
  * It use {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncFunction/AsyncFunction AsyncFunction}
  * to create a more safe runtime, it default only enable a very small set of global objects.
  *
- * If you want to enable more global objects. You can change `allowedGlobalkeys`.
+ * If you want to enable more global objects. You can change `allowedGlobalKeys`.
  *
  * @example
  *
@@ -90,7 +90,7 @@ export function createSaferEval(opt: MakeSaferEvalOption = {}) {
 
     const parameterNames = parameters.slice(0, parameters.length - 1)
 
-    const AsyncFunction = getAsyncFunctionConstructor();
+    const AsyncFunction = getAsyncFunctionConstructor()
 
     const fn = AsyncFunction(
       ...globalAllowedKeys,
