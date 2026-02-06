@@ -7,7 +7,6 @@ export interface Procedure {
 export interface CommunicationAdapter<T extends CommunicationProtocol = CommunicationProtocol> {
   receive(receiver: Fn<void, [data: T]>): void
   send(data: T): void
-  destory?(): void
 }
 
 export enum MessageFlag {

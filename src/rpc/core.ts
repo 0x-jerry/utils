@@ -122,10 +122,6 @@ function createProxy<T>(keyPath: string[], fn: Fn) {
   return p as T
 }
 
-export function defineProcedure<T extends Procedure>(t: T) {
-  return t
-}
-
 function isResponseMessage(o: unknown): o is CommunicationProtocol {
   return isCommunicationProtocol(o) && !!((o.f || 0) & MessageFlag.Response)
 }

@@ -26,7 +26,7 @@ describe('rpc', () => {
     methods: testMethods,
   })
 
-  const c = createRPCClient<(typeof s)['methods']>({
+  const c = createRPCClient<typeof testMethods>({
     adaptor: createMessageChannelAdaptor(m.port2),
   })
 
