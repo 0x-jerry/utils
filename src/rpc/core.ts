@@ -9,10 +9,13 @@ import {
 } from './types'
 import { isRequestMessage, isResponseMessage } from './utils'
 
-export interface RPCServerOption<M> {
-  methods: M
+export interface RPCCommonOption {
   namespace?: string
   adaptor: CommunicationAdapter
+}
+
+export interface RPCServerOption<M> extends RPCCommonOption {
+  methods: M
 }
 
 export function createRPCServer<M extends Procedure>(opt: RPCServerOption<M>) {
@@ -25,6 +28,7 @@ export function createRPCServer<M extends Procedure>(opt: RPCServerOption<M>) {
 
     const resp: CommunicationProtocol = {
       _: data._,
+      n: namespace,
       f: MessageFlag.Response,
     }
 
@@ -70,29 +74,38 @@ type Promisify<T> = {
   [K in keyof T]: T[K] extends Fn<infer R, infer P> ? (...args: P) => Promise<R> : Promisify<T[K]>
 }
 
-export interface ClientOptions {
-  namespace?: string
-  adaptor: CommunicationAdapter
+export interface ClientOptions extends RPCCommonOption {
+  /**
+   * Timeout in milliseconds
+   * @default 2000
+   */
+  timeout?: number
 }
 
 export function createRPCClient<T extends Procedure>(t: ClientOptions): Promisify<T> {
-  const { adaptor, namespace } = t
+  const { adaptor, namespace, timeout = 2000 } = t
 
-  const callRecord = new Map<string, PromiseWithResolvers<unknown>>()
+  interface CallRecord {
+    p: PromiseWithResolvers<unknown>
+    timeoutHandle: number
+  }
+
+  const callRecord = new Map<string, CallRecord>()
 
   adaptor.registerReceiveCallback((data) => {
     // Check response message
     if (!isResponseMessage(data, namespace)) return false
 
-    const p = callRecord.get(data._)
-    if (!p) return false
+    const record = callRecord.get(data._)
+    if (!record) return false
+    clearTimeout(record.timeoutHandle)
 
     callRecord.delete(data._)
 
     if (data.e) {
-      p.reject(data.e)
+      record.p.reject(data.e)
     } else {
-      p.resolve(data.d)
+      record.p.resolve(data.d)
     }
 
     return true
@@ -103,6 +116,7 @@ export function createRPCClient<T extends Procedure>(t: ClientOptions): Promisif
   async function send(keyPath: string[], ...args: unknown[]) {
     const resp: CommunicationProtocol = {
       _: nanoid(),
+      n: namespace,
       f: MessageFlag.Default,
       k: keyPath,
       a: args,
@@ -110,7 +124,15 @@ export function createRPCClient<T extends Procedure>(t: ClientOptions): Promisif
 
     const p = createPromise()
 
-    callRecord.set(resp._, p)
+    const timeoutHandle = setTimeout(() => {
+      callRecord.delete(resp._)
+      p.reject(new Error('Timeout'))
+    }, timeout)
+
+    callRecord.set(resp._, {
+      p,
+      timeoutHandle: timeoutHandle as any,
+    })
 
     adaptor.send(resp)
 

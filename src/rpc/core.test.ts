@@ -46,4 +46,35 @@ describe('rpc', () => {
   it('should work with deep object', async () => {
     expect(await c.deep.minus(4, 2)).toBe(2)
   })
+
+  it('should throw error when timeout', async () => {
+    const c = createRPCClient<typeof testMethods>({
+      adaptor: createMessageChannelAdaptor(m.port2),
+      namespace: 'default',
+      timeout: 50,
+    })
+
+    await expect(() => c.deep.minus(4, 2)).rejects.toThrowError('Timeout')
+  })
+
+  it('should work with namespace', async () => {
+    const testMethods = {
+      ping() {
+        return 'pong'
+      },
+    }
+
+    const s = createRPCServer({
+      adaptor: createMessageChannelAdaptor(m.port1),
+      methods: testMethods,
+      namespace: 'default',
+    })
+
+    const c = createRPCClient<typeof testMethods>({
+      adaptor: createMessageChannelAdaptor(m.port2),
+      namespace: 'default',
+    })
+
+    expect(await c.ping()).toBe('pong')
+  })
 })
