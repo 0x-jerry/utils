@@ -63,8 +63,9 @@ function getFn(methods: Procedure | undefined, keyPath: string[]): Fn | null {
     }
   }
 
-  if (isObject(methods?.[key])) {
-    return getFn(methods?.[key], resetKeyPath)
+  const target = methods?.[key]
+  if (isObject(target) || isFn(target)) {
+    return getFn(target as Procedure, resetKeyPath)
   }
 
   return null
