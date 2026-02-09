@@ -5,9 +5,9 @@ export function createMessageChannelAdaptor(m: MessagePort) {
     send(data) {
       m.postMessage(data)
     },
-    receive(receiver) {
+    registerReceiveCallback(receiveCallback) {
       m.addEventListener('message', (evt) => {
-        receiver(evt.data)
+        receiveCallback(evt.data)
       })
     },
   }

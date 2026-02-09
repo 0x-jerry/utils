@@ -7,9 +7,9 @@ export function createWorkerAdaptor(m?: Worker) {
     send(data) {
       host.postMessage(data)
     },
-    receive(receiver) {
+    registerReceiveCallback(receiveCallback) {
       host.addEventListener('message', (evt) => {
-        receiver((evt as any).data)
+        receiveCallback((evt as any).data)
       })
     },
   }

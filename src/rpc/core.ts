@@ -1,5 +1,5 @@
 import { createPromise, nanoid } from '../core'
-import { isFn, isObject, isString, isSymbol } from '../is'
+import { isFn, isObject, isSymbol } from '../is'
 import type { Fn } from '../types'
 import {
   type CommunicationAdapter,
@@ -7,17 +7,19 @@ import {
   MessageFlag,
   type Procedure,
 } from './types'
+import { isRequestMessage, isResponseMessage } from './utils'
 
-interface RPCServerOption<M> {
+export interface RPCServerOption<M> {
   methods: M
+  namespace?: string
   adaptor: CommunicationAdapter
 }
 
 export function createRPCServer<M extends Procedure>(opt: RPCServerOption<M>) {
-  const { adaptor, methods } = opt
+  const { adaptor, methods, namespace } = opt
 
-  adaptor.receive(async (data) => {
-    if (!isCommunicationProtocol(data)) return
+  adaptor.registerReceiveCallback((data) => {
+    if (!isRequestMessage(data, namespace)) return false
 
     const m = getFn(methods, data.k || [])
 
@@ -26,14 +28,20 @@ export function createRPCServer<M extends Procedure>(opt: RPCServerOption<M>) {
       f: MessageFlag.Response,
     }
 
-    try {
-      const respData = await m?.(...(data.a || []))
+    processMessage()
 
-      resp.d = respData
-    } catch (error) {
-      resp.e = String(error)
-    } finally {
-      adaptor.send(resp)
+    return true
+
+    async function processMessage() {
+      try {
+        const respData = await m?.(...(data.a || []))
+
+        resp.d = respData
+      } catch (error) {
+        resp.e = String(error)
+      } finally {
+        adaptor.send(resp)
+      }
     }
   })
 
@@ -62,21 +70,22 @@ type Promisify<T> = {
   [K in keyof T]: T[K] extends Fn<infer R, infer P> ? (...args: P) => Promise<R> : Promisify<T[K]>
 }
 
-interface ClientOptions {
+export interface ClientOptions {
+  namespace?: string
   adaptor: CommunicationAdapter
 }
 
 export function createRPCClient<T extends Procedure>(t: ClientOptions): Promisify<T> {
-  const { adaptor } = t
+  const { adaptor, namespace } = t
 
   const callRecord = new Map<string, PromiseWithResolvers<unknown>>()
 
-  adaptor.receive((data) => {
+  adaptor.registerReceiveCallback((data) => {
     // Check response message
-    if (!isResponseMessage(data)) return
+    if (!isResponseMessage(data, namespace)) return false
 
     const p = callRecord.get(data._)
-    if (!p) return
+    if (!p) return false
 
     callRecord.delete(data._)
 
@@ -85,6 +94,8 @@ export function createRPCClient<T extends Procedure>(t: ClientOptions): Promisif
     } else {
       p.resolve(data.d)
     }
+
+    return true
   })
 
   return createProxy<Promisify<T>>([], send)
@@ -92,6 +103,7 @@ export function createRPCClient<T extends Procedure>(t: ClientOptions): Promisif
   async function send(keyPath: string[], ...args: unknown[]) {
     const resp: CommunicationProtocol = {
       _: nanoid(),
+      f: MessageFlag.Default,
       k: keyPath,
       a: args,
     }
@@ -120,12 +132,4 @@ function createProxy<T>(keyPath: string[], fn: Fn) {
   })
 
   return p as T
-}
-
-function isResponseMessage(o: unknown): o is CommunicationProtocol {
-  return isCommunicationProtocol(o) && !!((o.f || 0) & MessageFlag.Response)
-}
-
-function isCommunicationProtocol(o: unknown): o is CommunicationProtocol {
-  return isObject(o) && '_' in o && isString(o._)
 }

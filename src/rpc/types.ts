@@ -5,45 +5,55 @@ export interface Procedure {
 }
 
 export interface CommunicationAdapter<T extends CommunicationProtocol = CommunicationProtocol> {
-  receive(receiver: Fn<void, [data: T]>): void
+  /**
+   *
+   * @param receiveCallback Return true if the data is valid message
+   */
+  registerReceiveCallback(receiveCallback: Fn<boolean, [data: T]>): void
   send(data: T): void
 }
 
 export enum MessageFlag {
+  Default = 0,
   /**
-   * remote response
+   * Remote response
    */
-  Response = 1,
+  Response = 0b1,
 }
 
 export interface CommunicationProtocol {
   /**
-   * id
+   * ID
    */
   _: string
 
   /**
-   * flags
+   * Flags
    */
-  f?: number
+  f: number
 
   /**
-   * key path
+   * Key path
    */
   k?: string[]
 
   /**
-   * arguments
+   * Arguments
    */
   a?: unknown[]
 
   /**
-   * error
+   * Error
    */
   e?: string
 
   /**
-   * response data
+   * Response data
    */
   d?: unknown
+
+  /**
+   * Namespcae
+   */
+  n?: string
 }
