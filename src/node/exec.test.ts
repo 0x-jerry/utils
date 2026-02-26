@@ -46,4 +46,12 @@ describe('exec', () => {
       expect(output).toBe("hello  'world\n")
     }
   })
+
+  it.skipIf(isWin)('should work with cwd option', async () => {
+    const output = await exec('pwd', { collectOutput: true, cwd: import.meta.dirname })
+
+    const expectPath = import.meta.dirname
+
+    expect(output.trim()).toBe(expectPath)
+  })
 })

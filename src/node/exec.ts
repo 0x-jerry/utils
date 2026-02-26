@@ -3,7 +3,7 @@ import os from 'node:os'
 import pc from 'picocolors'
 import { createPromise } from '../core'
 
-export interface ExecOptions {
+export interface ExecOptions extends Omit<CommonSpawnOptions, 'env' | 'stdio'> {
   /**
    * default is false
    */
@@ -15,7 +15,7 @@ export interface ExecOptions {
   /**
    * default is `process.env`
    */
-  env?: Record<string, string | undefined>
+  env?: NodeJS.ProcessEnv
 }
 
 /**
@@ -27,7 +27,7 @@ export interface ExecOptions {
  * ```
  */
 export async function exec(cmd: string, opt: ExecOptions = {}) {
-  const { env = process.env, collectOutput = false, silent = collectOutput } = opt
+  const { env = process.env, collectOutput = false, silent = collectOutput, ...other } = opt
 
   if (!silent) {
     console.log(pc.dim('$'), pc.dim(cmd))
@@ -43,6 +43,7 @@ export async function exec(cmd: string, opt: ExecOptions = {}) {
   for (const cmd of commands) {
     const [_cmd, ...args] = _parseArgs(cmd)
     const p = await _exec(_cmd, args, {
+      ...other,
       stdio: collectOutput ? 'pipe' : 'inherit',
       env: env,
     })
