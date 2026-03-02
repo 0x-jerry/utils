@@ -1,10 +1,10 @@
-import { createLogger, type LoggerLevel, type LoggerOption } from './createLogger'
+import { createLogger, type LoggerWriteFn } from './createLogger'
 
 describe('createSimpleLogger', () => {
   it('output', () => {
     const { console, write } = mockConsole()
 
-    const logger = createLogger('[tt]', { write })
+    const logger = createLogger('tt', { write })
 
     logger.log('hello')
     expect(console.info).toHaveBeenLastCalledWith('[tt]', 'hello')
@@ -16,65 +16,23 @@ describe('createSimpleLogger', () => {
     expect(console.error).toHaveBeenLastCalledWith('[tt]', 'hello')
   })
 
-  it('function prefix', () => {
-    let level: LoggerLevel | undefined
-
-    const { console, write } = mockConsole()
-
-    let idx = 0
-
-    const logger = createLogger(
-      (t) => {
-        level = t
-        return `[${idx++}]`
-      },
-      { write },
-    )
-
-    logger.log('hello')
-    expect(console.info).toBeCalledTimes(1)
-    expect(console.info.mock.calls[0][0]).toBe('[0]')
-    expect(level).toBe('info')
-
-    logger.warn('hello')
-    expect(console.warn.mock.calls[0][0]).toBe('[1]')
-    expect(level).toBe('warn')
-
-    logger.error('hello')
-    expect(console.error.mock.calls[0][0]).toBe('[2]')
-    expect(level).toBe('error')
-  })
-
   it('enable/disable', () => {
-    let level: LoggerLevel | undefined
-
-    let idx = 0
-
     const { console, write } = mockConsole()
 
-    const logger = createLogger(
-      (t) => {
-        level = t
-        return `[${idx++}]`
-      },
-      { write },
-    )
+    const logger = createLogger('tt', { write })
 
     logger.log('hello')
-    expect(level).toBe('info')
-    level = undefined
+    expect(console.info).toHaveBeenLastCalledWith('[tt]', 'hello')
     expect(logger.isEnabled).toBe(true)
 
     logger.disable()
     expect(logger.isEnabled).toBe(false)
-    logger.warn('hello')
-    logger.log('hello')
-    logger.warn('hello')
-    expect(level).toBe(undefined)
+    logger.log('hello1')
+    expect(console.info).toHaveBeenLastCalledWith('[tt]', 'hello')
 
     logger.enable()
-    logger.error('hello')
-    expect(level).toBe('error')
+    logger.log('hello2')
+    expect(console.info).toHaveBeenLastCalledWith('[tt]', 'hello2')
   })
 
   it('should print without prefix', () => {
@@ -100,8 +58,12 @@ function mockConsole() {
     error: vi.fn(),
   }
 
-  const write: LoggerOption['write'] = (type, ...params) => {
-    console[type](...params)
+  const write: LoggerWriteFn = (opt, formatter, ...params) => {
+    if (opt.namespace) {
+      console[opt.level](`[${opt.namespace}]`, formatter, ...params)
+    } else {
+      console[opt.level](formatter, ...params)
+    }
   }
 
   return {
