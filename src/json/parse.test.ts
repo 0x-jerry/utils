@@ -11,7 +11,7 @@ describe('json', () => {
     expect(r).toEqual(undefined)
   })
 
-  it('no transofrm', () => {
+  it('without transform', () => {
     const r = parseJson<JsonResult>(`{"a": 2}`)
 
     expect(r).toEqual({ a: 2 })
