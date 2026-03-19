@@ -16,6 +16,10 @@ export type Arrayable<T> = T | T[]
  */
 export type Awaitable<T> = T | PromiseLike<T>
 
+export type Factory<T> = T | (() => T)
+
+export type AsyncFactory<T> = T | (() => Awaitable<T>)
+
 export interface Ctor<Instance = unknown, Params extends unknown[] = unknown[]> {
   new (...args: Params): Instance
 }

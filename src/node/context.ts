@@ -1,5 +1,6 @@
 import { AsyncLocalStorage } from "node:async_hooks";
-import type { Awaitable } from "../types";
+import type { Awaitable, Factory } from "../types";
+import { toValue } from "../utils";
 
 type ASLStore = Map<ContextImplementSymbol, any>;
 
@@ -15,7 +16,7 @@ export interface ContextInstance<T> {
   impl(service: T): ContextImplement<T>;
 }
 
-export function create<Service>(name: string, defaultImpl?: () => Service) {
+export function create<Service>(name: string, defaultImpl?: Factory<Service>) {
   const ContextImpl: ContextInstance<Service> = {
     name,
     get() {
@@ -30,7 +31,7 @@ export function create<Service>(name: string, defaultImpl?: () => Service) {
       if (v.has(key)) {
         return v.get(key);
       } else if (defaultImpl) {
-        const value = defaultImpl();
+        const value = toValue(defaultImpl);
 
         v.set(key, value);
         return value;
