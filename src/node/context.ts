@@ -12,21 +12,52 @@ export type ContextImplement<Value = unknown> = [ContextImplementSymbol, Value]
 
 export interface ContextInstance<T> {
   name: string
+
+  /**
+   * Get current context
+   */
   get(): T
+
+  /**
+   * Implement the context
+   * @param service
+   */
   impl(service: T): ContextImplement<T>
 }
 
-type ContextRunFn = (
+export type ContextRunFn = (
   fn: () => Awaitable<void>,
   serviceImplements?: ContextImplement[],
 ) => Promise<void>
 
 export interface BindContext {
+  /**
+   * Run with context implements
+   */
   run: ContextRunFn
+
+  /**
+    Bind the context implementations in advance
+
+    ```ts
+    const bind = Context.bind(() => [CounterService.impl({ count: 1 })])
+
+    bind.run(() => {
+      const c = CounterService.get() // c.count === 1
+    })
+    ```
+   */
   bind: (serviceImplements?: Factory<ContextImplement[]>) => BindContext
 }
 
 export namespace Context {
+  /**
+    Create a context instance, then you can use the instance to get the runtime context
+
+    @param name Context name
+    @param defaultImpl The default implement will applied if the `run` function not provide the implement
+    @returns
+   */
   export function create<Service>(name: string, defaultImpl?: Factory<Service>) {
     const ContextImpl: ContextInstance<Service> = {
       name,
@@ -60,6 +91,41 @@ export namespace Context {
     return ContextImpl
   }
 
+  /**
+    Execute a function by provide context implements, support async runtime.
+
+    @example
+
+    ```ts
+    interface CounterService {
+      count: number
+    }
+
+    const CounterService = Context.create<CounterService>('counter')
+
+    const main = () => {
+      const c = CounterService.get()
+      console.log(c.count) // => 1
+
+      setTimeout(() => {
+        const c1 = CounterService.get()
+
+        console.log(c1.count) // => 1
+      }, 100)
+    }
+
+    Context.run(main, [
+      CounterService.impl({
+        count: 1,
+      }),
+    ])
+
+    ```
+
+    @param fn
+    @param serviceImplements
+    @returns
+   */
   export function run(fn: () => Awaitable<void>, serviceImplements?: ContextImplement[]) {
     const p = Promise.withResolvers<void>()
 
@@ -83,38 +149,80 @@ export namespace Context {
     return p.promise
   }
 
+  /**
+    Exit the current context
+
+    @example
+
+    ```ts
+    Context.run(() => {
+      const c = CounterService.get() // Works
+
+      Context.exit(() => {
+        const c = CounterService.get() // This will throw error, because current runtime is not in the context
+      })
+
+      const c1 = CounterService.get() // Works
+    })
+    ```
+   */
   export function exit(fn: () => Awaitable<void>) {
     return getAls().exit(() => fn())
   }
 
+  /**
+    Bind the context implementations in advance
+
+    ```ts
+    const bind = Context.bind(() => [CounterService.impl({ count: 1 })])
+
+    bind.run(() => {
+      const c = CounterService.get() // c.count === 1
+    })
+    ```
+   */
   export function bind(serviceImplements?: Factory<ContextImplement[]>): BindContext {
     return new BindContextImpl(serviceImplements && [serviceImplements])
   }
+}
 
-  class BindContextImpl implements BindContext {
-    implFactories: Factory<ContextImplement[]>[] = []
+class BindContextImpl implements BindContext {
+  implFactories: Factory<ContextImplement[]>[] = []
 
-    constructor(implFactories?: Factory<ContextImplement[]>[]) {
-      this.implFactories.push(...(implFactories || []))
-    }
+  constructor(implFactories?: Factory<ContextImplement[]>[]) {
+    this.implFactories.push(...(implFactories || []))
+  }
 
-    run: ContextRunFn = async (fn, contextImplements) => {
-      const allImplements = contextImplements
-        ? [...this.implFactories, contextImplements]
-        : this.implFactories
+  /**
+      Execute the function by context implementations
+     */
+  run: ContextRunFn = async (fn, contextImplements) => {
+    const allImplements = contextImplements
+      ? [...this.implFactories, contextImplements]
+      : this.implFactories
 
-      const normalizedImplements = allImplements.flatMap((f) => toValue(f))
+    const normalizedImplements = allImplements.flatMap((f) => toValue(f))
 
-      return Context.run(fn, normalizedImplements)
-    }
+    return Context.run(fn, normalizedImplements)
+  }
 
-    bind: (serviceImplements?: Factory<ContextImplement[]>) => BindContext = (implFactories) => {
-      const allImplements = implFactories
-        ? [...this.implFactories, implFactories]
-        : this.implFactories
+  /**
+      Bind the context implementations in advance
 
-      return new BindContextImpl(allImplements)
-    }
+      ```ts
+      const bind = Context.bind(() => [CounterService.impl({ count: 1 })])
+
+      bind.run(() => {
+        const c = CounterService.get() // c.count === 1
+      })
+      ```
+     */
+  bind: (serviceImplements?: Factory<ContextImplement[]>) => BindContext = (implFactories) => {
+    const allImplements = implFactories
+      ? [...this.implFactories, implFactories]
+      : this.implFactories
+
+    return new BindContextImpl(allImplements)
   }
 }
 
