@@ -16,6 +16,16 @@ export interface ContextInstance<T> {
   impl(service: T): ContextImplement<T>
 }
 
+type ContextRunFn = (
+  fn: () => Awaitable<void>,
+  serviceImplements?: ContextImplement[],
+) => Promise<void>
+
+export interface BindContext {
+  run: ContextRunFn
+  bind: (serviceImplements?: Factory<ContextImplement[]>) => BindContext
+}
+
 export namespace Context {
   export function create<Service>(name: string, defaultImpl?: Factory<Service>) {
     const ContextImpl: ContextInstance<Service> = {
@@ -75,6 +85,36 @@ export namespace Context {
 
   export function exit(fn: () => Awaitable<void>) {
     return getAls().exit(() => fn())
+  }
+
+  export function bind(serviceImplements?: Factory<ContextImplement[]>): BindContext {
+    return new BindContextImpl(serviceImplements && [serviceImplements])
+  }
+
+  class BindContextImpl implements BindContext {
+    implFactories: Factory<ContextImplement[]>[] = []
+
+    constructor(implFactories?: Factory<ContextImplement[]>[]) {
+      this.implFactories.push(...(implFactories || []))
+    }
+
+    run: ContextRunFn = async (fn, contextImplements) => {
+      const allImplements = contextImplements
+        ? [...this.implFactories, contextImplements]
+        : this.implFactories
+
+      const normalizedImplements = allImplements.flatMap((f) => toValue(f))
+
+      return Context.run(fn, normalizedImplements)
+    }
+
+    bind: (serviceImplements?: Factory<ContextImplement[]>) => BindContext = (implFactories) => {
+      const allImplements = implFactories
+        ? [...this.implFactories, implFactories]
+        : this.implFactories
+
+      return new BindContextImpl(allImplements)
+    }
   }
 }
 

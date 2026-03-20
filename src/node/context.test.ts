@@ -2,7 +2,7 @@ import { sleep } from '../core'
 import { Context } from './context'
 
 describe('context', () => {
-  class TestContext {
+  class CounterService {
     count = 0
 
     constructor(init = 0) {
@@ -13,18 +13,18 @@ describe('context', () => {
       this.count++
     }
   }
-  const Test = Context.create<InstanceType<typeof TestContext>>('test')
+  const CounterContext = Context.create<InstanceType<typeof CounterService>>('test')
 
-  it('should get context', () => {
+  it('should get context', async () => {
     const main = vi.fn(() => {
-      const t = Test.get()
-      t.add()
-      expect(t.count).toBe(1)
+      const c = CounterContext.get()
+      c.add()
+      expect(c.count).toBe(1)
     })
 
-    Context.run(main, [
+    await Context.run(main, [
       //
-      Test.impl(new TestContext()),
+      CounterContext.impl(new CounterService()),
     ])
 
     expect(main).toBeCalledTimes(1)
@@ -32,18 +32,19 @@ describe('context', () => {
 
   it('should get context in async runtime', async () => {
     const main = vi.fn(async () => {
-      const t = Test.get()
-      expect(t.count).toBe(0)
+      const c = CounterContext.get()
+      expect(c.count).toBe(0)
       await sleep(10)
-      const t1 = Test.get()
-      t1.add()
-      expect(t1).toBe(t)
-      expect(t1.count).toBe(1)
+
+      const c1 = CounterContext.get()
+      c1.add()
+      expect(c1).toBe(c)
+      expect(c1.count).toBe(1)
     })
 
     await Context.run(main, [
       //
-      Test.impl(new TestContext()),
+      CounterContext.impl(new CounterService()),
     ])
 
     expect(main).toBeCalledTimes(1)
@@ -51,20 +52,24 @@ describe('context', () => {
 
   it('should be isolated', async () => {
     const main = vi.fn(async () => {
-      const t = Test.get()
+      const t = CounterContext.get()
       expect(t.count).toBe(0)
+
       await sleep(10)
-      const t1 = Test.get()
+
+      const t1 = CounterContext.get()
       t1.add()
       expect(t1).toBe(t)
       expect(t1.count).toBe(1)
     })
 
     const main2 = vi.fn(async () => {
-      const t = Test.get()
+      const t = CounterContext.get()
       expect(t.count).toBe(1)
+
       await sleep(10)
-      const t1 = Test.get()
+
+      const t1 = CounterContext.get()
       t1.add()
       expect(t1).toBe(t)
       expect(t1.count).toBe(2)
@@ -72,17 +77,32 @@ describe('context', () => {
 
     const r1 = Context.run(main, [
       //
-      Test.impl(new TestContext()),
+      CounterContext.impl(new CounterService()),
     ])
 
     const r2 = Context.run(main2, [
       //
-      Test.impl(new TestContext(1)),
+      CounterContext.impl(new CounterService(1)),
     ])
 
     await Promise.all([r1, r2])
 
     expect(main).toBeCalledTimes(1)
     expect(main2).toBeCalledTimes(1)
+  })
+
+  it('should bind context in advance', async () => {
+    const main = vi.fn(() => {
+      const c = CounterContext.get()
+      c.add()
+      expect(c.count).toBe(2)
+    })
+
+    const bindContext = Context.bind(() => [CounterContext.impl(new CounterService(1))])
+
+    await bindContext.run(main)
+    await bindContext.run(main)
+
+    expect(main).toBeCalledTimes(2)
   })
 })
