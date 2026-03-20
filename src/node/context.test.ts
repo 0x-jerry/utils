@@ -30,7 +30,7 @@ describe('context', () => {
     expect(main).toHaveBeenCalledTimes(1)
   })
 
-  it('should get context in async runtime', async () => {
+  it('should get context in async scope', async () => {
     const main = vi.fn(async () => {
       const c = CounterContext.get()
       expect(c.count).toBe(0)
