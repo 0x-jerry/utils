@@ -49,7 +49,7 @@ export interface BindContext {
 
 export namespace Context {
   /**
-    Create a context instance, then you can use the instance to get the runtime context
+    Create a context instance, then you can use the instance to get the context in async scope
 
     @param name Context name
     @param defaultImpl The default implement will applied if the `run` function not provide the implement
@@ -89,7 +89,7 @@ export namespace Context {
   }
 
   /**
-    Execute a function by provide context implements, support async runtime.
+    Execute a function by provide context implements, support async scope.
 
     @example
 
@@ -145,7 +145,7 @@ export namespace Context {
       const c = CounterService.get() // Works
 
       Context.exit(() => {
-        const c = CounterService.get() // This will throw error, because current runtime is not in the context
+        const c = CounterService.get() // This will throw error, because current scope is not in the context scope
       })
 
       const c1 = CounterService.get() // Works
