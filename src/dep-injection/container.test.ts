@@ -56,7 +56,7 @@ describe('container', () => {
     expect(a).toBeInstanceOf(implA)
     expect(a1).toBeInstanceOf(implA)
     expect(a).toBe(a1)
-    expect(aCtor).toBeCalledTimes(1)
+    expect(aCtor).toHaveBeenCalledTimes(1)
   })
 
   it('get with target', () => {
@@ -92,7 +92,7 @@ describe('container', () => {
     const b = di.get('b')
 
     b.b()
-    expect(aCtor).toBeCalledTimes(1)
+    expect(aCtor).toHaveBeenCalledTimes(1)
   })
 
   it('#clear', () => {

@@ -22,12 +22,12 @@ describe('context', () => {
       expect(c.count).toBe(1)
     })
 
-    await Context.run(main, [
+    Context.run(main, [
       //
       CounterContext.impl(new CounterService()),
     ])
 
-    expect(main).toBeCalledTimes(1)
+    expect(main).toHaveBeenCalledTimes(1)
   })
 
   it('should get context in async runtime', async () => {
@@ -47,7 +47,7 @@ describe('context', () => {
       CounterContext.impl(new CounterService()),
     ])
 
-    expect(main).toBeCalledTimes(1)
+    expect(main).toHaveBeenCalledTimes(1)
   })
 
   it('should be isolated', async () => {
@@ -87,8 +87,8 @@ describe('context', () => {
 
     await Promise.all([r1, r2])
 
-    expect(main).toBeCalledTimes(1)
-    expect(main2).toBeCalledTimes(1)
+    expect(main).toHaveBeenCalledTimes(1)
+    expect(main2).toHaveBeenCalledTimes(1)
   })
 
   it('should bind context in advance', async () => {
@@ -100,9 +100,9 @@ describe('context', () => {
 
     const bindContext = Context.bind(() => [CounterContext.impl(new CounterService(1))])
 
-    await bindContext.run(main)
-    await bindContext.run(main)
+    bindContext.run(main)
+    bindContext.run(main)
 
-    expect(main).toBeCalledTimes(2)
+    expect(main).toHaveBeenCalledTimes(2)
   })
 })

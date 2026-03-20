@@ -87,7 +87,7 @@ describe('EventEmitter', () => {
 
     off()
 
-    expect(fn).toBeCalledTimes(1)
+    expect(fn).toHaveBeenCalledTimes(1)
   })
 
   it("should not throw listener's error", () => {
@@ -107,7 +107,7 @@ describe('EventEmitter', () => {
     off()
     off2()
 
-    expect(fn2).toBeCalledTimes(1)
+    expect(fn2).toHaveBeenCalledTimes(1)
   })
 
   it('should only call twice', () => {
@@ -127,6 +127,6 @@ describe('EventEmitter', () => {
     ee.emit('bar', 1, '1')
     expect(ee.events('bar').length).toBe(0)
 
-    expect(fn).toBeCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
   })
 })

@@ -7,9 +7,9 @@ describe('SimpleEventEmitter', () => {
     const fn = vi.fn()
     emitter.on(fn)
 
-    expect(fn).toBeCalledTimes(0)
+    expect(fn).toHaveBeenCalledTimes(0)
     emitter.emit()
-    expect(fn).toBeCalledTimes(1)
+    expect(fn).toHaveBeenCalledTimes(1)
   })
 
   it('#off', () => {
@@ -21,6 +21,6 @@ describe('SimpleEventEmitter', () => {
     dispose()
 
     emitter.emit()
-    expect(fn).toBeCalledTimes(0)
+    expect(fn).toHaveBeenCalledTimes(0)
   })
 })

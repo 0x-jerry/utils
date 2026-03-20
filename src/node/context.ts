@@ -25,10 +25,7 @@ export interface ContextInstance<T> {
   impl(service: T): ContextImplement<T>
 }
 
-export type ContextRunFn = (
-  fn: () => Awaitable<void>,
-  serviceImplements?: ContextImplement[],
-) => Promise<void>
+export type ContextRunFn = <T>(fn: () => T, serviceImplements?: ContextImplement[]) => T
 
 export interface BindContext {
   /**
@@ -126,7 +123,7 @@ export namespace Context {
     @param serviceImplements
     @returns
    */
-  export function run(fn: () => Awaitable<void>, serviceImplements?: ContextImplement[]) {
+  export function run<T>(fn: () => T, serviceImplements?: ContextImplement[]) {
     const als = getAls()
 
     const ctx: ASLStore = new Map()
@@ -185,7 +182,7 @@ class BindContextImpl implements BindContext {
   /**
       Execute the function by context implementations
      */
-  run: ContextRunFn = async (fn, contextImplements) => {
+  run<T>(fn: () => T, contextImplements?: ContextImplement[]) {
     const allImplements = contextImplements
       ? [...this.implFactories, contextImplements]
       : this.implFactories
