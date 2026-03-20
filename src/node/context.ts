@@ -127,26 +127,15 @@ export namespace Context {
     @returns
    */
   export function run(fn: () => Awaitable<void>, serviceImplements?: ContextImplement[]) {
-    const p = Promise.withResolvers<void>()
+    const als = getAls()
 
     const ctx: ASLStore = new Map()
 
-    getAls().run(ctx, async () => {
-      const v = getAls().getStore()!
+    for (const [key, value] of serviceImplements || []) {
+      ctx.set(key, value)
+    }
 
-      for (const [key, value] of serviceImplements || []) {
-        v.set(key, value)
-      }
-
-      try {
-        await fn()
-        p.resolve()
-      } catch (err) {
-        p.reject(err)
-      }
-    })
-
-    return p.promise
+    return als.run(ctx, fn)
   }
 
   /**
