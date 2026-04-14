@@ -9,9 +9,17 @@
     "declaration": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "outDir": "dist",
-    "lib": ["DOM", "ESNext"],
-    "skipDefaultLibCheck": true
+    "lib": [
+      "DOM",
+      "ESNext"
+    ],
+    "skipDefaultLibCheck": true,
+    "types": [
+      "node"
+    ]
   },
-  "include": ["src", "env.d.ts"]
+  "include": [
+    "src",
+    "env.d.ts"
+  ]
 }
