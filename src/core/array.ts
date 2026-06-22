@@ -20,7 +20,7 @@ export const remove = <T>(arr: T[], predicate: T | ((item: T, index: number) => 
 
   if (isFn(predicate)) {
     for (let idx = 0; idx < arr.length; idx++) {
-      const shouldRemove = predicate(arr[idx], idx)
+      const shouldRemove = predicate(arr[idx]!, idx)
 
       if (shouldRemove) {
         removed.push(...arr.splice(idx, 1))

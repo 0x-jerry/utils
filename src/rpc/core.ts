@@ -56,6 +56,9 @@ export function createRPCServer<M extends Procedure>(opt: RPCServerOption<M>) {
 
 function getFn(methods: Procedure | undefined, keyPath: string[]): Fn | null {
   const [key, ...resetKeyPath] = keyPath
+  if (!key) {
+    return null
+  }
 
   if (resetKeyPath.length === 0) {
     if (isFn(methods?.[key])) {

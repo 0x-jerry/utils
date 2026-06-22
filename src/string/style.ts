@@ -2,7 +2,7 @@ export function PascalCase(str: string) {
   return (
     str
       // snake_case or kebab-case
-      .replace(/[_-]\w/g, (n) => n[1].toUpperCase())
+      .replace(/[_-]\w/g, (n) => n[1]!.toUpperCase())
       // camelCase
       .replace(/^\w/g, (n) => n.toUpperCase())
   )
@@ -12,7 +12,7 @@ export function camelCase(str: string) {
   return (
     str
       // snake_case or kebab-case
-      .replace(/[_-]\w/g, (n) => n[1].toUpperCase())
+      .replace(/[_-]\w/g, (n) => n[1]!.toUpperCase())
       // PascalCase
       .replace(/^\w/g, (n) => n.toLowerCase())
   )

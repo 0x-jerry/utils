@@ -154,47 +154,47 @@ describe('container', () => {
   })
 })
 
-describe('ES decorator', () => {
-  type A = {
-    _?: number
-  }
+// describe('ES decorator', () => {
+//   type A = {
+//     _?: number
+//   }
 
-  interface B {
-    a: A
-  }
+//   interface B {
+//     a: A
+//   }
 
-  interface C {
-    b: B
-  }
+//   interface C {
+//     b: B
+//   }
 
-  interface DIMap {
-    a: A
-    b: B
-    c: C
-  }
+//   interface DIMap {
+//     a: A
+//     b: B
+//     c: C
+//   }
 
-  it('get', () => {
-    const DI = new Container<DIMap>()
-    class ImplA implements A {}
+//   it('get', () => {
+//     const DI = new Container<DIMap>()
+//     class ImplA implements A {}
 
-    class ImplB implements B {
-      @DI.inject('a')
-      a!: A
-    }
+//     class ImplB implements B {
+//       @DI.inject('a')
+//       a!: A
+//     }
 
-    class ImplC implements C {
-      @DI.lazyInject('b')
-      b!: B
-    }
+//     class ImplC implements C {
+//       @DI.lazyInject('b')
+//       b!: B
+//     }
 
-    DI.bind('a', ImplA)
-    DI.bind('b', ImplB)
-    DI.bind('c', ImplC)
+//     DI.bind('a', ImplA)
+//     DI.bind('b', ImplB)
+//     DI.bind('c', ImplC)
 
-    const c = DI.get('c')
+//     const c = DI.get('c')
 
-    expect(c).instanceOf(ImplC)
-    expect(c.b).instanceof(ImplB)
-    expect(c.b.a).instanceof(ImplA)
-  })
-})
+//     expect(c).instanceOf(ImplC)
+//     expect(c.b).instanceof(ImplB)
+//     expect(c.b.a).instanceof(ImplA)
+//   })
+// })

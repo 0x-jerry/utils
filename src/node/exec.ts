@@ -42,6 +42,10 @@ export async function exec(cmd: string, opt: ExecOptions = {}) {
 
   for (const cmd of commands) {
     const [_cmd, ...args] = _parseArgs(cmd)
+    if (!_cmd) {
+      throw new Error(`Parse args failed: ${cmd}`)
+    }
+
     const p = await _exec(_cmd, args, {
       ...other,
       stdio: collectOutput ? 'pipe' : 'inherit',
@@ -69,7 +73,7 @@ export function _parseArgs(cmd: string) {
     const part = _part.trim()
 
     if (part.startsWith('__$')) {
-      return args[+part.slice(3)]
+      return args[+part.slice(3)]!
     }
     return part
   })

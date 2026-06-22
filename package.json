@@ -35,10 +35,8 @@
     "release": "x-release",
     "prepublishOnly": "npm run build"
   },
-  "release": {
-    "clean": [
-      "dist"
-    ]
+  "peerDependencies": {
+    "fflate": "^0.8.2"
   },
   "devDependencies": {
     "@0x-jerry/x-release": "^3.0.1",
@@ -51,8 +49,9 @@
     "vitest": "^4.1.0"
   },
   "dependencies": {
-    "fflate": "^0.8.2",
     "nanoid": "^5.1.7",
     "picocolors": "^1.1.1"
-  }
+  },
+  "module": "src/index.ts",
+  "private": true
 }

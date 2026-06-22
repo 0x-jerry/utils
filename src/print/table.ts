@@ -1,21 +1,17 @@
 import type { Optional } from '../types'
 
 export interface TextTableOption {
-  highlight?: (cell: string) => string
+  /**
+   * @default "-"
+   */
+  headLine?: string
+  highlight?: (cell: TableCellType) => string
 }
 
 export type TableCellType = Optional<string | number | boolean>
 
 export function textTable(input: TableCellType[][], opt?: TextTableOption) {
-  const table = uniformTable(input)
-
-  if (opt?.highlight) {
-    for (const row of table) {
-      for (const [idx, txt] of row.entries()) {
-        row[idx] = opt.highlight(txt)
-      }
-    }
-  }
+  const table = uniformTable(input, opt)
 
   return table
 }
@@ -34,26 +30,37 @@ export function textTableToString(input: TableCellType[][], opt?: TextTableToStr
   return str.join('\n')
 }
 
-export function uniformTable(table: TableCellType[][]) {
+export function uniformTable(table: TableCellType[][], opt?: TextTableOption) {
+  const { headLine = '-', highlight } = opt || {}
+
   const colLens = calcColLength(table)
 
   const uniformed: string[][] = []
 
-  for (const row of table) {
+  for (const [rowIdx, row] of table.entries()) {
     const uniformedRow: string[] = []
 
     for (const [idx, s] of row.entries()) {
-      uniformedRow[idx] = padEnd(s, colLens[idx], ' ')
+      const str = highlight ? highlight(s) : s
+      uniformedRow[idx] = padEnd(str, colLens[idx] || 0, ' ')
     }
 
     uniformed.push(uniformedRow)
+
+    if (rowIdx === 0 && headLine) {
+      const headLineRow: string[] = []
+      for (const [idx] of row.entries()) {
+        headLineRow[idx] = padEnd('', colLens[idx] || 0, headLine)
+      }
+      uniformed.push(headLineRow)
+    }
   }
 
   return uniformed
 }
 
 function calcColLength(table: TableCellType[][]) {
-  const [header, ...content] = table
+  const [header = [], ...content] = table
   const colLens = []
   for (let idx = 0; idx < header.length; idx++) {
     let maxLen = getLength(header[idx])
@@ -72,8 +79,7 @@ function _toString(cell: TableCellType) {
   return (cell ?? '').toString()
 }
 
-// biome-ignore lint/suspicious/noControlCharactersInRegex: <explanation>
-const StyleRE = /\x1b\[\d+m/g
+const StyleRE = /\u001b\[[0-9;]*m/g
 
 function getLength(cell: TableCellType) {
   return _toString(cell).replace(StyleRE, '').length

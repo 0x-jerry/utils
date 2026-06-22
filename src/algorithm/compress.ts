@@ -15,7 +15,7 @@ export async function compressText(text: string): Promise<string> {
   const compressed = (await import('fflate')).zlibSync(buffer)
 
   const base64 = isWeb
-    ? window.btoa(String.fromCharCode(...compressed))
+    ? globalThis.btoa(String.fromCharCode(...compressed))
     : Buffer.from(compressed).toString('base64')
 
   return base64
@@ -36,7 +36,7 @@ export async function decompressText(compressedText: string): Promise<string> {
 }
 
 function base64ToUint8(b64: string) {
-  const binaryString = window.atob(b64)
+  const binaryString = globalThis.atob(b64)
 
   const uint8Array = new Uint8Array(binaryString.length)
 

@@ -12,6 +12,7 @@ describe('text table', () => {
     const table = textTable(input)
     expect(table).eqls([
       ['head1      ', 'head2         '],
+      ['-----------', '--------------'],
       ['1234       ', 'text2         '],
       ['           ', 'false         '],
       ['tttttttttt1', 'ttttttttttttt3'],
@@ -41,6 +42,7 @@ describe('text table', () => {
 
     expect(s).eqls([
       ['head1', 'head2'],
+      ['-----', '-----'],
       ['\x1B[36m1234\x1B[0m ', 'text2'],
     ])
 
