@@ -79,7 +79,7 @@ function _toString(cell: TableCellType) {
   return (cell ?? '').toString()
 }
 
-const StyleRE = /\u001b\[[0-9;]*m/g
+const StyleRE = /\x1b\[\d+m/g
 
 function getLength(cell: TableCellType) {
   return _toString(cell).replace(StyleRE, '').length
