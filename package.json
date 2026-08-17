@@ -33,7 +33,8 @@
     "test:coverage": "vitest run --coverage",
     "build": "tsdown",
     "release": "x-release",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "check": "tsc --noEmit"
   },
   "devDependencies": {
     "@0x-jerry/x-release": "^3.0.1",

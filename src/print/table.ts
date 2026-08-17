@@ -2,9 +2,9 @@ import type { Optional } from '../types'
 
 export interface TextTableOption {
   /**
-   * @default "-"
+   * Set falsy value to disabled, @default "-"
    */
-  headLine?: string
+  headLine?: string | false
   highlight?: (cell: TableCellType) => string
 }
 
